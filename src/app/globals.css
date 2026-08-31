@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Speedbird Offshore Sailing Club — brand palette */
+    --brand-primary-100: 228 30 40;
+    --brand-primary-hover: 201 23 32;
+    --brand-secondary-100: 38 46 188;
+    --brand-secondary-hover: 30 36 152;
+    --brand-tertiary-100: 255 255 255;
+    --brand-border: 38 46 188;
+    --brand-ink: 30 30 30;
+    --brand-muted: 244 244 244;
+    --brand-rule: 229 229 229;
+    --brand-rule-strong: 227 227 227;
+    --brand-tint: 238 240 255;
+    --text-primary: 30 30 30;
+    --text-secondary: 38 46 188;
+    --text-tertiary: 255 255 255;
+    --text-light: 234 235 255;
+    --button-font-family: "Gill Sans Nova";
+    --button-font-size: 18px;
+    --button-font-variant: normal;
+    --button-line-height: 20px;
+    --button-letter-spacing: 0px;
+    --spacing-xxs: 8px;
+    --spacing-xs: 12px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-tight: 18px;
+    --spacing-xl: 48px;
+    --spacing-card-x: 60px;
+    --spacing-card-y: 50px;
+    --spacing-section-x: 72px;
+    --spacing-section-y: 40px;
+    --spacing-section-gap: 60px;
+    --spacing-fee: 30px;
+    --spacing-compact: 10px;
+    --spacing-footer-y: 52px;
+    --spacing-hero-x: 84px;
+    --spacing-content-right: 96px;
+    --spacing-overline: 48px;
+    --spacing-overline-lg: 84px;
+    --header-offset: 112px;
+
+    --type-display: 60px;
+    --type-heading-xl: 56px;
+    --type-heading-lg: 48px;
+    --type-heading-md: 40px;
+    --type-heading-sm: 32px;
+    --type-heading-xs: 28px;
+    --type-person: 20px;
+    --type-person-title: 17px;
+    --type-body-lg: 19px;
+    --type-body: 16px;
+    --type-body-sm: 14px;
+    --type-label: 13px;
+    --type-caption: 12px;
+    --leading-display: 64px;
+    --leading-heading: 1.1;
+    --leading-body-lg: 26px;
+    --leading-body: 24px;
+    --leading-body-sm: 20px;
+    --leading-label: 1.5;
+    --leading-caption: 1.5;
+    --tracking-overline: 0.1em;
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    /* Primary: Speedbird Red #e41e28 */
+    --primary: 357 80% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Speedbird Blue #262dbc */
+    --secondary: 237 66% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 237 66% 45%;
+
+    --destructive: 357 80% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 88%;
+    --input: 214 32% 88%;
+    --ring: 357 80% 50%;
+
+    --radius: 0.25rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-offset: 160px;
+    }
+  }
+}
+
+@layer utilities {
+  .all-unset {
+    all: unset;
+  }
+}
+
+/* Keyframe animations used by sections */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% - var(--gap, 1rem))); }
+}
+
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-100% - var(--gap, 1rem))); }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s var(--animation-delay, 0s) ease forwards;
+}
+
+.animate-fade-up {
+  animation: fade-up 1s var(--animation-delay, 0s) ease forwards;
+}
+
+.animate-marquee {
+  animation: marquee var(--duration) infinite linear;
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration) linear infinite;
+}

@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "title": "Speedbird Offshore Sailing Club",
+    "description": "Sail Further. Explore More. Belong. RYA recognised offshore sailing club based on the River Hamble, sailing the Solent and beyond."
+  },
+  "coordinates": "50°51′N · 1°18′W",
+  "location": "River Hamble, Southampton",
+  "contactHeading": "Contact Us",
+  "email": "generalenquiries@soyc.co.uk",
+  "facebookLabel": "Find us on Facebook",
+  "facebookUrl": "https://www.facebook.com/groups/13091323358/",
+  "logoAlt": "Speedbird Offshore Sailing Club",
+  "copyright": "© 2026 Speedbird Offshore Yacht Club. All Rights Reserved.",
+  "registration": "Registered in England Company 05579271 49 Station Rd, Polegate, East Sussex, BN26 6EA",
+  "headerJoinLabel": "Join us",
+  "membersLabel": "Members area",
+  "primaryNavLabel": "Primary navigation",
+  "mobileNavLabel": "Mobile primary navigation",
+  "openNavLabel": "Open navigation menu",
+  "closeNavLabel": "Close navigation menu",
+  "logoHref": "/",
+  "logoSrc": "/figmaAssets/speedbird-logo--05-1.png",
+  "footerBackgroundSrc": "/figmaAssets/lines-1--1.png",
+  "footerCompassSrc": "/figmaAssets/compas.png",
+  "footerLogoSrc": "/figmaAssets/layer-5-1.png",
+  "siteFooterBackgroundSrc": "/figmaAssets/hamble-map.png"
+}

@@ -1,0 +1,54 @@
+{
+  "courseTabs": [
+    { "value": "Beginner", "label": "Beginner" },
+    { "value": "Intermediate", "label": "Intermediate" },
+    { "value": "Advanced", "label": "Advanced" },
+    { "value": "All Levels", "label": "All Levels" }
+  ],
+  "coursesByTab": {
+    "Beginner": [
+      {
+        "level": "Beginner",
+        "title": "Competent Crew",
+        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
+        "items": ["Basic seamanship", "Sail handling", "Rope work", "Safety awareness", "Helm experience"],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£650", "duration": "5 days" },
+          { "from": "1st April", "til": "31st October", "amount": "£600", "duration": "5 days" }
+        ],
+        "notes": "The price includes RYA course completion certificate. Course starts at 09:00 on the first day and finishes approximately 16:00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "All Levels",
+        "title": "Skill Bites",
+        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
+        "items": ["Basic seamanship", "Sail handling", "Rope work", "Safety awareness", "Helm experience"],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£86", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£73.50", "duration": "1 day" }
+        ],
+        "notes": "String value"
+      },
+      {
+        "level": "All Levels",
+        "title": "Improve Your Skills",
+        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
+        "items": ["Basic seamanship", "Sail handling", "Rope work", "Safety awareness", "Helm experience"],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£172", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£147", "duration": "1 day" }
+        ],
+        "notes": "String value"
+      }
+    ],
+    "Intermediate": [],
+    "Advanced": [],
+    "All Levels": []
+  },
+  "upcomingTrainingCourses": [
+    { "title": "IYS -Improve Your Skills", "dates": "23 October - 28 October", "yacht": "Concorde", "model": "Bavaria 38", "skipper": "Name Surname" },
+    { "title": "Competent Crew", "dates": "29 October - 02 September", "yacht": "Concorde", "model": "Bavaria 38", "skipper": "Name Surname" },
+    { "title": "RYA Day Skipper", "dates": "23 October - 28 October", "yacht": "Concorde", "model": "Bavaria 38", "skipper": "Name Surname" },
+    { "title": "Skill Bites", "dates": "23 October - 28 October", "yacht": "Concorde", "model": "Bavaria 38", "skipper": "Name Surname" }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "cardBoat": {
+    "kicker": "Our home",
+    "built": "Built:",
+    "specifications": "Specifications:"
+  },
+  "cardCourse": {
+    "from": "from:",
+    "till": "till:",
+    "notes": "Notes:"
+  },
+  "cardEvent": {
+    "skipper": "Skipper:"
+  },
+  "cruiseCarousel": {
+    "previous": "Previous cruise",
+    "next": "Next cruise",
+    "arrowSrc": "/figmaAssets/cruises/arrow.svg"
+  },
+  "gallery": {
+    "previous": "Previous slide",
+    "next": "Next slide",
+    "previousIcon": "/figmaAssets/community/arrow-prev.svg",
+    "nextIcon": "/figmaAssets/community/arrow-next.svg"
+  }
+}

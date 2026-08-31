@@ -1,0 +1,6 @@
+- [Atomic Design structure](atomic-design.md) — components split into atoms/molecules/organisms/layout; Header in root layout; data in src/data/.
+- [GSAP animation preference](gsap-animation.md) — use GSAP + ScrollTrigger for all animations; never Framer Motion.
+- [Inner-page heading convention](inner-page-heading-convention.md) — club content routes open with SectionHeading; Home, Membership Application, and Members stay purpose-specific.
+- [Next static build workflow](next-static-build-workflow.md) — production builds replace the dev manifest; restart the web workflow before preview checks.
+- [Sticky header scroll animation](sticky-header-scroll-animation.md) — animate an out-of-flow header shell inside a fixed sticky anchor to avoid scroll-direction feedback.
+- [Bounded sticky tabs](bounded-sticky-tabs.md) — use native sticky when reachable; short pages need a continuous final-scroll release, never a bottom-anchor jump.

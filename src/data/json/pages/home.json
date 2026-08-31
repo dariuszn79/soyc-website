@@ -1,0 +1,83 @@
+{
+  "metadata": {
+    "title": "Speedbird Offshore Sailing Club — Sail Further. Explore More. Belong.",
+    "description": "RYA recognised offshore sailing club based on the River Hamble, sailing the Solent and beyond. Join 300+ members with two dedicated offshore yachts."
+  },
+  "hero": {
+    "kicker": "Est. 1972 AD|SPEEDBIRD OFFSHORE SAILING CLUB",
+    "heading": "Sail Further.\nExplore More.\nBelong.",
+    "stats": [
+      { "value": "300+", "label": "Active members" },
+      { "value": "2", "label": "Offshore Yachts" },
+      { "value": "54", "label": "Years sailing" },
+      { "value": "RYA", "label": "Recognised" }
+    ],
+    "coordinates": "Hamble River · The Solent · 50°51'N · 1°18'W",
+    "backgroundImage": "/figmaAssets/heroimagelrg.svg",
+    "backgroundAlt": "Aerial view of yachts moored on the River Hamble",
+    "actions": [
+      { "label": "Join us", "href": "/join" },
+      { "label": "Our story", "href": "/the-club" }
+    ]
+  },
+  "sections": [
+    {
+      "kicker": "Our Cruises",
+      "heading": "Discover the solent, South Coast and beyond",
+      "body": "From Day Skipper to Coastal Skipper, our RYA practical courses take place on board our own club yachts — based on the River Hamble, sailing the Solent and beyond.",
+      "cta": { "label": "View cruises", "href": "/cruises" },
+      "image": "/figmaAssets/home/cruises.png",
+      "imageAlt": "Sailing on the Solent",
+      "align": "right",
+      "variant": "secondary"
+    },
+    {
+      "kicker": "Our Fleet",
+      "heading": "Two dedicated\noffshore yachts",
+      "body": "Two modern offshore yachts, meticulously maintained and fully equipped for racing, cruising, and training. Our fleet is maintained to the highest standard for offshore cruising — from Channel crossings to Biscay passages. Both yachts fully equipped and RYA compliant.",
+      "cta": { "label": "View the fleet", "href": "/fleet" },
+      "image": "/figmaAssets/home/fleet.png",
+      "imageAlt": "Speedbird and Concorde offshore yachts",
+      "align": "left",
+      "variant": "tertiary"
+    },
+    {
+      "kicker": "Our Community",
+      "heading": "Experienced offshore sailors. Year-round",
+      "body": "From seasoned skippers to keen novices — our members share a love of the sea and the camaraderie of offshore sailing.",
+      "cta": { "label": "Meet the crew", "href": "/community" },
+      "image": "/figmaAssets/home/community.png",
+      "imageAlt": "Club crew on deck",
+      "align": "right",
+      "variant": "secondary"
+    },
+    {
+      "kicker": "Our Training",
+      "heading": "Learn sailing on\nthe water.",
+      "body": "From Competent Crew, Day Skipper to Coastal Skipper, our RYA practical courses take place on board our own club yachts — based on the River Hamble, sailing the Solent and beyond.",
+      "cta": { "label": "View our training", "href": "/training" },
+      "image": "/figmaAssets/home/training.png",
+      "imageAlt": "RYA training on the Solent",
+      "align": "left",
+      "variant": "tertiary"
+    },
+    {
+      "kicker": "Membership",
+      "heading": "Thinking of joining?",
+      "body": "From Day Skipper to Coastal Skipper, our RYA practical courses take place on board our own club yachts — based on the River Hamble, sailing the Solent and beyond.",
+      "cta": { "label": "Learn more", "href": "/join" },
+      "image": "/figmaAssets/home/membership.png",
+      "imageAlt": "Members sailing together",
+      "align": "left",
+      "variant": "secondary"
+    }
+  ],
+  "finalCta": {
+    "kicker": "Our home",
+    "heading": "Thinking of joining",
+    "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
+    "label": "Join us",
+    "href": "/join",
+    "imageSrc": "/figmaAssets/home/join-cta.png"
+  }
+}

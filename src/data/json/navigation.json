@@ -1,0 +1,19 @@
+{
+  "primaryNavItems": [
+    { "label": "Home", "href": "/", "divider": true },
+    { "label": "The Club", "href": "/the-club", "divider": true },
+    { "label": "Community", "href": "/community", "divider": true },
+    { "label": "Fleet", "href": "/fleet", "divider": true },
+    { "label": "Cruises", "href": "/cruises", "divider": true },
+    { "label": "Training", "href": "/training", "divider": false }
+  ],
+  "footerNavLinks": [
+    { "label": "Sitemap", "href": "/" },
+    { "label": "Privacy", "href": "/" },
+    { "label": "The Club", "href": "/the-club" },
+    { "label": "Community", "href": "/community" },
+    { "label": "Fleet", "href": "/fleet" },
+    { "label": "Cookies", "href": "/" },
+    { "label": "Training", "href": "/training" }
+  ]
+}

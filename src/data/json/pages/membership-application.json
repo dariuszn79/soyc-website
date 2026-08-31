@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "title": "Membership Application | Speedbird Offshore Sailing Club",
+    "description": "Apply to join Speedbird Offshore Sailing Club on the River Hamble. Complete the membership application form online."
+  },
+  "form": {
+    "title": "Membership Application",
+    "intro": "To join SOYC you must complete the relevant sections of the form below marked with",
+    "requiredMarker": "*",
+    "membership": {
+      "heading": "Your Membership Type",
+      "description": "A separate application is required for each applicant",
+      "cards": [
+        { "value": "single", "title": "Single Member", "description": "Single adult membership. Applicant must be over 18 years or have a parent’s consent." },
+        { "value": "family", "title": "Family Member", "description": "Spouse, partner, or child aged over 24 years of an ordinary member." },
+        { "value": "child", "title": "Child Member", "description": "Children of any of the above, aged 8 to 17 years inclusive." }
+      ],
+      "dateOfBirthLabel": "Your date of birth",
+      "primaryMemberLabel": "Name of primary club member",
+      "primaryMemberPlaceholder": "Enter member name"
+    },
+    "sailingExperience": {
+      "heading": "Your Sailing Experience",
+      "description": "You don’t need any sailing experience to become a member. All sailing levels are welcome.",
+      "qualificationsToggle": "I have sailing qualifications",
+      "experienceToggle": "I have some sailing experience",
+      "experienceLabel": "Tell us about your sailing experience",
+      "experiencePlaceholder": "Enter your sailing experience",
+      "qualificationsLabel": "Tell us about your sailing qualifications/certificates",
+      "qualificationOptions": ["Competent Crew", "RYA Day Skipper", "RYA Coastal Skipper", "RYA Yachtmaster Coastal", "RYA Yachtmaster Offshore", "RYA Yachtmaster Ocean", "RYA VHF Radio", "RYA First Aid", "RYA Sea Survival", "Other"],
+      "otherQualificationsLabel": "What other qualifications/certificates do you have",
+      "otherQualificationsPlaceholder": "Enter any other qualifications"
+    },
+    "personalDetails": {
+      "heading": "Your Details",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter applicant name",
+      "surnameLabel": "Surname",
+      "surnamePlaceholder": "Enter applicant surname",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "Enter your phone number"
+    },
+    "emergencyContact": {
+      "heading": "Your Emergency Contact",
+      "nameLabel": "Name",
+      "namePlaceholder": "Enter contact name",
+      "surnameLabel": "Surname",
+      "surnamePlaceholder": "Enter contact surname",
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "Enter contact phone",
+      "relationshipLabel": "Relationship",
+      "relationshipPlaceholder": "Select relationship",
+      "relationshipOptions": [
+        { "value": "partner", "label": "Partner" },
+        { "value": "parent", "label": "Parent" },
+        { "value": "child", "label": "Child" },
+        { "value": "friend", "label": "Friend" },
+        { "value": "other", "label": "Other" }
+      ]
+    },
+    "addressLookup": {
+      "your": {
+        "postcodeLabel": "Your postcode",
+        "addressLabel": "Your address",
+        "cityLabel": "Your city",
+        "lookupEmptyStatus": "Enter your postcode before finding your address.",
+        "lookupStatus": "Automatic address lookup is not connected yet. Please enter your address below."
+      },
+      "emergency": {
+        "postcodeLabel": "Emergency contact postcode",
+        "addressLabel": "Emergency contact address",
+        "cityLabel": "Emergency contact city",
+        "lookupEmptyStatus": "Enter the emergency contact postcode before finding their address.",
+        "lookupStatus": "Automatic address lookup is not connected yet. Please enter the address below."
+      },
+      "postcodePlaceholder": "Postcode",
+      "addressPlaceholder": "Street address",
+      "cityPlaceholder": "Enter your city",
+      "button": "Find address"
+    },
+    "health": {
+      "heading": "Health declaration",
+      "declaration": "By completing this application form you are also confirming you are personally of sound mind, medically fit and sufficiently able bodied to engage in sailing activities. Please note that declared illnesses or medical conditions may not prevent you from joining SOYC as we promote equal opportunities; but the Membership Director must be made aware, by an attached letter, of any potential problems that could affect your safety and that of other crew members. If you are in any doubt about your fitness to take part in offshore sailing you should consult your general practitioner prior to applying for membership."
+    },
+    "declaration": {
+      "heading": "Declaration",
+      "declaration": "I wish to apply for membership to the Speedbird Offshore Yacht Club. I agree to comply with the Club rules (Sailing Orders) and will make myself familiar with them before sailing on a Club boat. I agree that the information on this form can be retained by the Club in electronic format, and used so that the Club can provide the best possible level of services to myself."
+    },
+    "dataConsent": {
+      "heading": "Data Consent Declarations",
+      "paragraphs": [
+        "Speedbird Offshore Yacht Club Ltd stores personal data about members for the purpose of our legitimate interest operating the Club and to protect Members’ vital interests and those of their dependants. Such details include name, address, membership details and fee payments. Next of Kin details are also required and may be given to the authorities in the event of an incident.",
+        "Members have access to the Club’s online booking system which is password protected. On it we display Member’s phone and email contact details, sailing qualifications and sailing history with the Club. Other personal details can be input and changed directly by you as a Member.",
+        "The Club will delete your personal data when it is no longer needed if you leave the Club. You have a right to “be forgotten” upon request."
+      ],
+      "dataConsent": "I consent to my data being stored and used as described above.",
+      "ageConsent": "I consent to any age-related information provided by me on this form being recorded and used for the purpose of allocation of Membership category and, where appropriate, applying the Club’s Child Protection Policy.",
+      "emailConsent": "I understand that the Club may send newsletters, sailing and training opportunities and other information we think may be of interest to you by email. Access to the Booking System will be given to you when your membership is complete. You can change whether you receive these emails at any time by updating your booking-system details."
+    },
+    "membershipConsent": {
+      "heading": "Membership Consent",
+      "addressee": "To the Board of Speedbird Offshore Yacht Club Limited",
+      "description": "Speedbird Offshore Yacht Club Ltd stores personal data about members for the purpose of our legitimate interest operating the Club and to protect Members’ vital interests and those of their dependants.",
+      "signatureLabel": "Signature (type your name in capitals)",
+      "signaturePlaceholder": "Type your full name",
+      "dateLabel": "Date (today’s date)"
+    },
+    "submitButton": "Submit your application",
+    "successMessage": "Thank you. Your application has been submitted for review."
+  }
+}

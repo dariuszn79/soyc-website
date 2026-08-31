@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "title": "Join Us | Speedbird Offshore Sailing Club",
+    "description": "Come sailing with us. A friendly, member-run sailing club based on the River Hamble near Southampton, with over 300 members and two well-equipped yachts."
+  },
+  "hero": {
+    "heading": "Come sailing with us",
+    "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally",
+    "imageSrc": "/figmaAssets/join/hero.png",
+    "imageAlt": "Speedbird members sailing together on the Solent",
+    "cta": {
+      "label": "Apply to join",
+      "href": "/membership-application"
+    }
+  },
+  "tabs": [
+    { "value": "Membership", "label": "Membership" },
+    { "value": "Fees", "label": "Fees" },
+    { "value": "Tester Day", "label": "Tester Day" },
+    { "value": "What do you need", "label": "What do you need" }
+  ],
+  "ariaLabel": "Join us information",
+  "panels": {
+    "membership": {
+      "intro": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
+      "cards": [
+        {
+          "heading": "Why join?",
+          "paragraphs": ["Membership gives you year-round access to two well-maintained yachts, a full programme of sailing trips, and a community of over 300 members. Sailing is available 365 days a year therefore membership starts on the month of application and lasts for 12 months. Here's what it costs."]
+        },
+        {
+          "heading": "How joining works",
+          "paragraphs": ["Becoming a member is straightforward:", "Sign into our booking system, browse available trips, pick a date, and you'll soon be on the water. You don't need to find a skipper, organise a crew, or own any specialist kit. Just book a place on a trip and turn up. Our skippers will brief you on everything before you leave the pontoon."],
+          "list": ["Fill in the membership application form.", "We’ll set up your account and send you login details for our online booking system", "Once you've been a member for two days you can book your first sail."]
+        },
+        {
+          "heading": "Not sure? Try us first",
+          "paragraphs": ["If you're curious about sailing but not ready to commit, we hold Potential New Member days throughout the year and you're welcome to come along. You'll spend a full day on the water with one of our qualified skippers and a friendly crew. No sailing knowledge required - just turn up. It's the best way to see if SOYC is for you."]
+        }
+      ]
+    },
+    "fees": {
+      "intro": {
+        "kicker": "Our Training",
+        "headingLines": ["Membership &", "Sailing Fees"],
+        "body": "SOYC offers some of the most afforable sailing on the South Coast. On top of your membership, you pay a sailing fee each time you go out. We sail all year, so there's no \"off season\". The sailing fee covers the boat, fuel, gas, and maintenance."
+      },
+      "membership": {
+        "heading": "Membership Fees",
+        "body": "Membership runs for 12 months from which ever month you join. Once we receive the paperwork we will issue you a personal membership number and sign-on information.",
+        "note": "Note: There must be an interval of at least two days between becoming a member and admission to the sailing facilities.",
+        "fees": [
+          { "heading": "Single Member", "price": "£165", "unit": "per year", "description": "Single Membership" },
+          { "heading": "Family Member", "price": "£100", "unit": "per year", "description": "Spouse, partner, or child (aged over 24 years) of an ordinary member" },
+          { "heading": "Child Family Member", "price": "£10", "unit": "per year", "description": "Children of any of the above (aged 8 to 17 years) inclusive" }
+        ]
+      },
+      "dailySailing": {
+        "heading": "Daily Sailing Fees",
+        "body": "The daily sailing fee is paid each day you sail as a member and covers the boat, fuel, gas, and maintenance. You just chip in for any mooring fees for marinas you visit and for food on the day.",
+        "note": "Note: Rates valid until 31st October 2026. Temporary members pay an additional £20/day supplement. This does not apply to full members.",
+        "fees": [
+          { "heading": "Summer Rate", "price": "£56.00", "unit": "per day", "description": "1st April to 31st October 2026" },
+          { "heading": "Winter Rate", "price": "£41", "unit": "per day", "description": "1st November to 31st March 2026" }
+        ]
+      }
+    },
+    "testerDay": {
+      "intro": {
+        "kicker": "Our Training",
+        "headingLines": ["Potential New", "Member Days"],
+        "body": "Curious about sailing? Spend a day on the Solent with us before you decide whether to join. No experience necessary — our qualified skipper and crew will look after you from start to finish."
+      },
+      "expect": {
+        "heading": "What to expect",
+        "paragraphs": ["You'll join a scheduled trip on one of our yachts from Mercury Marina on the River Hamble. A typical day might include sailing across to the Isle of Wight, anchoring for lunch in a quiet bay, and returning in the afternoon. You'll be encouraged to get involved as much or as little as you like — take the helm, trim a sail, or just enjoy the ride.", "You'll sail with a commercially qualified skipper and experienced crew, so you're in safe hands throughout."]
+      },
+      "practical": {
+        "heading": "Practical details",
+        "details": [
+          { "key": "Cost", "value": "Just the standard member sailing fee (£56 summer / £41 winter) — no temporary membership surcharge for Potential New Member days" },
+          { "key": "When", "value": "Potential New Member days run in the spring and summer months (typically May–October, when sea temperatures allow)" },
+          { "key": "Duration", "value": "A full day, usually departing mid-morning and returning late afternoon" },
+          { "key": "What to bring", "value": "Warm layers, waterproofs if you have them, non-marking shoes with grip, and something for lunch. We'll sort the rest." },
+          { "key": "Location", "value": "Mercury Marina, Hamble, near Southampton (SO31 4HQ for sat nav)" }
+        ]
+      },
+      "booking": {
+        "heading": "How to Book",
+        "intro": "Getting on the water is easy:",
+        "email": { "label": "generalenquiries@soyc.co.uk", "href": "mailto:generalenquiries@soyc.co.uk" },
+        "firstStepBeforeEmail": "Email us at",
+        "firstStepAfterEmail": "to let us know you're interested",
+        "remainingSteps": ["We'll send you a short form to fill in and match you to an upcoming trip", "Turn up at the marina and enjoy your day", "If you loved it, joining is simple — and your sailing fee is offset against your first year's membership"]
+      }
+    },
+    "gear": {
+      "intro": {
+        "kicker": "Our Training",
+        "heading": "What You Need?",
+        "body": "You don't need any special equipment to sail with us, just a few sensible bits and you're good to go. Here's what to bring:"
+      },
+      "cards": [
+        {
+          "heading": "Clothing",
+          "paragraphs": ["The boat has life jackets and safety harnesses for everyone on board, so you don't need to bring your own but you're welcome to if you prefer.", "The main thing to get right is layers. It's almost always cooler on the water than on land, even on a sunny day, so bring one more warm layer than you think you'll need. A windproof jacket is ideal and if you have waterproofs, bring those too in case it rains or there's spray. You don't need to buy dedicated sailing gear just yet; a decent waterproof coat and warm fleece will do the job.", "In summer, don't forget sun protection, including a hat and high-factor suncream. The reflection off the water means you can burn surprisingly quickly, even on overcast days."]
+        },
+        {
+          "heading": "Foot wear",
+          "paragraphs": ["If you have sailing shoes or deck boots, great. If not, trainers with clean, non-marking soles work fine — the kind you'd wear on an indoor sports court. On cold or wet days, sea boots are a good option too. Please make sure the soles are free of mud and stones before you step aboard. Wellington boots aren't suitable as they're slippery on deck."]
+        },
+        {
+          "heading": "Food and Drink",
+          "paragraphs": ["The boat will be supplied with tea, coffee and milk but please bring a packed lunch, plenty of water, and any snacks you'd like. Sometimes the skipper will suggest lunch ashore at a harbour or marina and they'll let you know in advance so you can plan accordingl"]
+        }
+      ]
+    }
+  }
+}

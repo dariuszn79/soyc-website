@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Cruises | Speedbird Offshore Sailing Club",
+    "description": "Discover the South Coast and beyond with Speedbird Offshore Sailing Club, from day sails to longer cruises."
+  },
+  "hero": {
+    "heading": "Discover the South Coast and Beyond",
+    "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally established as the British Airways Yacht Club, we became fully independent in 2016 and are now wholly owned and managed by our members.",
+    "imageSrc": "/figmaAssets/cruises/hero.png",
+    "imageAlt": "A Speedbird yacht sailing under a red, white and blue spinnaker"
+  },
+  "cruiseTypes": [
+    {
+      "kicker": "Our Home",
+      "heading": "Day sails",
+      "blocks": [
+        { "type": "paragraph", "text": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally established as the British Airways Yacht Club, we became fully independent in 2016 and are now wholly owned and managed by our members." },
+        { "type": "list", "variant": "spaced", "items": ["Lunch at anchor in Osborne Bay, with views of Osborne House", "Sailing west to Newtown Creek, Yarmouth, Lymington or as far as Alum Bay", "Sailing east to Portsmouth Harbour, Wootton Creek, Bembridge or Chichester", "Exploring Southampton Water or the River Medina"] }
+      ]
+    },
+    {
+      "kicker": "Our Home",
+      "heading": "Multi-day cruises",
+      "blocks": [
+        { "type": "paragraph", "text": "Longer trips are charged at the same daily rate; an overnight cruise away is simply twice the day-sail rate." },
+        { "type": "list", "variant": "compact", "items": ["An overnight stay at a local harbour or marina", "Two nights away to Poole or Weymouth", "Summer cruising to the West Country and beyond"] },
+        { "type": "paragraph", "text": "There's no fixed programme and trips are organised by skippers and crew throughout the year, so there's always something to sign up for." }
+      ]
+    }
+  ],
+  "upcoming": {
+    "kicker": "Our Home",
+    "heading": "Upcoming cruises",
+    "body": "We have grown into an active community of more than 300 members from all walks of life. We welcome everyone, from complete beginners taking their first taster sail to experienced Yachtmaster Ocean holders. What brings us together is a shared passion for sailing, learning and adventure."
+  },
+  "location": {
+    "kicker": "Our Fleet",
+    "heading": "Where are we now ?",
+    "body": "As an RYA-recognised training centre since 2009, we provide high-quality practical instruction designed to develop safe, confident and competent sailors. Our year-round programme makes excellent sailing and professional training accessible at competitive prices."
+  },
+  "cta": {
+    "kicker": "Our home",
+    "heading": "Thinking of joining",
+    "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
+    "label": "Join us",
+    "href": "/join",
+    "imageSrc": "/figmaAssets/cruises/cta.jpg"
+  }
+}

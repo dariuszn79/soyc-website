@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "title": "Training | Speedbird Offshore Sailing Club",
+    "description": "RYA practical sailing courses aboard our own club yachts — Competent Crew, Skill Bites, and Improve Your Skills, based on the River Hamble."
+  },
+  "hero": {
+    "heading": "Some of the highest quality training around",
+    "body": "SOYC is committed to achieving the very highest standards in safety and excellence within the sport of yachting. The club is an RYA Recognised Training Centre for practical courses and is fortunate to have a number of RYA qualified instructors amongst our members.",
+    "imageSrc": "/figmaAssets/training/hero.png",
+    "imageAlt": "Sailors taking part in practical yacht training on the River Hamble"
+  },
+  "practicalCourses": {
+    "kicker": "Our Home",
+    "heading": "Our Practical Courses",
+    "paragraphs": [
+      "Learn by doing. All practical courses include living aboard and passage-making on the Solent and surrounding waters.",
+      "All courses run aboard our own yachts on the Solent.\nSmall groups of 4–5 students ensure maximum time at the helm."
+    ]
+  },
+  "upcomingCourses": {
+    "kicker": "Our Home",
+    "heading": "Upcoming Courses",
+    "body": "We have grown into an active community of more than 300 members from all walks of life. We welcome everyone, from complete beginners taking their first taster sail to experienced Yachtmaster Ocean holders. What brings us together is a shared passion for sailing, learning and adventure."
+  },
+  "instructors": {
+    "kicker": "Our Home",
+    "heading": "Our instructors",
+    "body": "We have grown into an active community of more than 300 members from all walks of life. We welcome everyone, from complete beginners taking their first taster sail to experienced Yachtmaster Ocean holders. What brings us together is a shared passion for sailing, learning and adventure."
+  },
+  "shorebased": {
+    "kicker": "Our Home",
+    "heading": "Theoretical Shorebased Courses",
+    "body": "Courses are organised by \"Surrey Shorebased\" an RYA training centre in Woking, run by a club member, offering RYA shorebased courses in navigation, radio and radar.",
+    "cta": { "label": "Visit surrey-shorebased.co.uk", "href": "https://surrey-shorebased.co.uk", "external": true }
+  },
+  "courseTabs": {
+    "ariaLabel": "Training course levels",
+    "emptyMessage": "Course dates for this level will be announced soon.",
+    "rateNote": "Note- these rates are correct until 31/3/27. Revised rates will be posted here soon for April 27 onwards"
+  },
+  "cta": {
+    "kicker": "Our home",
+    "heading": "Thinking of joining",
+    "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
+    "label": "Join us",
+    "href": "/join",
+    "imageSrc": "/figmaAssets/training/cta.png"
+  }
+}

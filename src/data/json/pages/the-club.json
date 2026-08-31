@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "title": "The Club | Speedbird Offshore Sailing Club",
+    "description": "Speedbird Offshore Sailing Club — sailing from the River Hamble since 1972. Our story, board, fleet, training, and community."
+  },
+  "hero": {
+    "heading": "Sailing from the Hamble since 1972",
+    "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally established as the British Airways Yacht Club, we became fully independent in 2016 and are now wholly owned and managed by our members.",
+    "imageSrc": "/figmaAssets/community-hero-figma.png",
+    "imageAlt": "Aerial view of the River Hamble marina"
+  },
+  "aboutAriaLabel": "About the club",
+  "cards": [
+    { "kicker": "Our Community", "heading": "Active community of more than 300", "body": "We have grown from a small group of RAF officers to a thriving community of more than 300 members. From beginners taking their first RYA courses to experienced offshore sailors racing the Fastnet, Speedbird has a place for every level of sailor.", "cta": { "label": "View the fleet", "href": "/fleet" } },
+    { "kicker": "Our Cruises", "heading": "Discover the South Coast and Beyond", "body": "From seasoned skippers to keen novices — our members share a love of the sea and the camaraderie of offshore sailing.", "cta": { "label": "View the fleet", "href": "/fleet" } },
+    { "kicker": "Our Courses", "heading": "Some of the highest quality training around", "body": "As an RYA-recognised training centre since 2009, we provide high-quality practical instruction designed to develop safe, confident and competent sailors. Our year-round programme makes excellent sailing and professional training accessible at competitive prices.", "cta": { "label": "View the fleet", "href": "/fleet" } },
+    { "kicker": "Our Fleet", "heading": "Two dedicated offshore yachts.", "body": "We operate two fully equipped offshore yachts available to all members — from day sails on the Solent to extended Channel passages. Both yachts are maintained to the highest standard and fully RYA compliant throughout the year.", "cta": { "label": "View the fleet", "href": "/fleet" } }
+  ],
+  "committee": {
+    "kicker": "Our Committee",
+    "heading": "Our dedicated board members",
+    "body": "We have grown into an active community of more than 300 members from all walks of life. We welcome everyone, from complete beginners taking their first taster sail to experienced Yachtmaster Ocean holders. What brings us together is a shared passion for sailing, learning and adventure."
+  },
+  "cta": {
+    "kicker": "Our home",
+    "heading": "Thinking of joining",
+    "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water.",
+    "label": "Join us",
+    "href": "/join",
+    "imageSrc": "/figmaAssets/cta-yacht-bg.jpg"
+  }
+}

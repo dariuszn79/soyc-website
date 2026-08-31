@@ -1,0 +1,34 @@
+{
+  "metadata": {
+    "title": "Community | Speedbird Offshore Sailing Club",
+    "description": "Meet the experienced offshore sailors and skippers who make up the Speedbird Offshore Sailing Club community."
+  },
+  "hero": {
+    "heading": "Experienced offshore sailors. Year-round",
+    "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer.",
+    "imageSrc": "/figmaAssets/community/hero.png",
+    "imageAlt": "Speedbird sailors aboard an offshore yacht"
+  },
+  "gallery": {
+    "kicker": "Our Home",
+    "heading": "Members gallery",
+    "body": "Learn by doing. All practical courses include living aboard and passage-making on the Solent and surrounding waters.",
+    "src": "/figmaAssets/community/gallery.jpg",
+    "overlaySrc": "/figmaAssets/community/gallery-overlay.png",
+    "alt": "Speedbird members sailing together",
+    "totalSlides": 10
+  },
+  "skippers": {
+    "kicker": "Our Home",
+    "heading": "Our skippers",
+    "body": "We have grown into an active community of more than 300 members from all walks of life. We welcome everyone, from complete beginners taking their first taster sail to experienced Yachtmaster Ocean holders. What brings us together is a shared passion for sailing, learning and adventure."
+  },
+  "cta": {
+    "kicker": "Our home",
+    "heading": "Thinking of joining",
+    "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
+    "label": "Join us",
+    "href": "/join",
+    "imageSrc": "/figmaAssets/community/cta.jpg"
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Speedbird",
+    "model": "Bavaria  C38",
+    "year": "2024",
+    "description": "Our flagship yacht. Comfortable, capable, and equipped for both short and extended cruising. Popular for weekend passages and longer offshore cruises.",
+    "photo": "/figmaAssets/fleet-speedbird.png",
+    "photoAlt": "Speedbird moored in the marina",
+    "specsLeft": [
+      { "label": "Size", "value": "11.5m LOA (38')" },
+      { "label": "Sail area:", "value": "68 sq m" },
+      { "label": "Draught", "value": "2.1m" }
+    ],
+    "specsRight": [
+      { "label": "Max crew:", "value": "5" },
+      { "label": "Cabins:", "value": "3" },
+      { "label": "Berths", "value": "7" }
+    ]
+  },
+  {
+    "name": "Concorde",
+    "model": "Bavaria  36",
+    "year": "2014",
+    "description": "Our flagship yacht. Comfortable, capable, and equipped for both short and extended cruising. Popular for weekend passages and longer offshore cruises.",
+    "photo": "/figmaAssets/fleet-concorde.png",
+    "photoAlt": "Concorde moored alongside the marina pontoon",
+    "specsLeft": [
+      { "label": "Size", "value": "11.5m LOA (38')" },
+      { "label": "Sail area:", "value": "68 sq m" },
+      { "label": "Draught", "value": "2.1m" }
+    ],
+    "specsRight": [
+      { "label": "Max crew:", "value": "5" },
+      { "label": "Cabins:", "value": "3" },
+      { "label": "Berths", "value": "7" }
+    ]
+  }
+]
