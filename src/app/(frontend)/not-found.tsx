@@ -1,10 +1,10 @@
 import Link from "next/link";
-import pageJson from "@/data/json/pages/not-found.json";
-import type { NotFoundPageContent } from "@/data/page-types";
+import { getNotFound } from "@/lib/payload/queries";
 
-const content: NotFoundPageContent = pageJson;
+export default async function NotFound() {
+  const content = await getNotFound();
+  const action = content.action ?? { href: "/", label: "Back to home" };
 
-export default function NotFound() {
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center gap-spacing-lg bg-brand-tertiary-100 px-spacing-md">
       <div className="flex flex-col items-center gap-spacing-md text-center">
@@ -19,10 +19,10 @@ export default function NotFound() {
           {content.body}
         </p>
         <Link
-          href={content.action.href}
+          href={action.href ?? "/"}
           className="h-auto rounded-none bg-brand-primary-100 px-spacing-md py-spacing-xs font-button text-button font-normal leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-primary-hover"
         >
-          {content.action.label}
+          {action.label}
         </Link>
       </div>
     </main>

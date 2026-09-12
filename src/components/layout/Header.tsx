@@ -7,8 +7,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLayoutEffect, useRef, useState } from "react";
 import { NavItem } from "@/components/atoms/NavItem";
-import { primaryNavItems } from "@/data/navigation";
-import { siteContent } from "@/data/site";
+import { primaryNavItems as primaryNavItemsDefault } from "@/data/navigation";
+import { siteContent as siteContentDefault } from "@/data/site";
+import type { SiteContent } from "@/data/page-types";
+import type { NavItem as NavItemType } from "@/data/content-types";
 
 function normalizePath(path: string) {
   return path === "/" ? path : path.replace(/\/$/, "");
@@ -25,7 +27,15 @@ function normalizePath(path: string) {
  * page gets the same header automatically.
  */
 
-export function Header() {
+export function Header({
+  site,
+  nav,
+}: {
+  site?: SiteContent;
+  nav?: NavItemType[];
+} = {}) {
+  const siteContent = site ?? siteContentDefault;
+  const primaryNavItems = nav ?? primaryNavItemsDefault;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);

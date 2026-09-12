@@ -2,11 +2,21 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/organisms/Footer";
-import { siteContent } from "@/data/site";
+import { getSiteSettings, getNavigation } from "@/lib/payload/queries";
+import { LivePreviewListener } from "@/components/LivePreviewListener";
 
-export const metadata: Metadata = siteContent.metadata;
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteSettings();
+  return site.metadata;
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function FrontendLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [site, nav] = await Promise.all([getSiteSettings(), getNavigation()]);
+
   return (
     <html lang="en">
       <head>
@@ -15,9 +25,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         {/* Header is rendered once here so it is identical across every page */}
-        <Header />
+        <Header site={site} nav={nav.primaryNavItems as never} />
         {children}
-        <Footer />
+        <Footer site={site} />
+        <LivePreviewListener />
       </body>
     </html>
   );
