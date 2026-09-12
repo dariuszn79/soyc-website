@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { SectionHeading } from "@/components/organisms/SectionHeading";
 import { SectionTabsClient, type SectionTabData } from "./SectionTabsClient";
 import { cardLayoutClass, cardSpan, renderCard } from "@/components/blocks/renderCard";
 
@@ -36,11 +35,12 @@ export async function SectionTabs({ block }: { block: AnyObj }) {
   const tabs: SectionTabData[] = [];
   for (const [i, tab] of (block.tabs ?? []).entries()) {
     const cards = await resolveTabCards(tab as AnyObj, tab.layout ?? "grid-3");
-    const h = tab.sectionHeading;
     const content =
-      tab.showHeading && h?.heading ? (
+      tab.showTabSubheading && tab.subheading ? (
         <div className="flex flex-col gap-spacing-md">
-          <SectionHeading kicker={h.kicker} heading={h.heading} body={h.body} />
+          <p className="font-gill max-w-[720px] text-[20px] leading-[28px] text-brand-ink sm:text-[24px] sm:leading-[32px]">
+            {tab.subheading}
+          </p>
           {cards}
         </div>
       ) : (

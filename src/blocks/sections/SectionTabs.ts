@@ -1,10 +1,9 @@
 import type { Block } from "payload";
 import { cardBlocks } from "../cards";
-import { sectionHeadingFields } from "../../fields/sectionHeading";
 
 /**
- * Universal tabbed section — sticky tab bar, each tab holds either
- * hand-picked cards or cards sourced from a collection.
+ * Universal tabbed section — sticky tab bar, each tab holds an optional
+ * plain-text subheading plus hand-picked cards.
  * → components/organisms/SectionTabs.tsx (StickyTabs).
  */
 export const SectionTabsBlock: Block = {
@@ -12,7 +11,6 @@ export const SectionTabsBlock: Block = {
   interfaceName: "SectionTabsBlock",
   labels: { singular: "Section: Tabs", plural: "Sections: Tabs" },
   fields: [
-    ...sectionHeadingFields(),
     { name: "ariaLabel", type: "text", label: "Tab bar accessibility label" },
     {
       name: "tabs",
@@ -32,7 +30,20 @@ export const SectionTabsBlock: Block = {
             { label: "Stacked", value: "stacked" },
           ],
         },
-        ...sectionHeadingFields(),
+        {
+          name: "showTabSubheading",
+          type: "checkbox",
+          defaultValue: false,
+          label: "Show tab subheading",
+        },
+        {
+          name: "subheading",
+          type: "text",
+          label: "Subheading",
+          admin: {
+            condition: (_data, siblingData) => Boolean(siblingData?.showTabSubheading),
+          },
+        },
         {
           name: "content",
           type: "blocks",

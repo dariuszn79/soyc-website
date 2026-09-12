@@ -896,23 +896,13 @@ export interface RichTextContentBlock {
  * via the `definition` "SectionTabsBlock".
  */
 export interface SectionTabsBlock {
-  showHeading?: boolean | null;
-  sectionHeading?: {
-    kicker?: string | null;
-    heading: string;
-    body?: string | null;
-  };
   ariaLabel?: string | null;
   tabs?:
     | {
         label: string;
         layout?: ('grid-2' | 'grid-3' | 'grid-4' | 'stacked') | null;
-        showHeading?: boolean | null;
-        sectionHeading?: {
-          kicker?: string | null;
-          heading: string;
-          body?: string | null;
-        };
+        showTabSubheading?: boolean | null;
+        subheading?: string | null;
         content?:
           | (
               | CardLrgBlock
@@ -1950,28 +1940,14 @@ export interface RichTextContentBlockSelect<T extends boolean = true> {
  * via the `definition` "SectionTabsBlock_select".
  */
 export interface SectionTabsBlockSelect<T extends boolean = true> {
-  showHeading?: T;
-  sectionHeading?:
-    | T
-    | {
-        kicker?: T;
-        heading?: T;
-        body?: T;
-      };
   ariaLabel?: T;
   tabs?:
     | T
     | {
         label?: T;
         layout?: T;
-        showHeading?: T;
-        sectionHeading?:
-          | T
-          | {
-              kicker?: T;
-              heading?: T;
-              body?: T;
-            };
+        showTabSubheading?: T;
+        subheading?: T;
         content?:
           | T
           | {

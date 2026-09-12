@@ -253,10 +253,10 @@ const joinTabs = (j: AnyObj) => {
     tabs: [
       {
         label: "Membership",
-        source: "manual",
         layout: "grid-3",
+        showTabSubheading: true,
+        subheading: p.membership.intro,
         content: [
-          { blockType: "richText", body: [para(p.membership.intro)], size: "lead" },
           ...p.membership.cards.map((c: AnyObj) => ({
             blockType: "cardMed",
             heading: c.heading,
@@ -269,17 +269,10 @@ const joinTabs = (j: AnyObj) => {
       },
       {
         label: "Fees",
-        source: "manual",
         layout: "stacked",
+        showTabSubheading: true,
+        subheading: p.fees.intro.body,
         content: [
-          {
-            blockType: "cardLrg",
-            kicker: p.fees.intro.kicker,
-            heading: (p.fees.intro.headingLines as string[]).join("\n"),
-            body: [para(p.fees.intro.body)],
-            variant: "tertiary",
-            bordered: true,
-          },
           {
             blockType: "feeGroup",
             heading: p.fees.membership.heading,
@@ -298,18 +291,10 @@ const joinTabs = (j: AnyObj) => {
       },
       {
         label: "Tester Day",
-        source: "manual",
         layout: "grid-3",
+        showTabSubheading: true,
+        subheading: p.testerDay.intro.body,
         content: [
-          {
-            blockType: "cardLrg",
-            kicker: p.testerDay.intro.kicker,
-            heading: (p.testerDay.intro.headingLines as string[]).join("\n"),
-            body: [para(p.testerDay.intro.body)],
-            variant: "tertiary",
-            bordered: true,
-            fullWidth: true,
-          },
           {
             blockType: "cardMed",
             heading: p.testerDay.expect.heading,
@@ -346,18 +331,10 @@ const joinTabs = (j: AnyObj) => {
       },
       {
         label: "What do you need",
-        source: "manual",
         layout: "grid-3",
+        showTabSubheading: true,
+        subheading: p.gear.intro.body,
         content: [
-          {
-            blockType: "cardLrg",
-            kicker: p.gear.intro.kicker,
-            heading: p.gear.intro.heading,
-            body: [para(p.gear.intro.body)],
-            variant: "tertiary",
-            bordered: true,
-            fullWidth: true,
-          },
           ...(p.gear.cards as AnyObj[]).map(cardMed),
         ],
       },
