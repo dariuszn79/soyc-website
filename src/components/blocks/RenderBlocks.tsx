@@ -255,7 +255,9 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
       );
     }
 
-    case "coursesTabs":
+    case "coursesTabs": {
+      const { getCourses } = await import("@/lib/payload/queries");
+      const { courseTabs, coursesByTab } = await getCourses();
       return (
         <BodyWrapper key={index} first={first}>
           <TabsCourses
@@ -264,9 +266,12 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
               emptyMessage: block.emptyMessage ?? "",
               rateNote: block.rateNote ?? "",
             }}
+            courseTabs={courseTabs}
+            coursesByTab={coursesByTab}
           />
         </BodyWrapper>
       );
+    }
 
     case "cruiseCarousel": {
       const { getCruiseEvents } = await import("@/lib/payload/queries");

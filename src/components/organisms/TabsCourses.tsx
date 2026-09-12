@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { CardCourse } from "@/components/molecules/CardCourse";
 import { StickyTabs } from "@/components/molecules/StickyTabs";
-import { coursesByTab, courseTabs } from "@/data/courses";
-import type { CourseTab } from "@/data/courses";
+import type { Course, CourseTab } from "@/data/courses";
 import type { TrainingPageContent } from "@/data/page-types";
 
 /**
@@ -18,7 +17,15 @@ import type { TrainingPageContent } from "@/data/page-types";
  * CardCourse molecules.
  */
 
-export function TabsCourses({ content }: { content: TrainingPageContent["courseTabs"] }) {
+export function TabsCourses({
+  content,
+  courseTabs,
+  coursesByTab,
+}: {
+  content: TrainingPageContent["courseTabs"];
+  courseTabs: Array<{ value: CourseTab; label: string }>;
+  coursesByTab: Record<CourseTab, Course[]>;
+}) {
   const [activeTab, setActiveTab] = useState<CourseTab>("Beginner");
   const courses = coursesByTab[activeTab];
 

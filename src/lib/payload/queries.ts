@@ -12,7 +12,7 @@ import { boardMembers, trainingInstructors, communitySkippers } from "@/data/peo
 import { courseTabs, coursesByTab, upcomingTrainingCourses } from "@/data/courses";
 import { cruiseEvents } from "@/data/cruises";
 
-import type { Person } from "@/data/content-types";
+import type { Course, CourseTab, Person } from "@/data/content-types";
 import type { Page } from "@/payload-types";
 
 /** Run a Payload query, falling back to bundled JSON if the DB is unreachable
@@ -105,27 +105,30 @@ export const getPeople = (group: "board" | "instructors" | "skippers") =>
     return docs.length ? (docs as unknown as Person[]) : peopleFallback[group];
   }, peopleFallback[group]);
 
-export const getCourses = () =>
+export const getCourses = (): Promise<{
+  courseTabs: typeof courseTabs;
+  coursesByTab: Record<CourseTab, Course[]>;
+}> =>
   withFallback(
     async () => {
       const payload = await getPayloadClient();
       const { docs } = await payload.find({ collection: "courses", sort: "order", limit: 200 });
       if (!docs.length) return { courseTabs, coursesByTab };
-      const grouped: Record<string, unknown[]> = {
+      const grouped: Record<CourseTab, Course[]> = {
         Beginner: [],
         Intermediate: [],
         Advanced: [],
         "All Levels": [],
       };
       for (const c of docs as unknown as Array<Record<string, unknown>>) {
-        const tab = (c.tab as string) ?? "All Levels";
+        const tab = ((c.tab as string) ?? "All Levels") as CourseTab;
         (grouped[tab] ??= []).push({
-          level: c.level ?? tab,
-          title: c.title,
-          desc: c.desc ?? "",
+          level: (c.level as string) ?? tab,
+          title: c.title as string,
+          desc: (c.desc as string) ?? "",
           items: ((c.items as Array<{ item?: string }>) ?? []).map((i) => i.item ?? ""),
-          prices: c.prices ?? [],
-          notes: c.notes ?? "",
+          prices: (c.prices as Course["prices"]) ?? ([] as unknown as Course["prices"]),
+          notes: (c.notes as string) ?? "",
         });
       }
       return { courseTabs, coursesByTab: grouped };
