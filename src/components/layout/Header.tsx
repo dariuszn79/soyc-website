@@ -145,13 +145,13 @@ export function Header({
           })}
 
           <Link
-            href="/join"
+            href={siteContent.joinHref ?? "/join"}
             className="flex h-12 items-center justify-center bg-brand-primary-100 px-spacing-md py-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-primary-100/90"
           >
             {siteContent.headerJoinLabel}
           </Link>
           <Link
-            href="/members"
+            href={siteContent.membersHref ?? "/members-area"}
             className="flex h-12 items-center justify-center bg-brand-secondary-100 px-spacing-md py-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-secondary-100/90"
           >
             {siteContent.membersLabel}
@@ -197,14 +197,14 @@ export function Header({
             })}
             <div className="mt-spacing-md grid grid-cols-2 gap-spacing-xxs">
               <Link
-                href="/join"
+                href={siteContent.joinHref ?? "/join"}
                 className="flex h-12 items-center justify-center bg-brand-primary-100 px-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100"
                 onClick={() => setMobileOpen(false)}
               >
                 {siteContent.headerJoinLabel}
               </Link>
               <Link
-                href="/members"
+                href={siteContent.membersHref ?? "/members-area"}
                 className="flex h-12 items-center justify-center bg-brand-secondary-100 px-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100"
                 onClick={() => setMobileOpen(false)}
               >

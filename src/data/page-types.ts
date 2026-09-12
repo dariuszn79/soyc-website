@@ -118,6 +118,11 @@ export interface SiteContent {
   registration: string;
   headerJoinLabel: string;
   membersLabel: string;
+  /** Optional href overrides (Header/Footer globals). */
+  joinHref?: string;
+  membersHref?: string;
+  /** Non-page footer links (Footer global). */
+  extraLinks?: Array<{ label: string; href: string }>;
   primaryNavLabel: string;
   mobileNavLabel: string;
   openNavLabel: string;

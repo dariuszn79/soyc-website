@@ -12,7 +12,7 @@ export async function PageView({ slug }: { slug: string }) {
   return (
     <main className="flex min-h-screen w-full flex-col overflow-hidden bg-brand-tertiary-100">
       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <RenderBlocks blocks={(page.layout as any) ?? []} variant={variant} />
+      <RenderBlocks blocks={(page.pageSections as any) ?? []} variant={variant} />
     </main>
   );
 }

@@ -6,7 +6,6 @@ import { primaryNavItems, footerNavLinks } from "@/data/navigation";
 import { componentLabels } from "@/data/component-labels";
 import fleetLocationJson from "@/data/json/components/fleet-location.json";
 import cruiseMapJson from "@/data/json/components/cruise-map.json";
-import notFoundJson from "@/data/json/pages/not-found.json";
 import { fleet } from "@/data/fleet";
 import { boardMembers, trainingInstructors, communitySkippers } from "@/data/people";
 import { courseTabs, coursesByTab, upcomingTrainingCourses } from "@/data/courses";
@@ -14,6 +13,7 @@ import { cruiseEvents } from "@/data/cruises";
 
 import type { Course, CourseTab, Person } from "@/data/content-types";
 import type { Page } from "@/payload-types";
+import { toBoat, toEventCard, toPerson } from "./transform";
 
 /** Run a Payload query, falling back to bundled JSON if the DB is unreachable
  * (e.g. before DATABASE_URI is configured or the schema is seeded). */
@@ -34,17 +34,77 @@ const peopleFallback: Record<string, Person[]> = {
 export const getSiteSettings = () =>
   withFallback(async () => {
     const payload = await getPayloadClient();
-    return (await payload.findGlobal({ slug: "site-settings" })) as typeof siteContent;
+    const settings = await payload.findGlobal({ slug: "site-settings" });
+    return { ...siteContent, ...mergeGlobal(settings) };
   }, siteContent);
 
+/**
+ * Header content — the `header` global merged over the bundled site.json
+ * fallback so the Header component keeps receiving its SiteContent shape.
+ */
+/** Merge a global doc over the site.json fallback, ignoring unset fields. */
+const mergeGlobal = (doc: unknown) =>
+  Object.fromEntries(
+    Object.entries(doc as Record<string, unknown>).filter(([, v]) => v != null),
+  );
+
+export const getHeader = () =>
+  withFallback(async () => {
+    const payload = await getPayloadClient();
+    const header = await payload.findGlobal({ slug: "header" });
+    return { ...siteContent, ...mergeGlobal(header) };
+  }, siteContent);
+
+/**
+ * Footer content — the `footer` global merged over site.json, plus the
+ * page-driven + manual footer links via getNavigation().
+ */
+export const getFooter = () =>
+  withFallback(async () => {
+    const payload = await getPayloadClient();
+    const footer = await payload.findGlobal({ slug: "footer" });
+    return { ...siteContent, ...mergeGlobal(footer) };
+  }, siteContent);
+
+/**
+ * Navigation is generated from Pages: each page's `nav.showIn` marks it for
+ * the header and/or footer, `nav.navOrder` sorts, `nav.navLabel` overrides
+ * the title. Footer extras (non-page links) come from the `footer` global.
+ */
 export const getNavigation = () =>
   withFallback(
     async () => {
       const payload = await getPayloadClient();
-      const nav = await payload.findGlobal({ slug: "navigation" });
+      const { docs } = await payload.find({ collection: "pages", limit: 200 });
+      const pages = docs as Page[];
+
+      const inNav = (p: Page, area: string) =>
+        (((p.nav as Record<string, unknown> | undefined)?.showIn as string[] | undefined) ?? []).includes(area);
+      const byOrder = (a: Page, b: Page) =>
+        (((a.nav as Record<string, unknown> | undefined)?.navOrder as number) ?? 999) -
+        (((b.nav as Record<string, unknown> | undefined)?.navOrder as number) ?? 999);
+      const toItem = (p: Page) => ({
+        label: ((p.nav as Record<string, unknown> | undefined)?.navLabel as string) || p.title,
+        href: p.slug === "home" ? "/" : `/${p.slug}`,
+        divider: ((p.nav as Record<string, unknown> | undefined)?.divider as boolean) ?? false,
+      });
+
+      const headerItems = pages.filter((p) => inNav(p, "header")).sort(byOrder).map(toItem);
+      const footerPageLinks = pages
+        .filter((p) => inNav(p, "footer"))
+        .sort(byOrder)
+        .map((p) => ({ label: toItem(p).label, href: toItem(p).href }));
+
+      const footer = await getFooter();
+      const extra = ((footer.extraLinks as Array<{ label: string; href: string }> | undefined) ?? []).map(
+        (l) => ({ label: l.label, href: l.href }),
+      );
+
       return {
-        primaryNavItems: nav.primaryNavItems ?? primaryNavItems,
-        footerNavLinks: nav.footerNavLinks ?? footerNavLinks,
+        primaryNavItems: headerItems.length ? headerItems : primaryNavItems,
+        footerNavLinks: [...footerPageLinks, ...extra].length
+          ? [...footerPageLinks, ...extra]
+          : footerNavLinks,
       };
     },
     { primaryNavItems, footerNavLinks },
@@ -68,19 +128,13 @@ export const getCruiseMap = () =>
     return (await payload.findGlobal({ slug: "cruise-map" })) as typeof cruiseMapJson;
   }, cruiseMapJson);
 
-export const getNotFound = () =>
-  withFallback(async () => {
-    const payload = await getPayloadClient();
-    return (await payload.findGlobal({ slug: "page-not-found" })) as typeof notFoundJson;
-  }, notFoundJson);
-
 export const getPage = (slug: string): Promise<Page | null> =>
   withFallback(async () => {
     const payload = await getPayloadClient();
     const { docs } = await payload.find({
       collection: "pages",
       where: { slug: { equals: slug } },
-      depth: 2,
+      depth: 3,
       limit: 1,
     });
     return (docs[0] as Page) ?? null;
@@ -89,8 +143,8 @@ export const getPage = (slug: string): Promise<Page | null> =>
 export const getBoats = () =>
   withFallback(async () => {
     const payload = await getPayloadClient();
-    const { docs } = await payload.find({ collection: "boats", sort: "order", limit: 100 });
-    return docs.length ? docs : fleet;
+    const { docs } = await payload.find({ collection: "boats", sort: "order", limit: 100, depth: 2 });
+    return docs.length ? docs.map(toBoat) : fleet;
   }, fleet);
 
 export const getPeople = (group: "board" | "instructors" | "skippers") =>
@@ -101,8 +155,9 @@ export const getPeople = (group: "board" | "instructors" | "skippers") =>
       where: { group: { equals: group } },
       sort: "order",
       limit: 200,
+      depth: 2,
     });
-    return docs.length ? (docs as unknown as Person[]) : peopleFallback[group];
+    return docs.length ? (docs.map(toPerson) as Person[]) : peopleFallback[group];
   }, peopleFallback[group]);
 
 export const getCourses = (): Promise<{
@@ -144,7 +199,7 @@ export const getTrainingEvents = () =>
       sort: "order",
       limit: 100,
     });
-    return docs.length ? docs : upcomingTrainingCourses;
+    return docs.length ? docs.map(toEventCard) : upcomingTrainingCourses;
   }, upcomingTrainingCourses);
 
 export const getCruiseEvents = () =>
@@ -154,6 +209,7 @@ export const getCruiseEvents = () =>
       collection: "cruise-events",
       sort: "order",
       limit: 100,
+      depth: 2,
     });
-    return docs.length ? docs : cruiseEvents;
+    return docs.length ? docs.map(toEventCard) : cruiseEvents;
   }, cruiseEvents);

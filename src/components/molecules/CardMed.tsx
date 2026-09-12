@@ -17,10 +17,10 @@ export function CardMed({ heading, children }: CardMedProps) {
     <div className="flex max-w-[480px] flex-col gap-spacing-lg p-6 sm:p-[56px]">
       <Overline />
       <div className="flex flex-col gap-spacing-md">
-        <h2 className="font-baskerville text-[40px] italic leading-[44px] text-brand-secondary-100 sm:text-heading-xl sm:leading-heading">
+        <h2 className="font-baskerville text-heading-md italic leading-heading text-brand-secondary-100">
           {heading}
         </h2>
-        <div className="font-gill text-[18px] leading-[24px] text-brand-ink sm:max-h-[180px] sm:overflow-hidden">
+        <div className="font-gill text-[18px] leading-[24px] text-brand-ink">
           {children}
         </div>
       </div>

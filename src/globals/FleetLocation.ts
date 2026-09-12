@@ -1,9 +1,14 @@
 import type { GlobalConfig } from "payload";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const FleetLocation: GlobalConfig = {
   slug: "fleet-location",
   label: "Fleet Location",
+  admin: {
+    group: adminGroups.fleet,
+    description: "The fleet's base location / home port map.",
+  },
   access: { read: () => true },
   fields: [
     { name: "heading", type: "text" },

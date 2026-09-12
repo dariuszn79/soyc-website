@@ -94,13 +94,13 @@ export function SiteFooter() {
           ))}
           <span className="ml-3 flex items-center gap-2">
             <Link
-              href="/join"
+              href={siteContent.joinHref ?? "/join"}
               className="bg-brand-primary-100 px-4 py-2 font-button text-body-sm text-brand-tertiary-100 transition-colors hover:bg-brand-primary-hover"
             >
               {siteContent.headerJoinLabel}
             </Link>
             <Link
-              href="/members"
+              href={siteContent.membersHref ?? "/members-area"}
               className="bg-brand-secondary-100 px-4 py-2 font-button text-body-sm text-brand-tertiary-100 transition-colors hover:bg-brand-secondary-hover"
             >
               {siteContent.membersLabel}

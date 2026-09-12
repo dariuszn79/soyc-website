@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SectionHeading } from "@/components/molecules/SectionHeading";
+import { SectionHeading } from "@/components/organisms/SectionHeading";
 import type { HomePageContent } from "@/data/page-types";
 
 /**

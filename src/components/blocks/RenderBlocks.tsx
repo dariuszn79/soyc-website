@@ -1,23 +1,39 @@
+import { Kicker } from "@/components/atoms/Kicker";
 import { Overline } from "@/components/atoms/Overline";
-import { SectionHeading } from "@/components/molecules/SectionHeading";
-import { CardLrg } from "@/components/molecules/CardLrg";
-import { CardPerson } from "@/components/molecules/CardPerson";
-import { CardEvent } from "@/components/molecules/CardEvent";
-import { RichText } from "@/components/molecules/RichText";
-import { HeroHome } from "@/components/organisms/HeroHome";
-import { SectionSideImage } from "@/components/organisms/SectionSideImage";
+import { SectionHeader } from "@/components/organisms/SectionHeader";
+import { SectionHeading } from "@/components/organisms/SectionHeading";
+import { SectionImageParalax } from "@/components/organisms/SectionImageParalax";
 import { SectionImageSide } from "@/components/organisms/SectionImageSide";
 import { SectionBackgroundImage } from "@/components/organisms/SectionBackgroundImage";
+import { SectionCenter } from "@/components/organisms/SectionCenter";
 import { SectionGallery } from "@/components/organisms/SectionGallery";
+import { SectionFleetLocation } from "@/components/organisms/SectionFleetLocation";
+import { SectionTabs } from "@/components/organisms/SectionTabs";
+import { SectionContent } from "@/components/organisms/SectionContent";
+import { NauticalMap } from "@/components/organisms/NauticalMap";
+import { HeroHome } from "@/components/organisms/HeroHome";
 import { CruiseEventCarousel } from "@/components/organisms/CruiseEventCarousel";
-import { FleetLocation } from "@/components/organisms/FleetLocation";
-import { TabsCourses } from "@/components/organisms/TabsCourses";
-import { TabsJoinUs } from "@/components/organisms/TabsJoinUs";
 import { MembershipApplicationForm } from "@/components/organisms/MembershipApplicationForm";
+import { FormEmbed } from "@/components/organisms/FormEmbed";
+import { CardPerson } from "@/components/molecules/CardPerson";
+import { CardEvent } from "@/components/molecules/CardEvent";
 
-import { SectionKicker } from "./SectionKicker";
-import { toRichTextBlocks, toCta } from "@/lib/payload/transform";
-import { getBoats } from "@/lib/payload/queries";
+import { cardLayoutClass, cardSpan, renderCard } from "./renderCard";
+import {
+  toBoat,
+  toCta,
+  toEventCard,
+  toMediaAlt,
+  toMediaSrc,
+  toPerson,
+} from "@/lib/payload/transform";
+import {
+  getBoats,
+  getCruiseEvents,
+  getFleetLocation,
+  getPeople,
+  getTrainingEvents,
+} from "@/lib/payload/queries";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Block = any;
@@ -26,6 +42,21 @@ type Block = any;
 function BodyWrapper({ children, first }: { children: React.ReactNode; first?: boolean }) {
   return (
     <div className={`mx-auto w-full max-w-[1440px] ${first ? "" : "mt-[60px]"}`}>{children}</div>
+  );
+}
+
+/** Optional SectionHeading above a section — driven by the `showHeading`
+ * toggle + `sectionHeading` group every section block exposes. */
+function SectionHeadingToggle({ block }: { block: Block }) {
+  const h = block.sectionHeading;
+  if (!block.showHeading || !h?.heading) return null;
+  return (
+    <SectionHeading
+      kicker={<Kicker label={h.kicker} />}
+      heading={h.heading}
+      body={h.body}
+      as="h2"
+    />
   );
 }
 
@@ -40,22 +71,22 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
             heading: block.heading ?? "",
             stats: (block.stats ?? []).map((s: Block) => ({ value: s.value, label: s.label })),
             coordinates: block.coordinates ?? "",
-            backgroundImage: block.backgroundImage ?? "",
-            backgroundAlt: block.backgroundAlt ?? "",
+            backgroundImage: toMediaSrc(block.backgroundImage),
+            backgroundAlt: block.backgroundAlt || toMediaAlt(block.backgroundImage),
             actions: (block.actions ?? []).map((a: Block) => ({ label: a.label, href: a.href })),
           }}
         />
       );
 
-    case "heroBasic":
+    case "sectionHeader":
       return (
         <div key={index} className="flex w-full flex-col items-center px-4 sm:px-spacing-md">
-          <SectionHeading
+          <SectionHeader
             kicker={<Overline />}
             heading={block.heading ?? ""}
             body={block.body}
-            imageSrc={block.imageSrc || undefined}
-            imageAlt={block.imageAlt || undefined}
+            imageSrc={toMediaSrc(block.image) || undefined}
+            imageAlt={block.imageAlt || toMediaAlt(block.image)}
             as="h1"
             compact
             cta={toCta(block.cta)}
@@ -63,22 +94,46 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
         </div>
       );
 
-    case "sectionImageSide":
+    case "sectionHeading":
       return (
         <BodyWrapper key={index} first={first}>
-          <SectionSideImage
+          <SectionHeading
+            kicker={<Kicker label={block.kicker} />}
+            heading={block.heading ?? ""}
+            body={block.body}
+            as={(block.as as "h1" | "h2" | "h3") ?? "h2"}
+          />
+        </BodyWrapper>
+      );
+
+    case "sectionImageParalax":
+      return (
+        <BodyWrapper key={index} first={first}>
+          <SectionHeadingToggle block={block} />
+          <SectionImageParalax
             kicker={block.kicker ?? ""}
             heading={block.heading ?? ""}
             body={block.body ?? ""}
             cta={{ label: block.cta?.label ?? "", href: block.cta?.href ?? "#" }}
-            image={block.image ?? ""}
-            imageAlt={block.imageAlt ?? ""}
+            image={toMediaSrc(block.image)}
+            imageAlt={block.imageAlt || toMediaAlt(block.image)}
             align={block.align ?? "right"}
             variant={block.variant ?? "secondary"}
             figmaLayout
           />
         </BodyWrapper>
       );
+
+    case "sectionImageSide": {
+      const boat = block.boat && typeof block.boat === "object" ? toBoat(block.boat) : null;
+      if (!boat) return null;
+      return (
+        <BodyWrapper key={index} first={first}>
+          <SectionHeadingToggle block={block} />
+          <SectionImageSide boat={boat} imagePosition={block.imagePosition ?? "left"} />
+        </BodyWrapper>
+      );
+    }
 
     case "sectionBackgroundImage":
       return (
@@ -89,119 +144,84 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
             body={block.body ?? ""}
             ctaLabel={block.ctaLabel ?? ""}
             ctaHref={block.ctaHref ?? "#"}
-            imageSrc={block.imageSrc ?? ""}
+            imageSrc={toMediaSrc(block.image)}
           />
         </BodyWrapper>
       );
 
-    case "sectionHeading":
+    case "sectionCenter":
       return (
         <BodyWrapper key={index} first={first}>
-          <SectionHeading
-            kicker={<SectionKicker label={block.kicker} />}
-            heading={block.heading ?? ""}
-            body={block.body}
-            as={(block.as as "h1" | "h2") ?? "h2"}
+          <SectionCenter
+            heading={block.heading || undefined}
+            body={block.body || undefined}
+            ctaLabel={block.ctaLabel || undefined}
+            ctaHref={block.ctaHref || undefined}
           />
         </BodyWrapper>
       );
 
-    case "simpleContent":
+    case "sectionGallery":
       return (
-        <div key={index} className="mx-auto flex min-h-[60vh] w-full max-w-[720px] flex-col items-center justify-center gap-spacing-md px-4 py-24 text-center sm:px-spacing-md">
-          {block.label && (
-            <p className="font-gill text-label uppercase leading-label text-brand-secondary-100">
-              {block.label}
-            </p>
-          )}
-          <h1 className="font-baskerville text-heading-md italic leading-heading text-brand-secondary-100 sm:text-heading-xl">
-            {block.heading}
-          </h1>
-          {block.body && (
-            <p className="font-gill text-body leading-body text-brand-ink lg:text-body-lg">
-              {block.body}
-            </p>
-          )}
-          <div className="mt-spacing-md flex flex-wrap items-center justify-center gap-4">
-            {(block.actions ?? []).map((a: Block, i: number) => (
-              <a
-                key={i}
-                href={a.href}
-                className={
-                  i === 0
-                    ? "inline-flex items-center justify-center bg-brand-primary-100 px-spacing-md py-spacing-xs font-button text-button leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-primary-hover"
-                    : "inline-flex items-center justify-center border border-brand-secondary-100 px-spacing-md py-spacing-xs font-button text-button leading-button tracking-button text-brand-secondary-100 transition-colors hover:bg-brand-secondary-100/10"
-                }
-              >
-                {a.label}
-              </a>
-            ))}
+        <BodyWrapper key={index} first={first}>
+          <SectionHeadingToggle block={block} />
+          <div className="mt-[60px]">
+            <SectionGallery
+              src={toMediaSrc(block.image)}
+              overlaySrc={toMediaSrc(block.overlayImage) || undefined}
+              alt={block.alt || toMediaAlt(block.image)}
+              totalSlides={block.totalSlides ?? 10}
+            />
           </div>
-        </div>
-      );
-
-    case "cardGrid":
-      return (
-        <BodyWrapper key={index} first={first}>
-          <section className="grid w-full grid-cols-1 gap-spacing-md lg:grid-cols-[repeat(2,minmax(0,560px))] lg:justify-between">
-            {(block.cards ?? []).map((card: Block, i: number) => (
-              <div key={i} className="min-h-0 lg:min-h-[578px]">
-                <CardLrg
-                  kicker={card.kicker ?? ""}
-                  heading={card.heading ?? ""}
-                  body={<span className="whitespace-pre-line">{card.body}</span>}
-                  cta={toCta(card.cta)}
-                  figmaLayout
-                />
-              </div>
-            ))}
-          </section>
         </BodyWrapper>
       );
 
-    case "richTextCards":
+    case "sectionFleetLocation": {
+      const content = await getFleetLocation();
       return (
         <BodyWrapper key={index} first={first}>
-          <section className="grid w-full gap-spacing-md py-spacing-md lg:grid-cols-2">
-            {(block.cards ?? []).map((card: Block, i: number) => (
-              <div key={i} className="lg:h-[414px]">
-                <CardLrg
-                  kicker={card.kicker ?? ""}
-                  heading={card.heading ?? ""}
-                  figmaLayout
-                  body={<RichText blocks={toRichTextBlocks(card.blocks)} />}
-                />
-              </div>
-            ))}
-          </section>
+          <SectionFleetLocation flush={block.flush ?? false} content={content} />
         </BodyWrapper>
       );
+    }
 
-    case "peopleSection": {
-      const { getPeople } = await import("@/lib/payload/queries");
-      const people = await getPeople(block.group ?? "board");
+    case "sectionFleet": {
+      const boats = await getBoats();
       return (
         <BodyWrapper key={index} first={first}>
-          <SectionHeading
-            kicker={<SectionKicker label={block.kicker} />}
-            heading={block.heading ?? ""}
-            body={block.body}
-            as="h2"
-          />
-          <div className="mt-[60px] grid grid-cols-1 gap-spacing-md md:grid-cols-2 xl:grid-cols-3">
-            {people.map((person, i) => (
-              <CardPerson key={`${person.name}-${i}`} {...person} layout="club" />
+          <SectionHeadingToggle block={block} />
+          <div className="flex w-full flex-col gap-spacing-md">
+            {boats.map((boat: Block, i: number) => (
+              <SectionImageSide
+                key={i}
+                boat={toBoat(boat)}
+                imagePosition={i % 2 === 0 ? "left" : "right"}
+              />
             ))}
           </div>
         </BodyWrapper>
       );
     }
 
-    case "paragraphsSection":
+    case "sectionPeople": {
+      const people = await getPeople(block.group ?? "board");
+      return (
+        <BodyWrapper key={index} first={first}>
+          <SectionHeadingToggle block={block} />
+          <div className="mt-[60px] grid grid-cols-1 gap-spacing-md md:grid-cols-2 xl:grid-cols-3">
+            {people.map((person, i) => (
+              <CardPerson key={`${person.name}-${i}`} {...toPerson(person)} layout="club" />
+            ))}
+          </div>
+        </BodyWrapper>
+      );
+    }
+
+    case "sectionParagraphs":
       return (
         <BodyWrapper key={index} first={first}>
           <div className="flex max-w-[720px] flex-col gap-spacing-md">
-            <SectionKicker label={block.kicker} />
+            <Kicker label={block.kicker} />
             <h2 className="font-baskerville text-heading-md italic leading-heading text-brand-secondary-100 sm:text-heading-xl">
               {block.heading}
             </h2>
@@ -227,152 +247,112 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
         </BodyWrapper>
       );
 
-    case "upcomingCourses": {
-      const { getTrainingEvents } = await import("@/lib/payload/queries");
-      const events = await getTrainingEvents();
+    case "sectionEvents": {
+      const events =
+        block.source === "cruise-events" ? await getCruiseEvents() : await getTrainingEvents();
+      const isCarousel = block.display === "carousel";
       return (
         <BodyWrapper key={index} first={first}>
-          <SectionHeading
-            kicker={<SectionKicker label={block.kicker} />}
-            heading={block.heading ?? ""}
-            body={block.body}
-            as="h2"
-          />
-          <div className="mt-14 flex flex-col gap-spacing-sm">
-            {events.map((e: Block, i: number) => (
-              <CardEvent
-                key={i}
-                title={e.title}
-                dates={e.dates}
-                yacht={e.yacht}
-                model={e.model}
-                skipper={e.skipper}
-                variant="grid"
-              />
-            ))}
-          </div>
-        </BodyWrapper>
-      );
-    }
-
-    case "coursesTabs": {
-      const { getCourses } = await import("@/lib/payload/queries");
-      const { courseTabs, coursesByTab } = await getCourses();
-      return (
-        <BodyWrapper key={index} first={first}>
-          <TabsCourses
-            content={{
-              ariaLabel: block.ariaLabel ?? "",
-              emptyMessage: block.emptyMessage ?? "",
-              rateNote: block.rateNote ?? "",
-            }}
-            courseTabs={courseTabs}
-            coursesByTab={coursesByTab}
-          />
-        </BodyWrapper>
-      );
-    }
-
-    case "cruiseCarousel": {
-      const { getCruiseEvents } = await import("@/lib/payload/queries");
-      const events = await getCruiseEvents();
-      return (
-        <BodyWrapper key={index} first={first}>
-          <SectionHeading
-            kicker={<SectionKicker label={block.kicker} />}
-            heading={block.heading ?? ""}
-            body={block.body}
-            as="h2"
-          />
+          <SectionHeadingToggle block={block} />
           <div className="mt-14">
-            <CruiseEventCarousel events={events as Block} />
+            {isCarousel ? (
+              <CruiseEventCarousel
+                events={events.map((e: Block) => toEventCard(e)) as never}
+              />
+            ) : (
+              <div className="flex flex-col gap-spacing-sm">
+                {events.map((e: Block, i: number) => (
+                  <CardEvent key={i} {...toEventCard(e)} variant="grid" />
+                ))}
+              </div>
+            )}
           </div>
         </BodyWrapper>
       );
     }
 
-    case "fleetLocation":
+    case "sectionCards": {
+      const columns = block.columns === "3" ? "grid-3" : "grid-2";
+      const cards: Block[] = block.cards ?? [];
+      const nodes: React.ReactNode[] = [];
+      for (const [i, c] of cards.entries()) nodes.push(await renderCard(c, i));
       return (
         <BodyWrapper key={index} first={first}>
-          <FleetLocation flush={block.flush ?? false} />
-        </BodyWrapper>
-      );
-
-    case "fleetList": {
-      const boats = await getBoats();
-      return (
-        <BodyWrapper key={index} first={first}>
-          <div className="flex w-full flex-col gap-spacing-md">
-            {boats.map((boat: Block, i: number) => (
-              <SectionImageSide
-                key={i}
-                boat={boat}
-                imagePosition={i % 2 === 0 ? "left" : "right"}
-              />
+          <SectionHeadingToggle block={block} />
+          <div className={`mt-[60px] ${cardLayoutClass(columns)}`}>
+            {nodes.map((node, i) => (
+              <div key={i} className={cardSpan(cards[i], columns)}>
+                {node}
+              </div>
             ))}
           </div>
         </BodyWrapper>
       );
     }
 
-    case "gallery":
+    case "sectionTabs":
       return (
         <BodyWrapper key={index} first={first}>
-          <SectionHeading
-            kicker={<SectionKicker label={block.kicker} />}
-            heading={block.heading ?? ""}
-            body={block.body}
-            as="h2"
-          />
-          <div className="mt-[60px]">
-            <SectionGallery
-              src={block.src ?? ""}
-              overlaySrc={block.overlaySrc || undefined}
-              alt={block.alt ?? ""}
-              totalSlides={block.totalSlides ?? 10}
-            />
-          </div>
+          <SectionHeadingToggle block={block} />
+          <SectionTabs block={block} />
         </BodyWrapper>
       );
 
-    case "joinTabs":
+    case "sectionContent":
       return (
-        <BodyWrapper key={index} first={first}>
-          <TabsJoinUs
-            content={
-              {
-                ariaLabel: block.ariaLabel ?? "",
-                tabs: block.tabs ?? [],
-                panels: block.panels,
-              } as Block
-            }
-          />
-        </BodyWrapper>
+        <SectionContent
+          key={index}
+          label={block.label}
+          heading={block.heading ?? ""}
+          body={block.body}
+          actions={block.actions ?? []}
+        />
       );
 
-    case "membershipForm":
+    case "membershipApplicationForm":
       return (
         <BodyWrapper key={index} first={first}>
           <MembershipApplicationForm content={{ form: block.form } as Block} />
         </BodyWrapper>
       );
 
+    case "formEmbed": {
+      const form = block.form && typeof block.form === "object" ? block.form : null;
+      if (!form) return null;
+      return (
+        <BodyWrapper key={index} first={first}>
+          <SectionHeadingToggle block={block} />
+          <FormEmbed form={form} />
+        </BodyWrapper>
+      );
+    }
+
+    case "nauticalMap":
+      return <NauticalMap key={index} />;
+
     default:
       return null;
   }
 }
 
+const HERO_TYPES = ["heroHome", "sectionHeader"];
+
 export async function RenderBlocks({ blocks, variant = "default" }: { blocks: Block[]; variant?: "default" | "home" }) {
-  const hero = (blocks ?? []).filter((b) => b.blockType === "heroHome" || b.blockType === "heroBasic");
-  const body = (blocks ?? []).filter((b) => b.blockType !== "heroHome" && b.blockType !== "heroBasic");
+  const hero = (blocks ?? []).filter((b) => HERO_TYPES.includes(b.blockType));
+  const body = (blocks ?? []).filter((b) => !HERO_TYPES.includes(b.blockType));
   const bodyPad = variant === "home" ? "px-4 pb-24 sm:px-spacing-md" : "px-4 pb-[60px] pt-12 sm:px-spacing-md";
+
+  // Render sequentially: each section may run a Payload query, and the DB is
+  // behind a small session-mode pooler — parallel queries would exhaust it.
+  const rendered: React.ReactNode[] = [];
+  for (const [i, b] of hero.entries()) rendered.push(await renderBlock(b, i, i === 0));
+  const bodyNodes: React.ReactNode[] = [];
+  for (const [i, b] of body.entries()) bodyNodes.push(await renderBlock(b, i, i === 0));
 
   return (
     <>
-      {await Promise.all(hero.map((b, i) => renderBlock(b, i, i === 0)))}
-      {body.length > 0 && (
-        <div className={bodyPad}>{await Promise.all(body.map((b, i) => renderBlock(b, i, i === 0)))}</div>
-      )}
+      {rendered}
+      {bodyNodes.length > 0 && <div className={bodyPad}>{bodyNodes}</div>}
     </>
   );
 }

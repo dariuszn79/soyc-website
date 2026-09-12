@@ -1,8 +1,6 @@
-import type { Metadata } from "next";
-import { PageView, pageMetadata } from "@/components/blocks/PageView";
+import { redirect } from "next/navigation";
 
-export const generateMetadata = (): Promise<Metadata> => pageMetadata("members");
-
+/** Legacy route — the members area now lives at /members-area. */
 export default function MembersPage() {
-  return <PageView slug="members" />;
+  redirect("/members-area");
 }

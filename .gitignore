@@ -12,3 +12,4 @@ tsconfig.tsbuildinfo
 
 # Payload media uploads
 /public/media
+.vercel

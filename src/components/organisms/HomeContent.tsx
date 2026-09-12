@@ -1,4 +1,4 @@
-import { SectionSideImage } from "@/components/organisms/SectionSideImage";
+import { SectionImageParalax } from "@/components/organisms/SectionImageParalax";
 import type { Section } from "@/data/content-types";
 
 /**
@@ -10,7 +10,7 @@ export function HomeContent({ content }: { content: Section[] }) {
   return (
     <section className="mx-auto mt-spacing-xl flex w-full max-w-[1440px] flex-col gap-spacing-section-gap overflow-hidden">
       {content.map((section) => (
-        <SectionSideImage
+        <SectionImageParalax
           key={section.kicker}
           kicker={section.kicker}
           heading={section.heading}

@@ -1,9 +1,14 @@
 import type { GlobalConfig } from "payload";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const ComponentLabels: GlobalConfig = {
   slug: "component-labels",
   label: "Component Labels",
+  admin: {
+    group: adminGroups.settings,
+    description: "Reusable UI text fragments and micro-copy (button labels, card labels).",
+  },
   access: { read: () => true },
   fields: [
     {

@@ -1,12 +1,16 @@
 import type { CollectionConfig } from "payload";
-import { imagePathField } from "../fields/content";
+import { imageUploadField } from "../fields/content";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const People: CollectionConfig = {
   slug: "people",
+  labels: { singular: "Person", plural: "People" },
   admin: {
+    group: adminGroups.settings,
     useAsTitle: "name",
     defaultColumns: ["name", "title", "group", "order"],
+    description: "Committee members, staff, and instructors shown on the site.",
   },
   access: { read: () => true },
   versions: { drafts: true },
@@ -15,7 +19,7 @@ export const People: CollectionConfig = {
     { name: "title", type: "text" },
     { name: "dept", type: "text" },
     { name: "email", type: "text" },
-    ...imagePathField({ name: "photo", label: "Photo path", altName: "photoAlt" }),
+    ...imageUploadField({ name: "photo", label: "Photo", altName: "photoAlt" }),
     {
       name: "group",
       type: "select",

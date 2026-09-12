@@ -33,6 +33,8 @@ interface CardLrgProps {
   variant?: "secondary" | "tertiary" | "primary";
   cta?: Cta;
   figmaLayout?: boolean;
+  /** Draw a hairline border around the card (Figma tab-panel intros). */
+  bordered?: boolean;
 }
 
 export function CardLrg({
@@ -43,6 +45,7 @@ export function CardLrg({
   variant = "tertiary",
   cta,
   figmaLayout = false,
+  bordered = false,
 }: CardLrgProps) {
   const isPrimary   = variant === "primary";
   const isSecondary = variant === "secondary";
@@ -91,14 +94,17 @@ export function CardLrg({
     : "text-4xl sm:text-heading-xl";
 
   const bodyType = figmaLayout
-    ? "text-[18px] leading-[1.4] sm:text-[24px] sm:leading-[32px] lg:max-h-[180px] lg:overflow-hidden"
+    ? "text-[18px] leading-[1.4] sm:text-[24px] sm:leading-[32px]"
     : "text-body leading-body";
+
+  const border = bordered ? "border border-brand-rule" : "";
 
   return (
     <div
-      className={`flex flex-col ${containerSpacing} ${containerBg}`}
+      className={`flex flex-col ${containerSpacing} ${containerBg} ${border}`}
     >
       <div className="flex flex-col gap-spacing-md">
+        
         <div className="flex flex-col gap-spacing-xs">
           <Overline white={overlineWhite} />
           {showKickerLabel && (

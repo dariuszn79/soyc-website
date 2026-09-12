@@ -1,9 +1,14 @@
 import type { GlobalConfig } from "payload";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const CruiseMap: GlobalConfig = {
   slug: "cruise-map",
   label: "Cruise Map",
+  admin: {
+    group: adminGroups.cruises,
+    description: "Interactive route tracker map shown on the Cruises page.",
+  },
   access: { read: () => true },
   fields: [
     { name: "mapSrc", type: "text" },

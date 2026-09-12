@@ -16,9 +16,37 @@ export const headingGroup = (
 };
 
 /**
- * Image reference. To keep the current design byte-identical we store image
- * paths as text pointing at existing /public assets. A `media` upload
- * relationship can be layered on later without breaking these.
+ * Image picker backed by the Media library (upload relationship) plus a
+ * free-text alt override. Renderers should resolve the media doc to its URL.
+ */
+export const imageUploadField = (
+  overrides: {
+    name?: string;
+    label?: string;
+    altName?: string;
+    required?: boolean;
+  } = {},
+): Field[] => [
+  {
+    name: overrides.name ?? "image",
+    label: overrides.label ?? "Image",
+    type: "upload",
+    relationTo: "media",
+    required: overrides.required ?? false,
+  },
+  {
+    name: overrides.altName ?? "imageAlt",
+    label: "Image alt text",
+    type: "text",
+    admin: {
+      description: "Accessible description. Falls back to the asset's own alt text.",
+    },
+  },
+];
+
+/**
+ * Image reference stored as a /public path string — used for fixed site
+ * chrome (header/footer artwork) where the asset library is unnecessary.
  */
 export const imagePathField = (
   overrides: { name?: string; label?: string; altName?: string } = {},

@@ -1,13 +1,16 @@
 import type { CollectionConfig } from "payload";
-import { imagePathField } from "../fields/content";
+import { imageUploadField } from "../fields/content";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const CruiseEvents: CollectionConfig = {
   slug: "cruise-events",
   labels: { singular: "Cruise Event", plural: "Cruise Events" },
   admin: {
+    group: adminGroups.cruises,
     useAsTitle: "title",
     defaultColumns: ["title", "dates", "yacht", "order"],
+    description: "Upcoming club trips and cruise logs.",
   },
   access: { read: () => true },
   versions: { drafts: true },
@@ -17,7 +20,7 @@ export const CruiseEvents: CollectionConfig = {
     { name: "yacht", type: "text" },
     { name: "model", type: "text" },
     { name: "skipper", type: "text" },
-    ...imagePathField({ name: "imageSrc", label: "Image path", altName: "imageAlt" }),
+    ...imageUploadField({ name: "imageSrc", label: "Photo", altName: "imageAlt" }),
     {
       name: "order",
       type: "number",

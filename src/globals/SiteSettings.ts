@@ -1,9 +1,14 @@
 import type { GlobalConfig } from "payload";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
   label: "Site Settings",
+  admin: {
+    group: adminGroups.settings,
+    description: "Default SEO metadata for the site.",
+  },
   access: { read: () => true },
   fields: [
     {
@@ -14,27 +19,6 @@ export const SiteSettings: GlobalConfig = {
         { name: "description", type: "textarea" },
       ],
     },
-    { name: "coordinates", type: "text" },
-    { name: "location", type: "text" },
-    { name: "contactHeading", type: "text" },
-    { name: "email", type: "text" },
-    { name: "facebookLabel", type: "text" },
-    { name: "facebookUrl", type: "text" },
-    { name: "logoAlt", type: "text" },
-    { name: "copyright", type: "text" },
-    { name: "registration", type: "text" },
-    { name: "headerJoinLabel", type: "text" },
-    { name: "membersLabel", type: "text" },
-    { name: "primaryNavLabel", type: "text" },
-    { name: "mobileNavLabel", type: "text" },
-    { name: "openNavLabel", type: "text" },
-    { name: "closeNavLabel", type: "text" },
-    { name: "logoHref", type: "text" },
-    { name: "logoSrc", type: "text" },
-    { name: "footerBackgroundSrc", type: "text" },
-    { name: "footerCompassSrc", type: "text" },
-    { name: "footerLogoSrc", type: "text" },
-    { name: "siteFooterBackgroundSrc", type: "text" },
   ],
   hooks: { afterChange: [revalidateFrontend] },
 };

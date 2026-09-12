@@ -9,28 +9,37 @@ import sharp from "sharp";
 
 import { Pages } from "./collections/Pages";
 import { Boats } from "./collections/Boats";
-import { People } from "./collections/People";
+import { CruiseEvents } from "./collections/CruiseEvents";
 import { Courses } from "./collections/Courses";
 import { TrainingEvents } from "./collections/TrainingEvents";
-import { CruiseEvents } from "./collections/CruiseEvents";
-import { Media } from "./collections/Media";
 import { Users } from "./collections/Users";
+import { People } from "./collections/People";
+import { Media } from "./collections/Media";
 
-import { SiteSettings } from "./globals/SiteSettings";
-import { Navigation } from "./globals/Navigation";
-import { ComponentLabels } from "./globals/ComponentLabels";
+import { Header } from "./globals/Header";
+import { Footer } from "./globals/Footer";
 import { FleetLocation } from "./globals/FleetLocation";
 import { CruiseMap } from "./globals/CruiseMap";
-import { NotFound } from "./globals/NotFound";
+import { SiteSettings } from "./globals/SiteSettings";
+import { ComponentLabels } from "./globals/ComponentLabels";
+
+import { adminGroups } from "./lib/payload/adminGroups";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+// Collections/globals are ordered so that sidebar groups appear in a
+// content-first order: Content & Pages → The Fleet → Cruises → Training →
+// Members & Forms → Settings & Utility.
 export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: "— SOYC Admin" },
+    components: {
+      // Bold collection/global labels in the sidebar.
+      providers: [{ path: "@/components/admin/AdminStyles" }],
+    },
     livePreview: {
       collections: ["pages"],
     },
@@ -39,30 +48,47 @@ export default buildConfig({
   collections: [
     Pages,
     Boats,
-    People,
+    CruiseEvents,
     Courses,
     TrainingEvents,
-    CruiseEvents,
-    Media,
     Users,
+    People,
+    Media,
   ],
   globals: [
-    SiteSettings,
-    Navigation,
-    ComponentLabels,
+    Header,
+    Footer,
     FleetLocation,
     CruiseMap,
-    NotFound,
+    SiteSettings,
+    ComponentLabels,
   ],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
       ssl: { rejectUnauthorized: false },
+      // The DB is fronted by a session-mode pooler (max ~15 clients total).
+      // Keep each process's pool small so dev workers + schema introspection
+      // don't exhaust it.
+      max: 4,
     },
   }),
   plugins: [
     formBuilderPlugin({
       fields: { payment: false },
+      formOverrides: {
+        admin: {
+          group: adminGroups.members,
+          description: "Form templates built with the visual form builder (e.g. the membership application).",
+        },
+      },
+      formSubmissionOverrides: {
+        admin: {
+          group: adminGroups.members,
+          description: "Entries received from website forms.",
+        },
+        labels: { singular: "Form Entry", plural: "Form Entries" },
+      },
     }),
   ],
   secret: process.env.PAYLOAD_SECRET || "",

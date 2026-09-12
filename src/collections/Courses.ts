@@ -1,5 +1,6 @@
 import type { CollectionConfig } from "payload";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 const levelOptions = [
   { label: "Beginner", value: "Beginner" },
@@ -18,8 +19,10 @@ const priceFields = [
 export const Courses: CollectionConfig = {
   slug: "courses",
   admin: {
+    group: adminGroups.training,
     useAsTitle: "title",
     defaultColumns: ["title", "level", "tab", "order"],
+    description: "Course curriculum (e.g. Competent Crew, Day Skipper).",
   },
   access: { read: () => true },
   versions: { drafts: true },

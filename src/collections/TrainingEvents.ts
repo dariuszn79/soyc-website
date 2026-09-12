@@ -1,12 +1,15 @@
 import type { CollectionConfig } from "payload";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 export const TrainingEvents: CollectionConfig = {
   slug: "training-events",
-  labels: { singular: "Training Event", plural: "Training Events" },
+  labels: { singular: "Training Date", plural: "Training Dates" },
   admin: {
+    group: adminGroups.training,
     useAsTitle: "title",
     defaultColumns: ["title", "dates", "yacht", "order"],
+    description: "Scheduled training calendar entries and course slots.",
   },
   access: { read: () => true },
   versions: { drafts: true },

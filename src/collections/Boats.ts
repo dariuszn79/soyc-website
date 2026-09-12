@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
-import { imagePathField } from "../fields/content";
+import { imageUploadField } from "../fields/content";
 import { revalidateFrontend } from "../hooks/revalidateFrontend";
+import { adminGroups } from "../lib/payload/adminGroups";
 
 const specGroup = (name: string, label: string) => ({
   name,
@@ -15,8 +16,10 @@ const specGroup = (name: string, label: string) => ({
 export const Boats: CollectionConfig = {
   slug: "boats",
   admin: {
+    group: adminGroups.fleet,
     useAsTitle: "name",
     defaultColumns: ["name", "model", "year", "_status"],
+    description: "Vessel fleet profiles shown on the Fleet page.",
   },
   access: { read: () => true },
   versions: { drafts: true },
@@ -25,7 +28,7 @@ export const Boats: CollectionConfig = {
     { name: "model", type: "text" },
     { name: "year", type: "text" },
     { name: "description", type: "textarea" },
-    ...imagePathField({ name: "photo", label: "Photo path", altName: "photoAlt" }),
+    ...imageUploadField({ name: "photo", label: "Photo", altName: "photoAlt" }),
     specGroup("specsLeft", "Specifications (left column)"),
     specGroup("specsRight", "Specifications (right column)"),
     {

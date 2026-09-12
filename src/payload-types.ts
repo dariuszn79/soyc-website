@@ -69,12 +69,12 @@ export interface Config {
   collections: {
     pages: Page;
     boats: Boat;
-    people: Person;
+    'cruise-events': CruiseEvent;
     courses: Course;
     'training-events': TrainingEvent;
-    'cruise-events': CruiseEvent;
-    media: Media;
     users: User;
+    people: Person;
+    media: Media;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
@@ -86,12 +86,12 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     boats: BoatsSelect<false> | BoatsSelect<true>;
-    people: PeopleSelect<false> | PeopleSelect<true>;
+    'cruise-events': CruiseEventsSelect<false> | CruiseEventsSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     'training-events': TrainingEventsSelect<false> | TrainingEventsSelect<true>;
-    'cruise-events': CruiseEventsSelect<false> | CruiseEventsSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    people: PeopleSelect<false> | PeopleSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -104,20 +104,20 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
-    'site-settings': SiteSetting;
-    navigation: Navigation;
-    'component-labels': ComponentLabel;
+    header: Header;
+    footer: Footer;
     'fleet-location': FleetLocation;
     'cruise-map': CruiseMap;
-    'page-not-found': PageNotFound;
+    'site-settings': SiteSetting;
+    'component-labels': ComponentLabel;
   };
   globalsSelect: {
-    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
-    navigation: NavigationSelect<false> | NavigationSelect<true>;
-    'component-labels': ComponentLabelsSelect<false> | ComponentLabelsSelect<true>;
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
     'fleet-location': FleetLocationSelect<false> | FleetLocationSelect<true>;
     'cruise-map': CruiseMapSelect<false> | CruiseMapSelect<true>;
-    'page-not-found': PageNotFoundSelect<false> | PageNotFoundSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'component-labels': ComponentLabelsSelect<false> | ComponentLabelsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -155,38 +155,57 @@ export interface Page {
   id: number;
   title: string;
   /**
-   * URL slug. Use "home" for the homepage (route "/").
+   * e.g. "the-club", "fleet", "join". Use "home" for the homepage (route "/").
    */
   slug: string;
+  /**
+   * Compose the page by adding, reordering and editing sections.
+   */
+  pageSections?:
+    | (
+        | HeroHomeBlock
+        | SectionHeaderBlock
+        | SectionHeadingBlock
+        | SectionImageParalaxBlock
+        | SectionImageSideBlock
+        | SectionBackgroundImageBlock
+        | SectionCenterBlock
+        | SectionGalleryBlock
+        | SectionFleetLocationBlock
+        | SectionFleetBlock
+        | SectionPeopleBlock
+        | SectionParagraphsBlock
+        | SectionEventsBlock
+        | SectionCardsBlock
+        | SectionTabsBlock
+        | SectionContentBlock
+        | MembershipApplicationFormBlock
+        | FormEmbedBlock
+        | NauticalMapBlock
+      )[]
+    | null;
+  /**
+   * Add this page to the header and/or footer menus.
+   */
+  nav?: {
+    showIn?: ('header' | 'footer')[] | null;
+    /**
+     * Defaults to the page title.
+     */
+    navLabel?: string | null;
+    /**
+     * Lower numbers appear first.
+     */
+    navOrder?: number | null;
+    /**
+     * Show the | separator after this item in the header.
+     */
+    divider?: boolean | null;
+  };
   meta?: {
     title?: string | null;
     description?: string | null;
   };
-  /**
-   * Compose the page by adding, reordering and editing sections.
-   */
-  layout?:
-    | (
-        | HeroHomeBlock
-        | HeroBasicBlock
-        | SectionImageSideBlock
-        | SectionBackgroundImageBlock
-        | SectionHeadingBlock
-        | SimpleContentBlock
-        | CardGridBlock
-        | RichTextCardsBlock
-        | PeopleSectionBlock
-        | ParagraphsSectionBlock
-        | UpcomingCoursesBlock
-        | CoursesTabsBlock
-        | CruiseCarouselBlock
-        | FleetLocationBlock
-        | FleetListBlock
-        | GalleryBlock
-        | JoinTabsBlock
-        | MembershipFormBlock
-      )[]
-    | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -202,10 +221,10 @@ export interface HeroHomeBlock {
    */
   heading: string;
   coordinates?: string | null;
+  backgroundImage?: (number | null) | Media;
   /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
+   * Accessible description. Falls back to the asset's own alt text.
    */
-  backgroundImage?: string | null;
   backgroundAlt?: string | null;
   stats?:
     | {
@@ -218,7 +237,6 @@ export interface HeroHomeBlock {
     | {
         label: string;
         href: string;
-        external?: boolean | null;
         id?: string | null;
       }[]
     | null;
@@ -227,17 +245,38 @@ export interface HeroHomeBlock {
   blockType: 'heroHome';
 }
 /**
+ * Images, documents, and SVGs used across the site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBasicBlock".
+ * via the `definition` "media".
  */
-export interface HeroBasicBlock {
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionHeaderBlock".
+ */
+export interface SectionHeaderBlock {
   kicker?: string | null;
   heading: string;
   body?: string | null;
+  image?: (number | null) | Media;
   /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
+   * Accessible description. Falls back to the asset's own alt text.
    */
-  imageSrc?: string | null;
   imageAlt?: string | null;
   cta?: {
     label?: string | null;
@@ -249,53 +288,7 @@ export interface HeroBasicBlock {
   };
   id?: string | null;
   blockName?: string | null;
-  blockType: 'heroBasic';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SectionImageSideBlock".
- */
-export interface SectionImageSideBlock {
-  kicker?: string | null;
-  heading: string;
-  body?: string | null;
-  cta?: {
-    label?: string | null;
-    href?: string | null;
-    /**
-     * Open in a new tab / treat as an external link.
-     */
-    external?: boolean | null;
-  };
-  /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
-   */
-  image?: string | null;
-  imageAlt?: string | null;
-  align?: ('right' | 'left') | null;
-  variant?: ('secondary' | 'tertiary') | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'sectionImageSide';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SectionBackgroundImageBlock".
- */
-export interface SectionBackgroundImageBlock {
-  kicker?: string | null;
-  heading: string;
-  body?: string | null;
-  ctaLabel?: string | null;
-  ctaHref?: string | null;
-  /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
-   */
-  imageSrc?: string | null;
-  imageAlt?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'sectionBackgroundImage';
+  blockType: 'sectionHeader';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -312,132 +305,18 @@ export interface SectionHeadingBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SimpleContentBlock".
+ * via the `definition` "SectionImageParalaxBlock".
  */
-export interface SimpleContentBlock {
-  label?: string | null;
-  heading: string;
-  body?: string | null;
-  actions?:
-    | {
-        label: string;
-        href: string;
-        external?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'simpleContent';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardGridBlock".
- */
-export interface CardGridBlock {
-  sectionKicker?: string | null;
-  sectionHeading?: string | null;
-  cards?:
-    | {
-        kicker?: string | null;
-        heading: string;
-        body?: string | null;
-        cta?: {
-          label?: string | null;
-          href?: string | null;
-          /**
-           * Open in a new tab / treat as an external link.
-           */
-          external?: boolean | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cardGrid';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "RichTextCardsBlock".
- */
-export interface RichTextCardsBlock {
-  cards?:
-    | {
-        kicker?: string | null;
-        heading: string;
-        blocks?:
-          | (
-              | {
-                  text: string;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'paragraph';
-                }
-              | {
-                  variant?: ('spaced' | 'compact') | null;
-                  items?:
-                    | {
-                        item: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'list';
-                }
-              | {
-                  variant?: ('spaced' | 'compact') | null;
-                  items?:
-                    | {
-                        item: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'orderedList';
-                }
-              | {
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'break';
-                }
-            )[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'richTextCards';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PeopleSectionBlock".
- */
-export interface PeopleSectionBlock {
+export interface SectionImageParalaxBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
   kicker?: string | null;
   heading: string;
   body?: string | null;
-  group: 'board' | 'instructors' | 'skippers';
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'peopleSection';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ParagraphsSectionBlock".
- */
-export interface ParagraphsSectionBlock {
-  kicker?: string | null;
-  heading: string;
-  paragraphs?:
-    | {
-        text: string;
-        id?: string | null;
-      }[]
-    | null;
   cta?: {
     label?: string | null;
     href?: string | null;
@@ -446,136 +325,37 @@ export interface ParagraphsSectionBlock {
      */
     external?: boolean | null;
   };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'paragraphsSection';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "UpcomingCoursesBlock".
- */
-export interface UpcomingCoursesBlock {
-  kicker?: string | null;
-  heading: string;
-  body?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'upcomingCourses';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CoursesTabsBlock".
- */
-export interface CoursesTabsBlock {
-  ariaLabel?: string | null;
-  emptyMessage?: string | null;
-  rateNote?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'coursesTabs';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CruiseCarouselBlock".
- */
-export interface CruiseCarouselBlock {
-  kicker?: string | null;
-  heading: string;
-  body?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cruiseCarousel';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FleetLocationBlock".
- */
-export interface FleetLocationBlock {
+  image?: (number | null) | Media;
   /**
-   * Remove outer padding (used on the cruises page).
+   * Accessible description. Falls back to the asset's own alt text.
    */
-  flush?: boolean | null;
+  imageAlt?: string | null;
+  align?: ('right' | 'left') | null;
+  variant?: ('secondary' | 'tertiary') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'fleetLocation';
+  blockType: 'sectionImageParalax';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FleetListBlock".
+ * via the `definition` "SectionImageSideBlock".
  */
-export interface FleetListBlock {
-  heading?: string | null;
+export interface SectionImageSideBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  boat: number | Boat;
+  imagePosition?: ('left' | 'right') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'fleetList';
+  blockType: 'sectionImageSide';
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "GalleryBlock".
- */
-export interface GalleryBlock {
-  kicker?: string | null;
-  heading: string;
-  body?: string | null;
-  src?: string | null;
-  overlaySrc?: string | null;
-  alt?: string | null;
-  totalSlides?: number | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'gallery';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "JoinTabsBlock".
- */
-export interface JoinTabsBlock {
-  ariaLabel?: string | null;
-  tabs?:
-    | {
-        value: string;
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Structured content for the four join tabs (membership, fees, testerDay, gear).
-   */
-  panels:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'joinTabs';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MembershipFormBlock".
- */
-export interface MembershipFormBlock {
-  /**
-   * Labels and copy for the membership application form (matches MembershipApplicationContent.form).
-   */
-  form:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'membershipForm';
-}
-/**
+ * Vessel fleet profiles shown on the Fleet page.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "boats".
  */
@@ -585,10 +365,10 @@ export interface Boat {
   model?: string | null;
   year?: string | null;
   description?: string | null;
+  photo?: (number | null) | Media;
   /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
+   * Accessible description. Falls back to the asset's own alt text.
    */
-  photo?: string | null;
   photoAlt?: string | null;
   specsLeft?:
     | {
@@ -614,29 +394,336 @@ export interface Boat {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "people".
+ * via the `definition` "SectionBackgroundImageBlock".
  */
-export interface Person {
-  id: number;
-  name: string;
-  title?: string | null;
-  dept?: string | null;
-  email?: string | null;
+export interface SectionBackgroundImageBlock {
+  kicker?: string | null;
+  heading: string;
+  body?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  image?: (number | null) | Media;
   /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
+   * Accessible description. Falls back to the asset's own alt text.
    */
-  photo?: string | null;
-  photoAlt?: string | null;
-  group: 'board' | 'instructors' | 'skippers';
-  /**
-   * Sort order (ascending).
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  imageAlt?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionBackgroundImage';
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionCenterBlock".
+ */
+export interface SectionCenterBlock {
+  heading?: string | null;
+  body?: string | null;
+  ctaLabel?: string | null;
+  ctaHref?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionCenter';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionGalleryBlock".
+ */
+export interface SectionGalleryBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  image: number | Media;
+  /**
+   * Accessible description. Falls back to the asset's own alt text.
+   */
+  alt?: string | null;
+  overlayImage?: (number | null) | Media;
+  /**
+   * Accessible description. Falls back to the asset's own alt text.
+   */
+  overlayAlt?: string | null;
+  totalSlides?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionFleetLocationBlock".
+ */
+export interface SectionFleetLocationBlock {
+  /**
+   * Remove outer padding (edge-to-edge).
+   */
+  flush?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionFleetLocation';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionFleetBlock".
+ */
+export interface SectionFleetBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionFleet';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionPeopleBlock".
+ */
+export interface SectionPeopleBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  group: 'board' | 'instructors' | 'skippers';
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionPeople';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionParagraphsBlock".
+ */
+export interface SectionParagraphsBlock {
+  kicker?: string | null;
+  heading: string;
+  paragraphs?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+    /**
+     * Open in a new tab / treat as an external link.
+     */
+    external?: boolean | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionParagraphs';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionEventsBlock".
+ */
+export interface SectionEventsBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  source: 'training-events' | 'cruise-events';
+  display?: ('grid' | 'carousel') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionEvents';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionCardsBlock".
+ */
+export interface SectionCardsBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  columns?: ('2' | '3') | null;
+  cards?:
+    | (
+        | CardLrgBlock
+        | CardMedBlock
+        | CardWideBlock
+        | CardEventBlock
+        | CardCourseBlock
+        | CardBoatBlock
+        | CardPersonBlock
+        | CardFleetMapBlock
+        | FeeItemBlock
+        | FeeGroupBlock
+        | RichTextContentBlock
+      )[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardLrgBlock".
+ */
+export interface CardLrgBlock {
+  kicker?: string | null;
+  heading: string;
+  body?:
+    | (
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            variant?: ('spaced' | 'compact') | null;
+            items?:
+              | {
+                  item: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'list';
+          }
+        | {
+            variant?: ('spaced' | 'compact') | null;
+            items?:
+              | {
+                  item: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'orderedList';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'break';
+          }
+      )[]
+    | null;
+  cta?: {
+    label?: string | null;
+    href?: string | null;
+    /**
+     * Open in a new tab / treat as an external link.
+     */
+    external?: boolean | null;
+  };
+  variant?: ('tertiary' | 'secondary' | 'primary') | null;
+  /**
+   * Draw a hairline border around the card.
+   */
+  bordered?: boolean | null;
+  fullWidth?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardLrg';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardMedBlock".
+ */
+export interface CardMedBlock {
+  heading: string;
+  body?:
+    | (
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            variant?: ('spaced' | 'compact') | null;
+            items?:
+              | {
+                  item: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'list';
+          }
+        | {
+            variant?: ('spaced' | 'compact') | null;
+            items?:
+              | {
+                  item: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'orderedList';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'break';
+          }
+      )[]
+    | null;
+  fullWidth?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardMed';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardWideBlock".
+ */
+export interface CardWideBlock {
+  label?: string | null;
+  heading: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardWide';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardEventBlock".
+ */
+export interface CardEventBlock {
+  title: string;
+  dates?: string | null;
+  yacht?: string | null;
+  model?: string | null;
+  skipper?: string | null;
+  image?: (number | null) | Media;
+  /**
+   * Accessible description. Falls back to the asset's own alt text.
+   */
+  imageAlt?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardEvent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardCourseBlock".
+ */
+export interface CardCourseBlock {
+  course: number | Course;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardCourse';
+}
+/**
+ * Course curriculum (e.g. Competent Crew, Day Skipper).
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "courses".
  */
@@ -675,15 +762,43 @@ export interface Course {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "training-events".
+ * via the `definition` "CardBoatBlock".
  */
-export interface TrainingEvent {
+export interface CardBoatBlock {
+  boat: number | Boat;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardBoat';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardPersonBlock".
+ */
+export interface CardPersonBlock {
+  person: number | Person;
+  layout?: ('club' | 'default') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardPerson';
+}
+/**
+ * Committee members, staff, and instructors shown on the site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people".
+ */
+export interface Person {
   id: number;
-  title: string;
-  dates?: string | null;
-  yacht?: string | null;
-  model?: string | null;
-  skipper?: string | null;
+  name: string;
+  title?: string | null;
+  dept?: string | null;
+  email?: string | null;
+  photo?: (number | null) | Media;
+  /**
+   * Accessible description. Falls back to the asset's own alt text.
+   */
+  photoAlt?: string | null;
+  group: 'board' | 'instructors' | 'skippers';
   /**
    * Sort order (ascending).
    */
@@ -694,74 +809,194 @@ export interface TrainingEvent {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cruise-events".
+ * via the `definition` "CardFleetMapBlock".
  */
-export interface CruiseEvent {
-  id: number;
-  title: string;
-  dates?: string | null;
-  yacht?: string | null;
-  model?: string | null;
-  skipper?: string | null;
-  /**
-   * Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).
-   */
-  imageSrc?: string | null;
-  imageAlt?: string | null;
-  /**
-   * Sort order (ascending).
-   */
-  order?: number | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+export interface CardFleetMapBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cardFleetMap';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "FeeItemBlock".
  */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+export interface FeeItemBlock {
+  heading: string;
+  price?: string | null;
+  unit?: string | null;
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'feeItem';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "FeeGroupBlock".
  */
-export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
+export interface FeeGroupBlock {
+  heading: string;
+  body?: string | null;
+  note?: string | null;
+  fees?: FeeItemBlock[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'feeGroup';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RichTextContentBlock".
+ */
+export interface RichTextContentBlock {
+  body?:
+    | (
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            variant?: ('spaced' | 'compact') | null;
+            items?:
+              | {
+                  item: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'list';
+          }
+        | {
+            variant?: ('spaced' | 'compact') | null;
+            items?:
+              | {
+                  item: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'orderedList';
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'break';
+          }
+      )[]
+    | null;
+  size?: ('default' | 'lead') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'richText';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionTabsBlock".
+ */
+export interface SectionTabsBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  ariaLabel?: string | null;
+  tabs?:
     | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
+        label: string;
+        layout?: ('grid-2' | 'grid-3' | 'grid-4' | 'stacked') | null;
+        showHeading?: boolean | null;
+        sectionHeading?: {
+          kicker?: string | null;
+          heading: string;
+          body?: string | null;
+        };
+        content?:
+          | (
+              | CardLrgBlock
+              | CardMedBlock
+              | CardWideBlock
+              | CardEventBlock
+              | CardCourseBlock
+              | CardBoatBlock
+              | CardPersonBlock
+              | CardFleetMapBlock
+              | FeeItemBlock
+              | FeeGroupBlock
+              | RichTextContentBlock
+            )[]
+          | null;
+        id?: string | null;
       }[]
     | null;
-  password?: string | null;
-  collection: 'users';
+  emptyMessage?: string | null;
+  footerNote?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionTabs';
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionContentBlock".
+ */
+export interface SectionContentBlock {
+  label?: string | null;
+  heading: string;
+  body?: string | null;
+  actions?:
+    | {
+        label: string;
+        href: string;
+        external?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sectionContent';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MembershipApplicationFormBlock".
+ */
+export interface MembershipApplicationFormBlock {
+  /**
+   * Labels and copy for the membership application form (matches MembershipApplicationContent.form).
+   */
+  form:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'membershipApplicationForm';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormEmbedBlock".
+ */
+export interface FormEmbedBlock {
+  showHeading?: boolean | null;
+  sectionHeading?: {
+    kicker?: string | null;
+    heading: string;
+    body?: string | null;
+  };
+  form: number | Form;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'formEmbed';
+}
+/**
+ * Form templates built with the visual form builder (e.g. the membership application).
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "forms".
  */
@@ -928,6 +1163,92 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NauticalMapBlock".
+ */
+export interface NauticalMapBlock {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'nauticalMap';
+}
+/**
+ * Upcoming club trips and cruise logs.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cruise-events".
+ */
+export interface CruiseEvent {
+  id: number;
+  title: string;
+  dates?: string | null;
+  yacht?: string | null;
+  model?: string | null;
+  skipper?: string | null;
+  imageSrc?: (number | null) | Media;
+  /**
+   * Accessible description. Falls back to the asset's own alt text.
+   */
+  imageAlt?: string | null;
+  /**
+   * Sort order (ascending).
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Scheduled training calendar entries and course slots.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "training-events".
+ */
+export interface TrainingEvent {
+  id: number;
+  title: string;
+  dates?: string | null;
+  yacht?: string | null;
+  model?: string | null;
+  skipper?: string | null;
+  /**
+   * Sort order (ascending).
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * Club members and admin staff login accounts.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
+ * Entries received from website forms.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -976,8 +1297,8 @@ export interface PayloadLockedDocument {
         value: number | Boat;
       } | null)
     | ({
-        relationTo: 'people';
-        value: number | Person;
+        relationTo: 'cruise-events';
+        value: number | CruiseEvent;
       } | null)
     | ({
         relationTo: 'courses';
@@ -988,16 +1309,16 @@ export interface PayloadLockedDocument {
         value: number | TrainingEvent;
       } | null)
     | ({
-        relationTo: 'cruise-events';
-        value: number | CruiseEvent;
+        relationTo: 'users';
+        value: number | User;
+      } | null)
+    | ({
+        relationTo: 'people';
+        value: number | Person;
       } | null)
     | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'users';
-        value: number | User;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1056,33 +1377,42 @@ export interface PayloadMigration {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  pageSections?:
+    | T
+    | {
+        heroHome?: T | HeroHomeBlockSelect<T>;
+        sectionHeader?: T | SectionHeaderBlockSelect<T>;
+        sectionHeading?: T | SectionHeadingBlockSelect<T>;
+        sectionImageParalax?: T | SectionImageParalaxBlockSelect<T>;
+        sectionImageSide?: T | SectionImageSideBlockSelect<T>;
+        sectionBackgroundImage?: T | SectionBackgroundImageBlockSelect<T>;
+        sectionCenter?: T | SectionCenterBlockSelect<T>;
+        sectionGallery?: T | SectionGalleryBlockSelect<T>;
+        sectionFleetLocation?: T | SectionFleetLocationBlockSelect<T>;
+        sectionFleet?: T | SectionFleetBlockSelect<T>;
+        sectionPeople?: T | SectionPeopleBlockSelect<T>;
+        sectionParagraphs?: T | SectionParagraphsBlockSelect<T>;
+        sectionEvents?: T | SectionEventsBlockSelect<T>;
+        sectionCards?: T | SectionCardsBlockSelect<T>;
+        sectionTabs?: T | SectionTabsBlockSelect<T>;
+        sectionContent?: T | SectionContentBlockSelect<T>;
+        membershipApplicationForm?: T | MembershipApplicationFormBlockSelect<T>;
+        formEmbed?: T | FormEmbedBlockSelect<T>;
+        nauticalMap?: T | NauticalMapBlockSelect<T>;
+      };
+  nav?:
+    | T
+    | {
+        showIn?: T;
+        navLabel?: T;
+        navOrder?: T;
+        divider?: T;
+      };
   meta?:
     | T
     | {
         title?: T;
         description?: T;
-      };
-  layout?:
-    | T
-    | {
-        heroHome?: T | HeroHomeBlockSelect<T>;
-        heroBasic?: T | HeroBasicBlockSelect<T>;
-        sectionImageSide?: T | SectionImageSideBlockSelect<T>;
-        sectionBackgroundImage?: T | SectionBackgroundImageBlockSelect<T>;
-        sectionHeading?: T | SectionHeadingBlockSelect<T>;
-        simpleContent?: T | SimpleContentBlockSelect<T>;
-        cardGrid?: T | CardGridBlockSelect<T>;
-        richTextCards?: T | RichTextCardsBlockSelect<T>;
-        peopleSection?: T | PeopleSectionBlockSelect<T>;
-        paragraphsSection?: T | ParagraphsSectionBlockSelect<T>;
-        upcomingCourses?: T | UpcomingCoursesBlockSelect<T>;
-        coursesTabs?: T | CoursesTabsBlockSelect<T>;
-        cruiseCarousel?: T | CruiseCarouselBlockSelect<T>;
-        fleetLocation?: T | FleetLocationBlockSelect<T>;
-        fleetList?: T | FleetListBlockSelect<T>;
-        gallery?: T | GalleryBlockSelect<T>;
-        joinTabs?: T | JoinTabsBlockSelect<T>;
-        membershipForm?: T | MembershipFormBlockSelect<T>;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1110,7 +1440,6 @@ export interface HeroHomeBlockSelect<T extends boolean = true> {
     | {
         label?: T;
         href?: T;
-        external?: T;
         id?: T;
       };
   id?: T;
@@ -1118,13 +1447,13 @@ export interface HeroHomeBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBasicBlock_select".
+ * via the `definition` "SectionHeaderBlock_select".
  */
-export interface HeroBasicBlockSelect<T extends boolean = true> {
+export interface SectionHeaderBlockSelect<T extends boolean = true> {
   kicker?: T;
   heading?: T;
   body?: T;
-  imageSrc?: T;
+  image?: T;
   imageAlt?: T;
   cta?:
     | T
@@ -1138,9 +1467,29 @@ export interface HeroBasicBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SectionImageSideBlock_select".
+ * via the `definition` "SectionHeadingBlock_select".
  */
-export interface SectionImageSideBlockSelect<T extends boolean = true> {
+export interface SectionHeadingBlockSelect<T extends boolean = true> {
+  kicker?: T;
+  heading?: T;
+  body?: T;
+  as?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionImageParalaxBlock_select".
+ */
+export interface SectionImageParalaxBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
   kicker?: T;
   heading?: T;
   body?: T;
@@ -1160,6 +1509,24 @@ export interface SectionImageSideBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionImageSideBlock_select".
+ */
+export interface SectionImageSideBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
+  boat?: T;
+  imagePosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "SectionBackgroundImageBlock_select".
  */
 export interface SectionBackgroundImageBlockSelect<T extends boolean = true> {
@@ -1168,142 +1535,91 @@ export interface SectionBackgroundImageBlockSelect<T extends boolean = true> {
   body?: T;
   ctaLabel?: T;
   ctaHref?: T;
-  imageSrc?: T;
+  image?: T;
   imageAlt?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SectionHeadingBlock_select".
+ * via the `definition` "SectionCenterBlock_select".
  */
-export interface SectionHeadingBlockSelect<T extends boolean = true> {
-  kicker?: T;
+export interface SectionCenterBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
-  as?: T;
+  ctaLabel?: T;
+  ctaHref?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "SimpleContentBlock_select".
+ * via the `definition` "SectionGalleryBlock_select".
  */
-export interface SimpleContentBlockSelect<T extends boolean = true> {
-  label?: T;
-  heading?: T;
-  body?: T;
-  actions?:
-    | T
-    | {
-        label?: T;
-        href?: T;
-        external?: T;
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardGridBlock_select".
- */
-export interface CardGridBlockSelect<T extends boolean = true> {
-  sectionKicker?: T;
-  sectionHeading?: T;
-  cards?:
+export interface SectionGalleryBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
     | T
     | {
         kicker?: T;
         heading?: T;
         body?: T;
-        cta?:
-          | T
-          | {
-              label?: T;
-              href?: T;
-              external?: T;
-            };
-        id?: T;
       };
+  image?: T;
+  alt?: T;
+  overlayImage?: T;
+  overlayAlt?: T;
+  totalSlides?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "RichTextCardsBlock_select".
+ * via the `definition` "SectionFleetLocationBlock_select".
  */
-export interface RichTextCardsBlockSelect<T extends boolean = true> {
-  cards?:
+export interface SectionFleetLocationBlockSelect<T extends boolean = true> {
+  flush?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionFleetBlock_select".
+ */
+export interface SectionFleetBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
     | T
     | {
         kicker?: T;
         heading?: T;
-        blocks?:
-          | T
-          | {
-              paragraph?:
-                | T
-                | {
-                    text?: T;
-                    id?: T;
-                    blockName?: T;
-                  };
-              list?:
-                | T
-                | {
-                    variant?: T;
-                    items?:
-                      | T
-                      | {
-                          item?: T;
-                          id?: T;
-                        };
-                    id?: T;
-                    blockName?: T;
-                  };
-              orderedList?:
-                | T
-                | {
-                    variant?: T;
-                    items?:
-                      | T
-                      | {
-                          item?: T;
-                          id?: T;
-                        };
-                    id?: T;
-                    blockName?: T;
-                  };
-              break?:
-                | T
-                | {
-                    id?: T;
-                    blockName?: T;
-                  };
-            };
-        id?: T;
+        body?: T;
       };
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PeopleSectionBlock_select".
+ * via the `definition` "SectionPeopleBlock_select".
  */
-export interface PeopleSectionBlockSelect<T extends boolean = true> {
-  kicker?: T;
-  heading?: T;
-  body?: T;
+export interface SectionPeopleBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
   group?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ParagraphsSectionBlock_select".
+ * via the `definition` "SectionParagraphsBlock_select".
  */
-export interface ParagraphsSectionBlockSelect<T extends boolean = true> {
+export interface SectionParagraphsBlockSelect<T extends boolean = true> {
   kicker?: T;
   heading?: T;
   paragraphs?:
@@ -1324,93 +1640,410 @@ export interface ParagraphsSectionBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "UpcomingCoursesBlock_select".
+ * via the `definition` "SectionEventsBlock_select".
  */
-export interface UpcomingCoursesBlockSelect<T extends boolean = true> {
+export interface SectionEventsBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
+  source?: T;
+  display?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SectionCardsBlock_select".
+ */
+export interface SectionCardsBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
+  columns?: T;
+  cards?:
+    | T
+    | {
+        cardLrg?: T | CardLrgBlockSelect<T>;
+        cardMed?: T | CardMedBlockSelect<T>;
+        cardWide?: T | CardWideBlockSelect<T>;
+        cardEvent?: T | CardEventBlockSelect<T>;
+        cardCourse?: T | CardCourseBlockSelect<T>;
+        cardBoat?: T | CardBoatBlockSelect<T>;
+        cardPerson?: T | CardPersonBlockSelect<T>;
+        cardFleetMap?: T | CardFleetMapBlockSelect<T>;
+        feeItem?: T | FeeItemBlockSelect<T>;
+        feeGroup?: T | FeeGroupBlockSelect<T>;
+        richText?: T | RichTextContentBlockSelect<T>;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardLrgBlock_select".
+ */
+export interface CardLrgBlockSelect<T extends boolean = true> {
   kicker?: T;
   heading?: T;
-  body?: T;
+  body?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        list?:
+          | T
+          | {
+              variant?: T;
+              items?:
+                | T
+                | {
+                    item?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        orderedList?:
+          | T
+          | {
+              variant?: T;
+              items?:
+                | T
+                | {
+                    item?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        break?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+      };
+  variant?: T;
+  bordered?: T;
+  fullWidth?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CoursesTabsBlock_select".
+ * via the `definition` "CardMedBlock_select".
  */
-export interface CoursesTabsBlockSelect<T extends boolean = true> {
-  ariaLabel?: T;
-  emptyMessage?: T;
-  rateNote?: T;
+export interface CardMedBlockSelect<T extends boolean = true> {
+  heading?: T;
+  body?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        list?:
+          | T
+          | {
+              variant?: T;
+              items?:
+                | T
+                | {
+                    item?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        orderedList?:
+          | T
+          | {
+              variant?: T;
+              items?:
+                | T
+                | {
+                    item?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        break?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+      };
+  fullWidth?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CruiseCarouselBlock_select".
+ * via the `definition` "CardWideBlock_select".
  */
-export interface CruiseCarouselBlockSelect<T extends boolean = true> {
-  kicker?: T;
+export interface CardWideBlockSelect<T extends boolean = true> {
+  label?: T;
+  heading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardEventBlock_select".
+ */
+export interface CardEventBlockSelect<T extends boolean = true> {
+  title?: T;
+  dates?: T;
+  yacht?: T;
+  model?: T;
+  skipper?: T;
+  image?: T;
+  imageAlt?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardCourseBlock_select".
+ */
+export interface CardCourseBlockSelect<T extends boolean = true> {
+  course?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardBoatBlock_select".
+ */
+export interface CardBoatBlockSelect<T extends boolean = true> {
+  boat?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardPersonBlock_select".
+ */
+export interface CardPersonBlockSelect<T extends boolean = true> {
+  person?: T;
+  layout?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardFleetMapBlock_select".
+ */
+export interface CardFleetMapBlockSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeeItemBlock_select".
+ */
+export interface FeeItemBlockSelect<T extends boolean = true> {
+  heading?: T;
+  price?: T;
+  unit?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeeGroupBlock_select".
+ */
+export interface FeeGroupBlockSelect<T extends boolean = true> {
   heading?: T;
   body?: T;
+  note?: T;
+  fees?:
+    | T
+    | {
+        feeItem?: T | FeeItemBlockSelect<T>;
+      };
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FleetLocationBlock_select".
+ * via the `definition` "RichTextContentBlock_select".
  */
-export interface FleetLocationBlockSelect<T extends boolean = true> {
-  flush?: T;
+export interface RichTextContentBlockSelect<T extends boolean = true> {
+  body?:
+    | T
+    | {
+        paragraph?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        list?:
+          | T
+          | {
+              variant?: T;
+              items?:
+                | T
+                | {
+                    item?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        orderedList?:
+          | T
+          | {
+              variant?: T;
+              items?:
+                | T
+                | {
+                    item?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        break?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
+      };
+  size?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FleetListBlock_select".
+ * via the `definition` "SectionTabsBlock_select".
  */
-export interface FleetListBlockSelect<T extends boolean = true> {
-  heading?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "GalleryBlock_select".
- */
-export interface GalleryBlockSelect<T extends boolean = true> {
-  kicker?: T;
-  heading?: T;
-  body?: T;
-  src?: T;
-  overlaySrc?: T;
-  alt?: T;
-  totalSlides?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "JoinTabsBlock_select".
- */
-export interface JoinTabsBlockSelect<T extends boolean = true> {
+export interface SectionTabsBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
   ariaLabel?: T;
   tabs?:
     | T
     | {
-        value?: T;
         label?: T;
+        layout?: T;
+        showHeading?: T;
+        sectionHeading?:
+          | T
+          | {
+              kicker?: T;
+              heading?: T;
+              body?: T;
+            };
+        content?:
+          | T
+          | {
+              cardLrg?: T | CardLrgBlockSelect<T>;
+              cardMed?: T | CardMedBlockSelect<T>;
+              cardWide?: T | CardWideBlockSelect<T>;
+              cardEvent?: T | CardEventBlockSelect<T>;
+              cardCourse?: T | CardCourseBlockSelect<T>;
+              cardBoat?: T | CardBoatBlockSelect<T>;
+              cardPerson?: T | CardPersonBlockSelect<T>;
+              cardFleetMap?: T | CardFleetMapBlockSelect<T>;
+              feeItem?: T | FeeItemBlockSelect<T>;
+              feeGroup?: T | FeeGroupBlockSelect<T>;
+              richText?: T | RichTextContentBlockSelect<T>;
+            };
         id?: T;
       };
-  panels?: T;
+  emptyMessage?: T;
+  footerNote?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MembershipFormBlock_select".
+ * via the `definition` "SectionContentBlock_select".
  */
-export interface MembershipFormBlockSelect<T extends boolean = true> {
+export interface SectionContentBlockSelect<T extends boolean = true> {
+  label?: T;
+  heading?: T;
+  body?: T;
+  actions?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        external?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MembershipApplicationFormBlock_select".
+ */
+export interface MembershipApplicationFormBlockSelect<T extends boolean = true> {
   form?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormEmbedBlock_select".
+ */
+export interface FormEmbedBlockSelect<T extends boolean = true> {
+  showHeading?: T;
+  sectionHeading?:
+    | T
+    | {
+        kicker?: T;
+        heading?: T;
+        body?: T;
+      };
+  form?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NauticalMapBlock_select".
+ */
+export interface NauticalMapBlockSelect<T extends boolean = true> {
   id?: T;
   blockName?: T;
 }
@@ -1446,16 +2079,16 @@ export interface BoatsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "people_select".
+ * via the `definition` "cruise-events_select".
  */
-export interface PeopleSelect<T extends boolean = true> {
-  name?: T;
+export interface CruiseEventsSelect<T extends boolean = true> {
   title?: T;
-  dept?: T;
-  email?: T;
-  photo?: T;
-  photoAlt?: T;
-  group?: T;
+  dates?: T;
+  yacht?: T;
+  model?: T;
+  skipper?: T;
+  imageSrc?: T;
+  imageAlt?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1508,16 +2141,39 @@ export interface TrainingEventsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cruise-events_select".
+ * via the `definition` "users_select".
  */
-export interface CruiseEventsSelect<T extends boolean = true> {
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
   title?: T;
-  dates?: T;
-  yacht?: T;
-  model?: T;
-  skipper?: T;
-  imageSrc?: T;
-  imageAlt?: T;
+  dept?: T;
+  email?: T;
+  photo?: T;
+  photoAlt?: T;
+  group?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1540,29 +2196,6 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1754,6 +2387,100 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Logo and header buttons. Navigation links are created automatically from pages marked “Show in header” on each page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  logoSrc?: string | null;
+  logoAlt?: string | null;
+  logoHref?: string | null;
+  headerJoinLabel?: string | null;
+  joinHref?: string | null;
+  membersLabel?: string | null;
+  membersHref?: string | null;
+  primaryNavLabel?: string | null;
+  mobileNavLabel?: string | null;
+  openNavLabel?: string | null;
+  closeNavLabel?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Contact details, artwork and extra links. Page links come from pages marked “Show in footer”.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  contactHeading?: string | null;
+  email?: string | null;
+  facebookLabel?: string | null;
+  facebookUrl?: string | null;
+  coordinates?: string | null;
+  location?: string | null;
+  copyright?: string | null;
+  registration?: string | null;
+  footerLogoSrc?: string | null;
+  footerBackgroundSrc?: string | null;
+  footerCompassSrc?: string | null;
+  siteFooterBackgroundSrc?: string | null;
+  extraLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * The fleet's base location / home port map.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "fleet-location".
+ */
+export interface FleetLocation {
+  id: number;
+  heading?: string | null;
+  body?: string | null;
+  mapAriaLabel?: string | null;
+  mapSrc?: string | null;
+  logoSrc?: string | null;
+  concordeMarkerSrc?: string | null;
+  speedbirdMarkerSrc?: string | null;
+  concordeLabel?: string | null;
+  speedbirdLabel?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Interactive route tracker map shown on the Cruises page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cruise-map".
+ */
+export interface CruiseMap {
+  id: number;
+  mapSrc?: string | null;
+  mapAlt?: string | null;
+  logoSrc?: string | null;
+  speedbirdMarkerSrc?: string | null;
+  speedbirdMarkerAlt?: string | null;
+  concordeMarkerSrc?: string | null;
+  concordeMarkerAlt?: string | null;
+  concordeLabel?: string | null;
+  speedbirdLabel?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Default SEO metadata for the site.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
@@ -1763,55 +2490,12 @@ export interface SiteSetting {
     title?: string | null;
     description?: string | null;
   };
-  coordinates?: string | null;
-  location?: string | null;
-  contactHeading?: string | null;
-  email?: string | null;
-  facebookLabel?: string | null;
-  facebookUrl?: string | null;
-  logoAlt?: string | null;
-  copyright?: string | null;
-  registration?: string | null;
-  headerJoinLabel?: string | null;
-  membersLabel?: string | null;
-  primaryNavLabel?: string | null;
-  mobileNavLabel?: string | null;
-  openNavLabel?: string | null;
-  closeNavLabel?: string | null;
-  logoHref?: string | null;
-  logoSrc?: string | null;
-  footerBackgroundSrc?: string | null;
-  footerCompassSrc?: string | null;
-  footerLogoSrc?: string | null;
-  siteFooterBackgroundSrc?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "navigation".
- */
-export interface Navigation {
-  id: number;
-  primaryNavItems?:
-    | {
-        label: string;
-        href: string;
-        divider?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  footerNavLinks?:
-    | {
-        label: string;
-        href: string;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
+ * Reusable UI text fragments and micro-copy (button labels, card labels).
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "component-labels".
  */
@@ -1846,158 +2530,47 @@ export interface ComponentLabel {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "fleet-location".
+ * via the `definition` "header_select".
  */
-export interface FleetLocation {
-  id: number;
-  heading?: string | null;
-  body?: string | null;
-  mapAriaLabel?: string | null;
-  mapSrc?: string | null;
-  logoSrc?: string | null;
-  concordeMarkerSrc?: string | null;
-  speedbirdMarkerSrc?: string | null;
-  concordeLabel?: string | null;
-  speedbirdLabel?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cruise-map".
- */
-export interface CruiseMap {
-  id: number;
-  mapSrc?: string | null;
-  mapAlt?: string | null;
-  logoSrc?: string | null;
-  speedbirdMarkerSrc?: string | null;
-  speedbirdMarkerAlt?: string | null;
-  concordeMarkerSrc?: string | null;
-  concordeMarkerAlt?: string | null;
-  concordeLabel?: string | null;
-  speedbirdLabel?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-not-found".
- */
-export interface PageNotFound {
-  id: number;
-  label?: string | null;
-  heading?: string | null;
-  body?: string | null;
-  action?: {
-    label?: string | null;
-    href?: string | null;
-    /**
-     * Open in a new tab / treat as an external link.
-     */
-    external?: boolean | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "site-settings_select".
- */
-export interface SiteSettingsSelect<T extends boolean = true> {
-  metadata?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-      };
-  coordinates?: T;
-  location?: T;
-  contactHeading?: T;
-  email?: T;
-  facebookLabel?: T;
-  facebookUrl?: T;
+export interface HeaderSelect<T extends boolean = true> {
+  logoSrc?: T;
   logoAlt?: T;
-  copyright?: T;
-  registration?: T;
+  logoHref?: T;
   headerJoinLabel?: T;
+  joinHref?: T;
   membersLabel?: T;
+  membersHref?: T;
   primaryNavLabel?: T;
   mobileNavLabel?: T;
   openNavLabel?: T;
   closeNavLabel?: T;
-  logoHref?: T;
-  logoSrc?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  contactHeading?: T;
+  email?: T;
+  facebookLabel?: T;
+  facebookUrl?: T;
+  coordinates?: T;
+  location?: T;
+  copyright?: T;
+  registration?: T;
+  footerLogoSrc?: T;
   footerBackgroundSrc?: T;
   footerCompassSrc?: T;
-  footerLogoSrc?: T;
   siteFooterBackgroundSrc?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "navigation_select".
- */
-export interface NavigationSelect<T extends boolean = true> {
-  primaryNavItems?:
-    | T
-    | {
-        label?: T;
-        href?: T;
-        divider?: T;
-        id?: T;
-      };
-  footerNavLinks?:
+  extraLinks?:
     | T
     | {
         label?: T;
         href?: T;
         id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "component-labels_select".
- */
-export interface ComponentLabelsSelect<T extends boolean = true> {
-  cardBoat?:
-    | T
-    | {
-        kicker?: T;
-        built?: T;
-        specifications?: T;
-      };
-  cardCourse?:
-    | T
-    | {
-        from?: T;
-        till?: T;
-        notes?: T;
-      };
-  cardEvent?:
-    | T
-    | {
-        skipper?: T;
-      };
-  cruiseCarousel?:
-    | T
-    | {
-        previous?: T;
-        next?: T;
-        arrowSrc?: T;
-      };
-  gallery?:
-    | T
-    | {
-        previous?: T;
-        next?: T;
-        previousIcon?: T;
-        nextIcon?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2041,18 +2614,57 @@ export interface CruiseMapSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-not-found_select".
+ * via the `definition` "site-settings_select".
  */
-export interface PageNotFoundSelect<T extends boolean = true> {
-  label?: T;
-  heading?: T;
-  body?: T;
-  action?:
+export interface SiteSettingsSelect<T extends boolean = true> {
+  metadata?:
     | T
     | {
-        label?: T;
-        href?: T;
-        external?: T;
+        title?: T;
+        description?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "component-labels_select".
+ */
+export interface ComponentLabelsSelect<T extends boolean = true> {
+  cardBoat?:
+    | T
+    | {
+        kicker?: T;
+        built?: T;
+        specifications?: T;
+      };
+  cardCourse?:
+    | T
+    | {
+        from?: T;
+        till?: T;
+        notes?: T;
+      };
+  cardEvent?:
+    | T
+    | {
+        skipper?: T;
+      };
+  cruiseCarousel?:
+    | T
+    | {
+        previous?: T;
+        next?: T;
+        arrowSrc?: T;
+      };
+  gallery?:
+    | T
+    | {
+        previous?: T;
+        next?: T;
+        previousIcon?: T;
+        nextIcon?: T;
       };
   updatedAt?: T;
   createdAt?: T;
