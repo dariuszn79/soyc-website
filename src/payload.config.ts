@@ -79,7 +79,21 @@ export default buildConfig({
     ...(process.env.SUPABASE_S3_ENDPOINT
       ? [
           s3Storage({
-            collections: { media: true },
+            collections: {
+              media: {
+                // Supabase serves public objects from
+                // /object/public/<bucket>/<key>, not the S3 endpoint path the
+                // adapter would otherwise build.
+                generateFileURL: ({ filename, prefix }) =>
+                  [
+                    process.env.SUPABASE_S3_PUBLIC_URL,
+                    prefix,
+                    encodeURIComponent(filename),
+                  ]
+                    .filter(Boolean)
+                    .join("/"),
+              },
+            },
             bucket: process.env.SUPABASE_S3_BUCKET || "media",
             acl: "public-read",
             config: {
@@ -92,17 +106,6 @@ export default buildConfig({
               },
             },
           }),
-          // The adapter builds file URLs from the S3 endpoint, but Supabase
-          // serves public objects from /storage/v1/object/public/<bucket>/<key>.
-          (config) => {
-            const base = process.env.SUPABASE_S3_PUBLIC_URL;
-            const media = (config.collections ?? []).find((c) => c.slug === "media");
-            if (base && media && typeof media.upload === "object") {
-              media.upload.generateFileURL = ({ filename, prefix }) =>
-                [base, prefix, encodeURIComponent(filename)].filter(Boolean).join("/");
-            }
-            return config;
-          },
         ]
       : []),
     formBuilderPlugin({
