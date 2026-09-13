@@ -1,15 +1,18 @@
-import "server-only";
+import type { Payload } from "payload";
 
 /**
- * AISstream.io live vessel positions — a single long-lived WebSocket shared
- * by all requests. The stream is opened lazily on first poll and re-opened
- * with a fresh subscription when the tracked MMSI set changes.
+ * AISstream.io vessel tracking.
  *
- * Requires `AISSTREAM_API_KEY` (server-only env — never exposed to the
- * browser). When unset, `getVesselPositions` just returns an empty list.
+ * `startStream` opens the upstream WebSocket and calls `onReport` for each
+ * position fix. It is used in two places:
  *
- * NOTE: this holds state in the Next.js server process — it works in dev and
- * on any long-lived Node host, but not on short-lived serverless functions.
+ * - Dev / persistent Node host: `ensureStream` lazily starts it in-process and
+ *   positions are persisted to the Boat's `lastPosition` (throttled).
+ * - Serverless production: `scripts/ais-worker.ts` runs the same stream on an
+ *   always-on machine — /api/vessel-positions only ever reads the database,
+ *   so no socket is needed at request time.
+ *
+ * Requires `AISSTREAM_API_KEY` (server-only env — never sent to the browser).
  */
 
 export interface VesselPosition {
@@ -21,32 +24,38 @@ export interface VesselPosition {
   /** Speed over ground, knots. */
   sog?: number;
   shipName?: string;
-  /** Epoch ms of the last position report. */
+  /** Epoch ms of the position report. */
   updatedAt: number;
 }
 
 // South Coast / Solent bounding box — AISstream requires a box plus the MMSI
 // filter. [[minLat, minLon], [maxLat, maxLon]].
-const BOUNDING_BOXES = [[[50.3, -2.2], [51.3, -0.3]]];
+const BOUNDING_BOXES = [[[49.5, -3.5], [52.0, 1.0]]];
 const RECONNECT_MS = 5000;
+/** Minimum ms between DB writes per vessel. */
+const PERSIST_MS = 45_000;
 
-const positions = new Map<string, VesselPosition>();
 let socket: WebSocket | null = null;
 let subscribedTo = "";
-let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
+const lastPersist = new Map<string, number>();
 
 /**
- * Ensure the upstream stream is subscribed to `mmsis` and return the latest
- * cached positions for them (empty until the first reports arrive).
+ * Lazily ensure the in-process stream is subscribed to `mmsis`. No-op when the
+ * key is missing or the AIS worker is responsible (`AISSTREAM_MODE=worker`).
  */
-export function getVesselPositions(mmsis: string[]): VesselPosition[] {
-  ensureStream(mmsis);
-  return mmsis
-    .map((mmsi) => positions.get(mmsi))
-    .filter((p): p is VesselPosition => Boolean(p));
+export function ensureStream(mmsis: string[]) {
+  if (process.env.AISSTREAM_MODE === "worker") return;
+  startStream(mmsis, async (pos) => {
+    const { getPayloadClient } = await import("@/lib/payload/client");
+    await persistPosition(await getPayloadClient(), pos);
+  });
 }
 
-function ensureStream(mmsis: string[]) {
+/**
+ * Open (or re-subscribe) the upstream stream. One socket is kept per process;
+ * resending a subscription replaces it, so a changed MMSI set reconnects.
+ */
+export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => void) {
   const apiKey = process.env.AISSTREAM_API_KEY;
   if (!apiKey || !mmsis.length) return;
 
@@ -85,10 +94,10 @@ function ensureStream(mmsis: string[]) {
         typeof raw === "string" ? raw : Buffer.from(raw as ArrayBuffer).toString("utf8");
       const msg = JSON.parse(text);
       const meta = msg?.MetaData;
-      const report = msg?.Message?.PositionReport;
+      const report = msg?.Message?.[msg?.MessageType];
       // MetaData uses lowercase latitude/longitude; Message.* uses capitals.
       if (meta?.MMSI != null && meta.latitude != null && meta.longitude != null) {
-        positions.set(String(meta.MMSI), {
+        onReport({
           mmsi: String(meta.MMSI),
           lat: meta.latitude,
           lon: meta.longitude,
@@ -106,10 +115,7 @@ function ensureStream(mmsis: string[]) {
   ws.onclose = () => {
     if (socket !== ws) return;
     socket = null;
-    reconnectTimer ??= setTimeout(() => {
-      reconnectTimer = null;
-      ensureStream(mmsis);
-    }, RECONNECT_MS);
+    setTimeout(() => startStream(mmsis, onReport), RECONNECT_MS);
   };
 
   ws.onerror = () => {
@@ -119,4 +125,33 @@ function ensureStream(mmsis: string[]) {
       // already closed
     }
   };
+}
+
+/** Write a position fix onto the matching Boat's `lastPosition`, throttled to
+ * one write per vessel per PERSIST_MS. */
+export async function persistPosition(payload: Payload, pos: VesselPosition) {
+  const last = lastPersist.get(pos.mmsi) ?? 0;
+  if (Date.now() - last < PERSIST_MS) return;
+  lastPersist.set(pos.mmsi, Date.now());
+
+  const { docs } = await payload.find({
+    collection: "boats",
+    where: { mmsi: { equals: pos.mmsi } },
+    limit: 1,
+    depth: 0,
+  });
+  if (!docs[0]) return;
+  await payload.update({
+    collection: "boats",
+    id: docs[0].id,
+    data: {
+      lastPosition: {
+        lat: pos.lat,
+        lon: pos.lon,
+        sog: pos.sog ?? null,
+        cog: pos.cog ?? null,
+        reportedAt: new Date(pos.updatedAt).toISOString(),
+      },
+    } as never,
+  });
 }

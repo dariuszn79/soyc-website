@@ -66,9 +66,10 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || "",
       ssl: { rejectUnauthorized: false },
       // The DB is fronted by a session-mode pooler (max ~15 clients total).
-      // Keep each process's pool small so dev workers + schema introspection
-      // don't exhaust it.
-      max: 4,
+      // Keep each process's pool small and release idle connections quickly so
+      // dev workers + schema introspection don't exhaust it.
+      max: 2,
+      idleTimeoutMillis: 3000,
     },
   }),
   plugins: [

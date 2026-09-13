@@ -387,6 +387,16 @@ export interface Boat {
    */
   mmsi?: string | null;
   /**
+   * Auto-populated by the AIS tracker — no need to edit.
+   */
+  lastPosition?: {
+    lat?: number | null;
+    lon?: number | null;
+    sog?: number | null;
+    cog?: number | null;
+    reportedAt?: string | null;
+  };
+  /**
    * Sort order (ascending).
    */
   order?: number | null;
@@ -2051,6 +2061,15 @@ export interface BoatsSelect<T extends boolean = true> {
         id?: T;
       };
   mmsi?: T;
+  lastPosition?:
+    | T
+    | {
+        lat?: T;
+        lon?: T;
+        sog?: T;
+        cog?: T;
+        reportedAt?: T;
+      };
   order?: T;
   updatedAt?: T;
   createdAt?: T;

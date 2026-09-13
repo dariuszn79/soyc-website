@@ -41,6 +41,22 @@ export const Boats: CollectionConfig = {
       },
     },
     {
+      name: "lastPosition",
+      type: "group",
+      label: "Last AIS position",
+      admin: {
+        description: "Auto-populated by the AIS tracker — no need to edit.",
+        position: "sidebar",
+      },
+      fields: [
+        { name: "lat", type: "number" },
+        { name: "lon", type: "number" },
+        { name: "sog", type: "number", label: "SOG (kn)" },
+        { name: "cog", type: "number", label: "COG (°)" },
+        { name: "reportedAt", type: "text", label: "Reported at (ISO)" },
+      ],
+    },
+    {
       name: "order",
       type: "number",
       admin: { position: "sidebar", description: "Sort order (ascending)." },
