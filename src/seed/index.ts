@@ -61,14 +61,24 @@ async function mediaId(srcPath?: string | null, alt?: string): Promise<number | 
     where: { filename: { equals: filename } },
     limit: 1,
   });
+  // Always pass filePath so the active storage adapter (local disk / S3)
+  // actually receives the file — reusing the doc alone leaves remote
+  // storage empty when seeding a fresh bucket.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const doc = (found.docs[0] as any) ??
-    (await payload.create({
-      collection: "media",
-      data: { alt: alt ?? filename },
-      filePath: abs,
-      context: ctx,
-    }));
+  const doc: any = found.docs[0]
+    ? await payload.update({
+        collection: "media",
+        id: found.docs[0].id,
+        data: { alt: alt ?? filename },
+        filePath: abs,
+        context: ctx,
+      })
+    : await payload.create({
+        collection: "media",
+        data: { alt: alt ?? filename },
+        filePath: abs,
+        context: ctx,
+      });
   mediaCache.set(srcPath, doc.id as number);
   return doc.id as number;
 }
