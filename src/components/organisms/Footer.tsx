@@ -39,7 +39,7 @@ export function Footer({ site }: { site?: SiteContent } = {}) {
             <p className="font-gill text-heading-sm font-semibold leading-[36px]">
               {siteContent.coordinates}
             </p>
-            <p className="font-gill text-button font-medium leading-body">
+            <p className="font-gill text-button uppercase font-medium leading-body">
               {siteContent.location}
             </p>
           </div>
