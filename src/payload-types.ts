@@ -447,17 +447,19 @@ export interface SectionGalleryBlock {
     heading: string;
     body?: string | null;
   };
-  image: number | Media;
-  /**
-   * Accessible description. Falls back to the asset's own alt text.
-   */
-  alt?: string | null;
+  images: {
+    image: number | Media;
+    /**
+     * Accessible description. Falls back to the asset's own alt text.
+     */
+    alt?: string | null;
+    id?: string | null;
+  }[];
   overlayImage?: (number | null) | Media;
   /**
    * Accessible description. Falls back to the asset's own alt text.
    */
   overlayAlt?: string | null;
-  totalSlides?: number | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'sectionGallery';
@@ -1567,11 +1569,15 @@ export interface SectionGalleryBlockSelect<T extends boolean = true> {
         heading?: T;
         body?: T;
       };
-  image?: T;
-  alt?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
   overlayImage?: T;
   overlayAlt?: T;
-  totalSlides?: T;
   id?: T;
   blockName?: T;
 }

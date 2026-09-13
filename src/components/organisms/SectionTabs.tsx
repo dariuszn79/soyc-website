@@ -12,14 +12,18 @@ type AnyObj = any;
  * Relational cards (cardBoat, cardCourse, cardPerson) pick their record
  * directly, so tab content is always authored in the CMS.
  */
-async function resolveTabCards(tab: AnyObj, layout: string): Promise<ReactNode> {
+async function resolveTabCards(
+  tab: AnyObj,
+  layout: string,
+  key: string,
+): Promise<ReactNode> {
   const cards: AnyObj[] = tab.content ?? [];
   const nodes: ReactNode[] = [];
   for (const [i, c] of cards.entries()) nodes.push(await renderCard(c, i));
   const spans = cards.map((c) => cardSpan(c, layout));
 
   return (
-    <div className={cardLayoutClass(layout)}>
+    <div key={key} className={cardLayoutClass(layout)}>
       {nodes.map((node, i) => (
         <div key={i} className={spans[i] ?? ""}>
           {node}
@@ -34,11 +38,14 @@ export async function SectionTabs({ block }: { block: AnyObj }) {
   // is deliberately small (session-mode pooler).
   const tabs: SectionTabData[] = [];
   for (const [i, tab] of (block.tabs ?? []).entries()) {
-    const cards = await resolveTabCards(tab as AnyObj, tab.layout ?? "grid-3");
+    const cards = await resolveTabCards(tab as AnyObj, tab.layout ?? "grid-3", `tab-${i}`);
     const content =
       tab.showTabSubheading && tab.subheading ? (
-        <div className="flex flex-col gap-spacing-md">
-          <p className="font-gill max-w-[720px] text-[20px] leading-[28px] text-brand-ink sm:text-[24px] sm:leading-[32px]">
+        <div key={`tab-${i}`} className="flex flex-col gap-spacing-md pt-12">
+          <p
+            key="subheading"
+            className="font-gill max-w-[720px] text-[20px] leading-[28px] text-brand-ink sm:text-[24px] sm:leading-[32px]"
+          >
             {tab.subheading}
           </p>
           {cards}

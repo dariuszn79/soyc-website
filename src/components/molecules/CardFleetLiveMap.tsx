@@ -74,7 +74,10 @@ export default function CardFleetLiveMap({
         map.on("load", () => console.log("mapbox map loaded"));
         map.on("error", (e) => {
           console.error("Mapbox error", e?.error ?? e);
-          setMapError(e?.error?.message ?? "Map failed to load");
+          const err = e?.error as (Error & { status?: number }) | undefined;
+          setMapError(
+            err?.message || (err?.status ? `Request failed (${err.status})` : "Map failed to load"),
+          );
         });
         mapRef.current = map;
       })
@@ -154,7 +157,42 @@ export default function CardFleetLiveMap({
         {/* mapbox-gl adds .mapboxgl-map (position:relative) which overrides
             Tailwind's .absolute, so size with h-full w-full instead. */}
         <div ref={containerRef} className="h-full w-full" />
-
+ <div className="absolute bottom-[6.4%] left-[3.3%] flex flex-col gap-[10px]">
+          {vessels.map((vessel, i) => {
+            const pos = positions[vessel.mmsi];
+            const hasHeading = pos?.cog != null && pos.cog < 360;
+            return (
+            <div
+              key={vessel.mmsi}
+              className="flex h-[25px] items-center gap-xs rounded-full border bg-brand-tertiary-100 px-[6px] transition-opacity"
+              style={{
+                borderColor: VESSEL_COLOURS[i % VESSEL_COLOURS.length],
+                color: VESSEL_COLOURS[i % VESSEL_COLOURS.length],
+                opacity: positions[vessel.mmsi] ? 1 : 1,
+              }}
+              title={positions[vessel.mmsi] ? undefined : "Awaiting first AIS position report"}
+            >
+              <div
+                className="h-4 w-4 shrink-0 rounded-full"
+                style={{ background: VESSEL_COLOURS[i % VESSEL_COLOURS.length] }}
+              />
+              <div className="w-[105px] text-center font-button text-button leading-button">
+                {vessel.name+':'}
+              </div>
+              {pos ? (
+                <div className="flex-1 text-right text-[10px] leading-[14px]">
+                  {pos.lat.toFixed(4)}°, {pos.lon.toFixed(4)}° · SOG{" "}
+                  {pos.sog != null ? `${pos.sog.toFixed(1)} kn` : "–"} · COG{" "}
+                  {hasHeading ? `${Math.round(pos.cog!)}°` : "–"} · updated{" "}
+                  {Math.max(0, Math.round((Date.now() - pos.updatedAt) / 1000))}s ago
+                </div>
+              ) : (
+                <div className="opacity-60">Awaiting AIS position report…</div>
+              )}
+            </div>
+            );
+          })}
+        </div>
         {mapError && (
           <div className="absolute inset-0 flex items-center justify-center bg-brand-tertiary-100/90 p-spacing-md">
             <p className="font-gill text-body-sm leading-body-sm text-brand-ink">
@@ -163,56 +201,7 @@ export default function CardFleetLiveMap({
           </div>
         )}
 
-        <div className="absolute bottom-[6.4%] left-[3.3%] flex flex-col gap-[10px]">
-          {vessels.map((vessel, i) => (
-            <div
-              key={vessel.mmsi}
-              className="flex h-[25px] items-center gap-[10px] rounded-full border bg-brand-tertiary-100 px-[6px] transition-opacity"
-              style={{
-                borderColor: VESSEL_COLOURS[i % VESSEL_COLOURS.length],
-                color: VESSEL_COLOURS[i % VESSEL_COLOURS.length],
-                opacity: positions[vessel.mmsi] ? 1 : 0.45,
-              }}
-              title={positions[vessel.mmsi] ? undefined : "Awaiting first AIS position report"}
-            >
-              <span
-                className="h-4 w-4 shrink-0 rounded-full"
-                style={{ background: VESSEL_COLOURS[i % VESSEL_COLOURS.length] }}
-              />
-              <span className="w-[105px] text-center font-button text-button leading-button">
-                {vessel.name}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Live telemetry strip — position, SOG, COG per tracked vessel. */}
-      <div className="border-t border-brand-rule bg-brand-tertiary-100 px-spacing-md py-3 font-gill text-body-sm leading-body-sm text-brand-ink">
-        {vessels.map((vessel, i) => {
-          const pos = positions[vessel.mmsi];
-          const hasHeading = pos?.cog != null && pos.cog < 360;
-          return (
-            <div key={vessel.mmsi} className="flex flex-wrap items-baseline gap-x-3">
-              <span
-                className="font-button text-button leading-button"
-                style={{ color: VESSEL_COLOURS[i % VESSEL_COLOURS.length] }}
-              >
-                {vessel.name}
-              </span>
-              {pos ? (
-                <span>
-                  {pos.lat.toFixed(4)}°, {pos.lon.toFixed(4)}° · SOG{" "}
-                  {pos.sog != null ? `${pos.sog.toFixed(1)} kn` : "–"} · COG{" "}
-                  {hasHeading ? `${Math.round(pos.cog!)}°` : "–"} · updated{" "}
-                  {Math.max(0, Math.round((Date.now() - pos.updatedAt) / 1000))}s ago
-                </span>
-              ) : (
-                <span className="opacity-60">Awaiting AIS position report…</span>
-              )}
-            </div>
-          );
-        })}
+       
       </div>
     </div>
   );

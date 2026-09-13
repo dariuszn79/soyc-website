@@ -167,10 +167,13 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
           <SectionHeadingToggle block={block} />
           <div className="mt-[60px]">
             <SectionGallery
-              src={toMediaSrc(block.image)}
+              images={((block.images ?? []) as Block[])
+                .map((img) => ({
+                  src: toMediaSrc(img.image),
+                  alt: img.alt || toMediaAlt(img.image),
+                }))
+                .filter((img) => img.src)}
               overlaySrc={toMediaSrc(block.overlayImage) || undefined}
-              alt={block.alt || toMediaAlt(block.image)}
-              totalSlides={block.totalSlides ?? 10}
             />
           </div>
         </BodyWrapper>

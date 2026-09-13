@@ -112,9 +112,15 @@ const richTextToBlocks = (blocks: AnyObj[]) =>
   });
 
 /** CardLrg/CardMed `body` accepts rich-text blocks; a plain string becomes a
- * single paragraph block. */
+ * single paragraph block. Strings inside an array are paragraphs too. */
 const toBodyBlocks = (body: AnyObj) =>
-  Array.isArray(body) ? richTextToBlocks(body) : body ? [{ blockType: "paragraph", text: body }] : [];
+  Array.isArray(body)
+    ? richTextToBlocks(
+        body.map((b) => (typeof b === "string" ? { type: "paragraph", text: b } : b)),
+      )
+    : body
+      ? [{ blockType: "paragraph", text: body }]
+      : [];
 
 const para = (text: string) => ({ blockType: "paragraph", text });
 
@@ -237,10 +243,13 @@ const sectionEvents = (s: AnyObj, source: string, display: string) => ({
 const sectionGallery = async (g: AnyObj) => ({
   blockType: "sectionGallery",
   ...heading(g),
-  image: await mediaId(g.src, g.alt),
-  alt: g.alt,
+  images: await Promise.all(
+    ((g.images as AnyObj[]) ?? []).map(async (img) => ({
+      image: await mediaId(img.src, img.alt),
+      alt: img.alt,
+    })),
+  ),
   overlayImage: await mediaId(g.overlaySrc),
-  totalSlides: g.totalSlides,
 });
 
 const sectionContent = (p: AnyObj) => ({
@@ -254,10 +263,19 @@ const sectionContent = (p: AnyObj) => ({
 /** The join page's four tabs rebuilt as SectionTabs manual cards. */
 const joinTabs = (j: AnyObj) => {
   const p = j.panels;
-  const listBlock = (items: string[]) => ({
-    blockType: "list",
+  const listBlock = (items: string[], ordered = false) => ({
+    blockType: ordered ? "orderedList" : "list",
     variant: "compact",
     items: items.map((item) => ({ item })),
+  });
+  const tabCard = (c: AnyObj) => ({
+    blockType: "cardMed",
+    heading: c.heading,
+    body: [
+      ...((c.paragraphs as string[]) ?? []).map(para),
+      ...(c.list ? [listBlock(c.list as string[])] : []),
+      ...(c.orderedList ? [listBlock(c.orderedList as string[], true)] : []),
+    ],
   });
   return {
     blockType: "sectionTabs",
@@ -268,16 +286,7 @@ const joinTabs = (j: AnyObj) => {
         layout: "grid-3",
         showTabSubheading: true,
         subheading: p.membership.intro,
-        content: [
-          ...p.membership.cards.map((c: AnyObj) => ({
-            blockType: "cardMed",
-            heading: c.heading,
-            body: [
-              ...(c.paragraphs as string[]).map((t) => para(t)),
-              ...(c.list ? [listBlock(c.list as string[])] : []),
-            ],
-          })),
-        ],
+        content: (p.membership.cards as AnyObj[]).map(tabCard),
       },
       {
         label: "Fees",
@@ -305,50 +314,15 @@ const joinTabs = (j: AnyObj) => {
         label: "Tester Day",
         layout: "grid-3",
         showTabSubheading: true,
-        subheading: p.testerDay.intro.body,
-        content: [
-          {
-            blockType: "cardMed",
-            heading: p.testerDay.expect.heading,
-            body: (p.testerDay.expect.paragraphs as string[]).map((t) => para(t)),
-          },
-          {
-            blockType: "cardMed",
-            heading: p.testerDay.practical.heading,
-            body: [
-              listBlock(
-                (p.testerDay.practical.details as AnyObj[]).map(
-                  (d) => `${d.key}: ${d.value}`,
-                ),
-              ),
-            ],
-          },
-          {
-            blockType: "cardMed",
-            heading: p.testerDay.booking.heading,
-            body: [
-              para(
-                `${p.testerDay.booking.intro} ${p.testerDay.booking.firstStepBeforeEmail} ${p.testerDay.booking.email.label} ${p.testerDay.booking.firstStepAfterEmail}`,
-              ),
-              {
-                blockType: "orderedList",
-                variant: "compact",
-                items: (p.testerDay.booking.remainingSteps as string[]).map((s) => ({
-                  item: s,
-                })),
-              },
-            ],
-          },
-        ],
+        subheading: p.testerDay.intro,
+        content: (p.testerDay.cards as AnyObj[]).map(tabCard),
       },
       {
         label: "What do you need",
         layout: "grid-3",
         showTabSubheading: true,
-        subheading: p.gear.intro.body,
-        content: [
-          ...(p.gear.cards as AnyObj[]).map(cardMed),
-        ],
+        subheading: p.gear.intro,
+        content: (p.gear.cards as AnyObj[]).map(tabCard),
       },
     ],
   };

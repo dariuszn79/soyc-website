@@ -66,40 +66,35 @@
       }
     },
     "testerDay": {
-      "intro": {
-        "kicker": "Our Training",
-        "headingLines": ["Potential New", "Member Days"],
-        "body": "Curious about sailing? Spend a day on the Solent with us before you decide whether to join. No experience necessary — our qualified skipper and crew will look after you from start to finish."
-      },
-      "expect": {
-        "heading": "What to expect",
-        "paragraphs": ["You'll join a scheduled trip on one of our yachts from Mercury Marina on the River Hamble. A typical day might include sailing across to the Isle of Wight, anchoring for lunch in a quiet bay, and returning in the afternoon. You'll be encouraged to get involved as much or as little as you like — take the helm, trim a sail, or just enjoy the ride.", "You'll sail with a commercially qualified skipper and experienced crew, so you're in safe hands throughout."]
-      },
-      "practical": {
-        "heading": "Practical details",
-        "details": [
-          { "key": "Cost", "value": "Just the standard member sailing fee (£56 summer / £41 winter) — no temporary membership surcharge for Potential New Member days" },
-          { "key": "When", "value": "Potential New Member days run in the spring and summer months (typically May–October, when sea temperatures allow)" },
-          { "key": "Duration", "value": "A full day, usually departing mid-morning and returning late afternoon" },
-          { "key": "What to bring", "value": "Warm layers, waterproofs if you have them, non-marking shoes with grip, and something for lunch. We'll sort the rest." },
-          { "key": "Location", "value": "Mercury Marina, Hamble, near Southampton (SO31 4HQ for sat nav)" }
-        ]
-      },
-      "booking": {
-        "heading": "How to Book",
-        "intro": "Getting on the water is easy:",
-        "email": { "label": "generalenquiries@soyc.co.uk", "href": "mailto:generalenquiries@soyc.co.uk" },
-        "firstStepBeforeEmail": "Email us at",
-        "firstStepAfterEmail": "to let us know you're interested",
-        "remainingSteps": ["We'll send you a short form to fill in and match you to an upcoming trip", "Turn up at the marina and enjoy your day", "If you loved it, joining is simple — and your sailing fee is offset against your first year's membership"]
-      }
+      "intro": "Curious about sailing? Spend a day on the Solent with us before you decide whether to join. No experience necessary — our qualified skipper and crew will look after you from start to finish.",
+      "cards": [
+        {
+          "heading": "What to expect",
+          "paragraphs": ["You'll join a scheduled trip on one of our yachts from Mercury Marina on the River Hamble. A typical day might include sailing across to the Isle of Wight, anchoring for lunch in a quiet bay, and returning in the afternoon. You'll be encouraged to get involved as much or as little as you like — take the helm, trim a sail, or just enjoy the ride.", "You'll sail with a commercially qualified skipper and experienced crew, so you're in safe hands throughout."]
+        },
+        {
+          "heading": "Practical details",
+          "list": [
+            "Cost: Just the standard member sailing fee (£56 summer / £41 winter) — no temporary membership surcharge for Potential New Member days",
+            "When: Potential New Member days run in the spring and summer months (typically May–October, when sea temperatures allow)",
+            "Duration: A full day, usually departing mid-morning and returning late afternoon",
+            "What to bring: Warm layers, waterproofs if you have them, non-marking shoes with grip, and something for lunch. We'll sort the rest.",
+            "Location: Mercury Marina, Hamble, near Southampton (SO31 4HQ for sat nav)"
+          ]
+        },
+        {
+          "heading": "How to Book",
+          "paragraphs": ["Getting on the water is easy: Email us at generalenquiries@soyc.co.uk to let us know you're interested"],
+          "orderedList": [
+            "We'll send you a short form to fill in and match you to an upcoming trip",
+            "Turn up at the marina and enjoy your day",
+            "If you loved it, joining is simple — and your sailing fee is offset against your first year's membership"
+          ]
+        }
+      ]
     },
     "gear": {
-      "intro": {
-        "kicker": "Our Training",
-        "heading": "What You Need?",
-        "body": "You don't need any special equipment to sail with us, just a few sensible bits and you're good to go. Here's what to bring:"
-      },
+      "intro": "You don't need any special equipment to sail with us, just a few sensible bits and you're good to go. Here's what to bring:",
       "cards": [
         {
           "heading": "Clothing",

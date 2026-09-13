@@ -31,7 +31,7 @@ export function SectionTabsClient({
   const active = tabs.find((t) => t.value === activeTab) ?? tabs[0];
 
   return (
-    <div className="flex flex-col gap-spacing-md bg-brand-tertiary-100 pb-spacing-md pt-[60px]">
+    <div className="flex flex-col gap-spacing-md bg-brand-tertiary-100 pb-spacing-md pt-12">
       <StickyTabs
         tabs={tabs.map(({ value, label }) => ({ value, label }))}
         activeTab={activeTab}
@@ -39,12 +39,18 @@ export function SectionTabsClient({
         ariaLabel={ariaLabel}
       >
         {active?.content ?? (
-          <p className="border border-brand-rule p-spacing-md font-gill text-[18px] leading-[24px] text-brand-ink">
+          <p
+            key="empty"
+            className="border border-brand-rule p-spacing-md font-gill text-[18px] leading-[24px] text-brand-ink"
+          >
             {emptyMessage}
           </p>
         )}
         {footerNote && (
-          <p className="px-spacing-md text-center font-gill text-[16px] font-semibold leading-[19px] text-brand-secondary-100">
+          <p
+            key="footer"
+            className="px-spacing-md text-center font-gill text-[16px] font-semibold leading-[19px] text-brand-secondary-100"
+          >
             {footerNote}
           </p>
         )}

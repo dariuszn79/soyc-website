@@ -35,9 +35,18 @@ const RECONNECT_MS = 5000;
 /** Minimum ms between DB writes per vessel. */
 const PERSIST_MS = 45_000;
 
-let socket: WebSocket | null = null;
-let subscribedTo = "";
-const lastPersist = new Map<string, number>();
+// Kept on globalThis so Next.js dev-mode HMR (which re-evaluates this module
+// on edits) reuses the same socket instead of leaking one connection per
+// reload — aisstream enforces a concurrent-connection limit per API key.
+const state = ((globalThis as Record<string, unknown>).__aisStream ??= {
+  socket: null as WebSocket | null,
+  subscribedTo: "",
+  lastPersist: new Map<string, number>(),
+}) as {
+  socket: WebSocket | null;
+  subscribedTo: string;
+  lastPersist: Map<string, number>;
+};
 
 /**
  * Lazily ensure the in-process stream is subscribed to `mmsis`. No-op when the
@@ -60,14 +69,14 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
   if (!apiKey || !mmsis.length) return;
 
   const signature = mmsis.slice().sort().join(",");
-  if (socket && subscribedTo === signature) return;
-  subscribedTo = signature;
+  if (state.socket && state.subscribedTo === signature) return;
+  state.subscribedTo = signature;
 
-  socket?.close();
+  state.socket?.close();
   const ws = new WebSocket("wss://stream.aisstream.io/v0/stream");
   // Server sends binary frames containing UTF-8 JSON.
   ws.binaryType = "arraybuffer";
-  socket = ws;
+  state.socket = ws;
 
   ws.onopen = () => {
     // Subscription must arrive within 3 seconds of connect.
@@ -113,8 +122,8 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
   };
 
   ws.onclose = () => {
-    if (socket !== ws) return;
-    socket = null;
+    if (state.socket !== ws) return;
+    state.socket = null;
     setTimeout(() => startStream(mmsis, onReport), RECONNECT_MS);
   };
 
@@ -130,9 +139,9 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
 /** Write a position fix onto the matching Boat's `lastPosition`, throttled to
  * one write per vessel per PERSIST_MS. */
 export async function persistPosition(payload: Payload, pos: VesselPosition) {
-  const last = lastPersist.get(pos.mmsi) ?? 0;
+  const last = state.lastPersist.get(pos.mmsi) ?? 0;
   if (Date.now() - last < PERSIST_MS) return;
-  lastPersist.set(pos.mmsi, Date.now());
+  state.lastPersist.set(pos.mmsi, Date.now());
 
   const { docs } = await payload.find({
     collection: "boats",

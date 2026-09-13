@@ -13,10 +13,21 @@
     "kicker": "Our Home",
     "heading": "Members gallery",
     "body": "Learn by doing. All practical courses include living aboard and passage-making on the Solent and surrounding waters.",
-    "src": "/images/community/gallery.jpg",
-    "overlaySrc": "/images/community/gallery-overlay.png",
-    "alt": "Speedbird members sailing together",
-    "totalSlides": 10
+    "images": [
+      {
+        "src": "/images/community/galery-image-1.jpg",
+        "alt": "Speedbird members sailing the Concorde yacht offshore"
+      },
+      {
+        "src": "/images/community/galery-image-2.jpg",
+        "alt": "Concorde under sail on the Solent"
+      },
+      {
+        "src": "/images/community/galery-image-3.jpg",
+        "alt": "Speedbird members in life jackets aboard in the marina"
+      }
+    ],
+    "overlaySrc": "/images/community/gallery-overlay.png"
   },
   "skippers": {
     "kicker": "Our Home",

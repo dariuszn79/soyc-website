@@ -81,10 +81,8 @@ export interface CommunityPageContent {
     kicker: string;
     heading: string;
     body: string;
-    src: string;
+    images: Array<{ src: string; alt: string }>;
     overlaySrc: string;
-    alt: string;
-    totalSlides: number;
   };
   skippers: { kicker: string; heading: string; body: string };
   cta: CTA & { kicker: string; heading: string; body: string; imageSrc: string };

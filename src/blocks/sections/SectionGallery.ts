@@ -9,13 +9,16 @@ export const SectionGalleryBlock: Block = {
   labels: { singular: "Section: Gallery", plural: "Sections: Gallery" },
   fields: [
     ...sectionHeadingFields(),
-    ...imageUploadField({ name: "image", altName: "alt", label: "Gallery photo", required: true }),
-    ...imageUploadField({ name: "overlayImage", altName: "overlayAlt", label: "Overlay graphic (optional)" }),
     {
-      name: "totalSlides",
-      type: "number",
-      defaultValue: 10,
-      label: "Pagination dots",
+      name: "images",
+      label: "Gallery photos",
+      type: "array",
+      minRows: 1,
+      required: true,
+      fields: [
+        ...imageUploadField({ name: "image", altName: "alt", label: "Photo", required: true }),
+      ],
     },
+    ...imageUploadField({ name: "overlayImage", altName: "overlayAlt", label: "Overlay graphic (optional)" }),
   ],
 };

@@ -82,11 +82,11 @@ export function CardLrg({
   /* ── CTA button ─────────────────────────────────────────────────────── */
   // primary variant → white outline button; secondary/tertiary → solid red button
   const ctaClass = isPrimary
-    ? "inline-flex items-center justify-center border border-brand-tertiary-100 px-spacing-md py-spacing-xs font-button text-button leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-tertiary-100/10"
-    : "inline-flex items-center justify-center bg-brand-primary-100 px-spacing-md py-spacing-xs font-button text-button leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-primary-hover";
+    ? "inline-flex items-center justify-start border border-brand-tertiary-100 px-spacing-md py-spacing-xs font-button text-button leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-tertiary-100/10"
+    : "inline-flex items-center justify-start bg-brand-primary-100 px-spacing-md py-spacing-xs font-button text-button leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-primary-hover";
 
   const containerSpacing = figmaLayout
-    ? "h-full items-start justify-center gap-[56px] p-spacing-md sm:p-spacing-xl"
+    ? "h-full items-start justify-start gap-[56px] p-spacing-md sm:p-spacing-xl"
     : "items-start gap-spacing-lg px-spacing-md py-spacing-card-y sm:px-spacing-card-x";
 
   const headingSize = figmaLayout
