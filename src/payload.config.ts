@@ -5,6 +5,7 @@ import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
+import { s3Storage } from "@payloadcms/storage-s3";
 import sharp from "sharp";
 
 import { Pages } from "./collections/Pages";
@@ -73,6 +74,37 @@ export default buildConfig({
     },
   }),
   plugins: [
+    // Media uploads go to Supabase Storage (S3-compatible) when its env vars
+    // are set; otherwise local disk. Needed on Vercel's read-only filesystem.
+    ...(process.env.SUPABASE_S3_ENDPOINT
+      ? [
+          s3Storage({
+            collections: { media: true },
+            bucket: process.env.SUPABASE_S3_BUCKET || "media",
+            acl: "public-read",
+            config: {
+              endpoint: process.env.SUPABASE_S3_ENDPOINT,
+              region: process.env.SUPABASE_S3_REGION || "eu-west-2",
+              forcePathStyle: true,
+              credentials: {
+                accessKeyId: process.env.SUPABASE_S3_ACCESS_KEY_ID || "",
+                secretAccessKey: process.env.SUPABASE_S3_SECRET_ACCESS_KEY || "",
+              },
+            },
+          }),
+          // The adapter builds file URLs from the S3 endpoint, but Supabase
+          // serves public objects from /storage/v1/object/public/<bucket>/<key>.
+          (config) => {
+            const base = process.env.SUPABASE_S3_PUBLIC_URL;
+            const media = (config.collections ?? []).find((c) => c.slug === "media");
+            if (base && media && typeof media.upload === "object") {
+              media.upload.generateFileURL = ({ filename, prefix }) =>
+                [base, prefix, encodeURIComponent(filename)].filter(Boolean).join("/");
+            }
+            return config;
+          },
+        ]
+      : []),
     formBuilderPlugin({
       fields: { payment: false },
       formOverrides: {
