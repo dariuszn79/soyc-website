@@ -2391,7 +2391,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
-  logoSrc?: string | null;
+  logo?: (number | null) | Media;
+  /**
+   * Accessible description. Falls back to the asset's own alt text.
+   */
   logoAlt?: string | null;
   logoHref?: string | null;
   headerJoinLabel?: string | null;
@@ -2421,7 +2424,7 @@ export interface Footer {
   location?: string | null;
   copyright?: string | null;
   registration?: string | null;
-  footerLogoSrc?: string | null;
+  footerLogo?: (number | null) | Media;
   footerBackgroundSrc?: string | null;
   footerCompassSrc?: string | null;
   siteFooterBackgroundSrc?: string | null;
@@ -2495,7 +2498,7 @@ export interface SiteSetting {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  logoSrc?: T;
+  logo?: T;
   logoAlt?: T;
   logoHref?: T;
   headerJoinLabel?: T;
@@ -2523,7 +2526,7 @@ export interface FooterSelect<T extends boolean = true> {
   location?: T;
   copyright?: T;
   registration?: T;
-  footerLogoSrc?: T;
+  footerLogo?: T;
   footerBackgroundSrc?: T;
   footerCompassSrc?: T;
   siteFooterBackgroundSrc?: T;

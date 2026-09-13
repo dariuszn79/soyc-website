@@ -218,14 +218,23 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
     }
 
     case "sectionPeople": {
-      const people = await getPeople(block.group ?? "committee");
+      const group = block.group ?? "committee";
+      const people = await getPeople(group);
       return (
         <BodyWrapper key={index} first={first}>
           <SectionHeadingToggle block={block} />
           <div className="mt-[60px] grid grid-cols-1 gap-spacing-md md:grid-cols-2 xl:grid-cols-3">
-            {people.map((person, i) => (
-              <CardPerson key={`${person.name}-${i}`} {...toPerson(person)} layout="club" />
-            ))}
+            {people.map((person, i) => {
+              const p = toPerson(person);
+              return (
+                <CardPerson
+                  key={`${p.name}-${i}`}
+                  {...p}
+                  title={group === "committee" ? p.title : p.qualification ?? ""}
+                  layout="club"
+                />
+              );
+            })}
           </div>
         </BodyWrapper>
       );

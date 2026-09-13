@@ -25,7 +25,12 @@ export const Footer: GlobalConfig = {
     { name: "location", type: "text" },
     { name: "copyright", type: "text" },
     { name: "registration", type: "text" },
-    { name: "footerLogoSrc", type: "text", label: "Footer logo path" },
+    {
+      name: "footerLogo",
+      type: "upload",
+      relationTo: "media",
+      label: "Footer logo",
+    },
     { name: "footerBackgroundSrc", type: "text", label: "Footer background path" },
     { name: "footerCompassSrc", type: "text", label: "Compass graphic path" },
     { name: "siteFooterBackgroundSrc", type: "text", label: "Inner-footer map path" },

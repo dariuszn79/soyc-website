@@ -1,6 +1,7 @@
 [
   {
     "name": "Speedbird",
+    "mmsi": "232061480",
     "model": "Bavaria  C38",
     "year": "2024",
     "description": "Our flagship yacht. Comfortable, capable, and equipped for both short and extended cruising. Popular for weekend passages and longer offshore cruises.",
@@ -19,9 +20,9 @@
   },
   {
     "name": "Concorde",
-    "mmsi": "261010051",
+    "mmsi": "235012718",
     "model": "Bavaria  36",
-    "year": "2014",
+    "year": "2003",
     "description": "Our flagship yacht. Comfortable, capable, and equipped for both short and extended cruising. Popular for weekend passages and longer offshore cruises.",
     "photo": "/images/fleet-concorde.png",
     "photoAlt": "Concorde moored alongside the marina pontoon",

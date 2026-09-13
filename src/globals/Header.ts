@@ -16,8 +16,16 @@ export const Header: GlobalConfig = {
   },
   access: { read: () => true },
   fields: [
-    { name: "logoSrc", type: "text", label: "Logo image path" },
-    { name: "logoAlt", type: "text", label: "Logo alt text" },
+    { name: "logo", type: "upload", relationTo: "media", label: "Logo" },
+    {
+      name: "logoAlt",
+      type: "text",
+      label: "Logo alt text",
+      admin: {
+        description:
+          "Accessible description. Falls back to the asset's own alt text.",
+      },
+    },
     { name: "logoHref", type: "text", label: "Logo link", defaultValue: "/" },
     {
       name: "headerJoinLabel",

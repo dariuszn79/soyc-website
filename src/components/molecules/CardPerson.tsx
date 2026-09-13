@@ -18,7 +18,6 @@ export function CardPerson({
   title,
   photo,
   email,
-  qualification,
   layout = "default",
 }: CardPersonProps) {
   if (layout === "club") {
@@ -43,11 +42,6 @@ export function CardPerson({
               {title}
             </p>
           )}
-          {qualification && (
-            <p className="font-gill text-[13px] leading-body text-[#333444]/70 sm:text-[14px]">
-              {qualification}
-            </p>
-          )}
         </div>
       </article>
     );
@@ -67,9 +61,8 @@ export function CardPerson({
         <p className="font-gill text-label uppercase leading-label text-brand-secondary-100">{dept}</p>
         <div className="flex flex-col">
           <p className="font-baskerville text-person leading-heading text-brand-secondary-100">{name}</p>
-          <p className="font-baskerville italic text-person-title leading-heading text-brand-secondary-100">{title}</p>
-          {qualification && (
-            <p className="font-gill text-caption leading-caption text-brand-secondary-100/70">{qualification}</p>
+          {title && (
+            <p className="font-baskerville italic text-person-title leading-heading text-brand-secondary-100">{title}</p>
           )}
         </div>
         <div className="h-px w-full bg-brand-rule" />

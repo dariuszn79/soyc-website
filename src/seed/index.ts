@@ -460,7 +460,7 @@ await payload.updateGlobal({
 await payload.updateGlobal({
   slug: "header",
   data: {
-    logoSrc: site.logoSrc,
+    logo: await mediaId(site.logoSrc, site.logoAlt),
     logoAlt: site.logoAlt,
     logoHref: site.logoHref,
     headerJoinLabel: site.headerJoinLabel,
@@ -485,7 +485,7 @@ await payload.updateGlobal({
     location: site.location,
     copyright: site.copyright,
     registration: site.registration,
-    footerLogoSrc: site.footerLogoSrc,
+    footerLogo: await mediaId(site.footerLogoSrc, site.logoAlt),
     footerBackgroundSrc: site.footerBackgroundSrc,
     footerCompassSrc: site.footerCompassSrc,
     siteFooterBackgroundSrc: site.siteFooterBackgroundSrc,

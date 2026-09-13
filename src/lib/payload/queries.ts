@@ -12,7 +12,7 @@ import { cruiseEvents } from "@/data/cruises";
 
 import type { Course, CourseTab, Person } from "@/data/content-types";
 import type { Page } from "@/payload-types";
-import { toBoat, toEventCard, toPerson } from "./transform";
+import { toBoat, toEventCard, toMediaAlt, toMediaSrc, toPerson } from "./transform";
 
 /** Run a Payload query, falling back to bundled JSON if the DB is unreachable
  * (e.g. before DATABASE_URI is configured or the schema is seeded). */
@@ -55,8 +55,14 @@ const mergeGlobal = (doc: unknown) =>
 export const getHeader = () =>
   withFallback(async () => {
     const payload = await getPayloadClient();
-    const header = await payload.findGlobal({ slug: "header" });
-    return { ...siteContent, ...mergeGlobal(header) };
+    const header = await payload.findGlobal({ slug: "header", depth: 1 });
+    const merged = { ...siteContent, ...mergeGlobal(header) };
+    // `logo` is a media upload — resolve it back to the `logoSrc` URL string
+    // the SiteContent shape (and Header component) expects.
+    merged.logoSrc = toMediaSrc(header.logo, siteContent.logoSrc);
+    merged.logoAlt =
+      header.logoAlt || toMediaAlt(header.logo) || siteContent.logoAlt;
+    return merged;
   }, siteContent);
 
 /**
@@ -66,8 +72,15 @@ export const getHeader = () =>
 export const getFooter = () =>
   withFallback(async () => {
     const payload = await getPayloadClient();
-    const footer = await payload.findGlobal({ slug: "footer" });
-    return { ...siteContent, ...mergeGlobal(footer) };
+    const footer = await payload.findGlobal({ slug: "footer", depth: 1 });
+    const merged = { ...siteContent, ...mergeGlobal(footer) };
+    // `footerLogo` is a media upload — resolve it back to the `footerLogoSrc`
+    // URL string the SiteContent shape (and Footer component) expects.
+    merged.footerLogoSrc = toMediaSrc(
+      footer.footerLogo,
+      siteContent.footerLogoSrc,
+    );
+    return merged;
   }, siteContent);
 
 /**

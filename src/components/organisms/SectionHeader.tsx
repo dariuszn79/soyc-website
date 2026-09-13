@@ -94,9 +94,8 @@ export function SectionHeader({
         {body != null && (
           <div
             className={
-              isSubheading
-                ? "font-gill text-[18px] leading-[1.4] text-brand-ink sm:text-[24px] sm:leading-[32px]"
-                : "font-gill text-body leading-body text-brand-ink lg:text-body-lg lg:leading-body-lg"
+              "font-gill text-[18px] leading-[1.4] text-brand-ink sm:text-[24px] sm:leading-[32px]"
+                
             }
           >
             {body}

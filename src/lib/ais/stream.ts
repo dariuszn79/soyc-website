@@ -28,9 +28,6 @@ export interface VesselPosition {
   updatedAt: number;
 }
 
-// South Coast / Solent bounding box — AISstream requires a box plus the MMSI
-// filter. [[minLat, minLon], [maxLat, maxLon]].
-const BOUNDING_BOXES = [[[49.5, -3.5], [52.0, 1.0]]];
 const RECONNECT_MS = 5000;
 /** Minimum ms between DB writes per vessel. */
 const PERSIST_MS = 45_000;
@@ -68,9 +65,23 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
   const apiKey = process.env.AISSTREAM_API_KEY;
   if (!apiKey || !mmsis.length) return;
 
-  const signature = mmsis.slice().sort().join(",");
-  if (state.socket && state.subscribedTo === signature) return;
-  state.subscribedTo = signature;
+  // No BoundingBoxes — FiltersShipMMSI alone tracks the vessels globally, so
+  // fixes still arrive when a club boat sails outside home waters.
+  const subscription = JSON.stringify({
+    APIKey: apiKey,
+    FiltersShipMMSI: mmsis.slice().sort(),
+    // Class A ships send PositionReport; yachts' Class B transponders send
+    // StandardClassB/ExtendedClassB position reports instead.
+    FilterMessageTypes: [
+      "PositionReport",
+      "StandardClassBPositionReport",
+      "ExtendedClassBPositionReport",
+    ],
+  });
+  // Dedupe on the full payload so a changed subscription (e.g. new MMSI or
+  // filter) reconnects instead of silently reusing the old socket.
+  if (state.socket && state.subscribedTo === subscription) return;
+  state.subscribedTo = subscription;
 
   state.socket?.close();
   const ws = new WebSocket("wss://stream.aisstream.io/v0/stream");
@@ -80,20 +91,8 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
 
   ws.onopen = () => {
     // Subscription must arrive within 3 seconds of connect.
-    ws.send(
-      JSON.stringify({
-        APIKey: apiKey,
-        BoundingBoxes: BOUNDING_BOXES,
-        FiltersShipMMSI: mmsis,
-        // Class A ships send PositionReport; yachts' Class B transponders send
-        // StandardClassB/ExtendedClassB position reports instead.
-        FilterMessageTypes: [
-          "PositionReport",
-          "StandardClassBPositionReport",
-          "ExtendedClassBPositionReport",
-        ],
-      }),
-    );
+    ws.send(subscription);
+    console.log(`[ais] stream subscribed — tracking ${mmsis.length} vessel(s)`);
   };
 
   ws.onmessage = (event) => {
@@ -121,13 +120,15 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
     }
   };
 
-  ws.onclose = () => {
+  ws.onclose = (e) => {
     if (state.socket !== ws) return;
     state.socket = null;
+    console.log(`[ais] stream closed (code ${e.code}) — reconnecting in ${RECONNECT_MS / 1000}s`);
     setTimeout(() => startStream(mmsis, onReport), RECONNECT_MS);
   };
 
-  ws.onerror = () => {
+  ws.onerror = (e) => {
+    console.error("[ais] stream error", e);
     try {
       ws.close();
     } catch {

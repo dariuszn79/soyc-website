@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type mapboxgl from "mapbox-gl";
+import { formatLatDms, formatLonDms, formatTimeAgo } from "@/lib/utils";
 
 export interface TrackedVessel {
   mmsi: string;
@@ -21,6 +22,9 @@ interface LivePosition {
 
 /** Marker colours cycle through the brand palette (primary red, secondary blue, ink). */
 const VESSEL_COLOURS = ["#e41e28", "#262ebc", "#1e1e1e", "#2e7d4f", "#b4690e"];
+/** Teardrop pointing north — path from public/images/icons/marker-vessel.svg (36×36). */
+const VESSEL_MARKER_PATH =
+  "M24.8435 18.439C25.6407 25.2825 23.1326 36 23.1326 36H12.8674C12.8674 36 10.3593 25.2825 11.1565 18.439C12.0477 10.7878 15.9313 0 18 0C20.0687 0 23.9523 10.7878 24.8435 18.439Z";
 const SOLENT_CENTER: [number, number] = [-1.3, 50.83];
 const POLL_MS = 10_000;
 
@@ -121,19 +125,20 @@ export default function CardFleetLiveMap({
       let marker = markersRef.current.get(vessel.mmsi);
       if (!marker) {
         const el = document.createElement("div");
-        el.style.cssText = "width:20px;height:20px";
+        el.style.cssText = "width:32px;height:32px";
         marker = new mb.Marker(el).setLngLat([pos.lon, pos.lat]).addTo(map);
         markersRef.current.set(vessel.mmsi, marker);
       } else {
         marker.setLngLat([pos.lon, pos.lat]);
       }
 
-      // Directional arrow when the vessel reports a valid course; dot when
-      // moored (COG 360 = "not available" in AIS).
+      // Teardrop points north; rotate by COG when the vessel reports a valid
+      // course (COG 360 = "not available" in AIS). Fill uses the vessel colour.
       const hasHeading = pos.cog != null && pos.cog < 360;
-      marker.getElement().innerHTML = hasHeading
-        ? `<div style="width:0;height:0;margin:1px auto;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:18px solid ${colour};transform:rotate(${pos.cog}deg);transform-origin:50% 70%;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))"></div>`
-        : `<div style="width:14px;height:14px;margin:3px;border-radius:50%;background:${colour};border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>`;
+      marker.getElement().innerHTML =
+        `<svg width="32" height="32" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" ` +
+        `style="display:block;transform:rotate(${hasHeading ? pos.cog : 0}deg);transform-origin:50% 65%;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))">` +
+        `<path d="${VESSEL_MARKER_PATH}" fill="${colour}"/></svg>`;
     }
     if (!hasFitRef.current) {
       const live = vessels.map((v) => positions[v.mmsi]).filter(Boolean);
@@ -180,14 +185,14 @@ export default function CardFleetLiveMap({
                 {vessel.name+':'}
               </div>
               {pos ? (
-                <div className="flex-1 text-right text-[10px] leading-[14px]">
-                  {pos.lat.toFixed(4)}°, {pos.lon.toFixed(4)}° · SOG{" "}
-                  {pos.sog != null ? `${pos.sog.toFixed(1)} kn` : "–"} · COG{" "}
-                  {hasHeading ? `${Math.round(pos.cog!)}°` : "–"} · updated{" "}
-                  {Math.max(0, Math.round((Date.now() - pos.updatedAt) / 1000))}s ago
+                <div className="flex-1 text-right text-[13px] leading-[14px] text-brand-ink/70">
+                  {formatLatDms(pos.lat)}, {formatLonDms(pos.lon)} · SOG:{" "}
+                  {pos.sog != null ? `${pos.sog.toFixed(1)} kn` : "–"} · COG:{" "}
+                  {hasHeading ? `${Math.round(pos.cog!)}°` : "–"} · Updated{" "}
+                  {formatTimeAgo(pos.updatedAt)}
                 </div>
               ) : (
-                <div className="opacity-60">Awaiting AIS position report…</div>
+                <div className="text-brand-ink/50">Awaiting AIS position report…</div>
               )}
             </div>
             );
