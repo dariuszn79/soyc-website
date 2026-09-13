@@ -178,14 +178,18 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
 
     case "sectionFleetLocation": {
       const [content, locBoats] = [await getFleetLocation(), await getBoats()];
+      // Only boats with a valid 9-digit MMSI can be tracked — without at
+      // least one, the whole section stays off the page.
+      const vessels = locBoats
+        .filter((b) => /^\d{9}$/.test((b.mmsi ?? "").trim()))
+        .map((b) => ({ mmsi: b.mmsi!.trim(), name: b.name }));
+      if (vessels.length === 0) return null;
       return (
         <BodyWrapper key={index} first={first}>
           <SectionFleetLocation
             flush={block.flush ?? false}
             content={content}
-            vessels={locBoats
-              .filter((b) => b.mmsi)
-              .map((b) => ({ mmsi: b.mmsi as string, name: b.name }))}
+            vessels={vessels}
             mapboxToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? ""}
           />
         </BodyWrapper>
@@ -211,7 +215,7 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
     }
 
     case "sectionPeople": {
-      const people = await getPeople(block.group ?? "board");
+      const people = await getPeople(block.group ?? "committee");
       return (
         <BodyWrapper key={index} first={first}>
           <SectionHeadingToggle block={block} />

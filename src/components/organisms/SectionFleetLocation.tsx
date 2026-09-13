@@ -1,5 +1,5 @@
 import { Overline } from "@/components/atoms/Overline";
-import { FleetLiveMap, type TrackedVessel } from "@/components/molecules/CardFleetMap";
+import { CardFleetLiveMap, type TrackedVessel } from "@/components/molecules/CardFleetLiveMapLazy";
 import data from "@/data/json/components/fleet-location.json";
 import type { FleetLocationContent } from "@/data/page-types";
 
@@ -40,7 +40,7 @@ export function SectionFleetLocation({ flush = false, content = defaultContent, 
         aria-label={content.mapAriaLabel}
       >
         {live ? (
-          <FleetLiveMap vessels={vessels} mapboxToken={mapboxToken} className="absolute inset-0" />
+          <CardFleetLiveMap vessels={vessels} mapboxToken={mapboxToken} className="absolute inset-0" />
         ) : (
           <>
         {/* eslint-disable-next-line @next/next/no-img-element */}

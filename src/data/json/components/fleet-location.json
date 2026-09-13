@@ -2,10 +2,10 @@
   "heading": "Where are we now?",
   "body": "As an RYA-recognised training centre since 2009, we provide high-quality practical instruction designed to develop safe, confident and competent sailors. Our year-round programme makes excellent sailing and professional training accessible at competitive prices.",
   "mapAriaLabel": "Map showing the approximate positions of Concorde and Speedbird",
-  "mapSrc": "/figmaAssets/fleet-map.png",
-  "logoSrc": "/figmaAssets/speedbird-logo--05-1.png",
-  "concordeMarkerSrc": "/figmaAssets/boat-concorde.png",
-  "speedbirdMarkerSrc": "/figmaAssets/boat-speedbird.png",
+  "mapSrc": "/images/fleet-map.png",
+  "logoSrc": "/images/speedbird-logo--05-1.png",
+  "concordeMarkerSrc": "/images/boat-concorde.png",
+  "speedbirdMarkerSrc": "/images/boat-speedbird.png",
   "concordeLabel": "Concorde",
   "speedbirdLabel": "Speedbird"
 }

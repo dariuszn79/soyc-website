@@ -6,10 +6,8 @@ import { CardEvent } from "@/components/molecules/CardEvent";
 import { CardCourse } from "@/components/molecules/CardCourse";
 import { CardBoat } from "@/components/molecules/CardBoat";
 import { CardPerson } from "@/components/molecules/CardPerson";
-import { CardFleetMap } from "@/components/molecules/CardFleetMap";
 import { FeeItem } from "@/components/molecules/FeeItem";
 import { RichText } from "@/components/molecules/RichText";
-import { getBoats, getCruiseMap } from "@/lib/payload/queries";
 import {
   toBoat,
   toCta,
@@ -89,19 +87,6 @@ export async function renderCard(card: CardBlock, key: number | string): Promise
       if (!card.person || typeof card.person !== "object") return null;
       return (
         <CardPerson key={key} {...toPerson(card.person)} layout={card.layout ?? "club"} />
-      );
-    }
-    case "cardFleetMap": {
-      const [content, boats] = [await getCruiseMap(), await getBoats()];
-      return (
-        <CardFleetMap
-          key={key}
-          content={content}
-          vessels={boats
-            .filter((b) => b.mmsi)
-            .map((b) => ({ mmsi: b.mmsi as string, name: b.name }))}
-          mapboxToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? ""}
-        />
       );
     }
     case "feeItem":

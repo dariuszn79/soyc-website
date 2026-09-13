@@ -8,6 +8,13 @@ export const SectionFleetLocationBlock: Block = {
   labels: { singular: "Section: Fleet Location", plural: "Sections: Fleet Location" },
   fields: [
     {
+      name: "prereqNotice",
+      type: "ui",
+      admin: {
+        components: { Field: "@/components/admin/FleetMapPrereqWarning" },
+      },
+    },
+    {
       name: "flush",
       type: "checkbox",
       defaultValue: false,

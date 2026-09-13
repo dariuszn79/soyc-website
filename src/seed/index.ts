@@ -64,6 +64,9 @@ async function mediaId(srcPath?: string | null, alt?: string): Promise<number | 
   // Always pass filePath so the active storage adapter (local disk / S3)
   // actually receives the file — reusing the doc alone leaves remote
   // storage empty when seeding a fresh bucket.
+  // NOTE: a fresh context object is required per call — the cloud-storage
+  // plugin stashes the processed file on req.context (_payloadCloudStorage),
+  // so sharing `ctx` across ops makes every upload after the first a no-op.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const doc: any = found.docs[0]
     ? await payload.update({
@@ -71,13 +74,13 @@ async function mediaId(srcPath?: string | null, alt?: string): Promise<number | 
         id: found.docs[0].id,
         data: { alt: alt ?? filename },
         filePath: abs,
-        context: ctx,
+        context: { disableRevalidate: true },
       })
     : await payload.create({
         collection: "media",
         data: { alt: alt ?? filename },
         filePath: abs,
-        context: ctx,
+        context: { disableRevalidate: true },
       });
   mediaCache.set(srcPath, doc.id as number);
   return doc.id as number;
@@ -377,7 +380,7 @@ async function buildPages() {
       pageSections: [
         await sectionHeader(theClub.hero),
         sectionCards(theClub.cards.map((c: AnyObj) => cardLrg(c)), { columns: "2" }),
-        sectionPeople(theClub.committee, "board"),
+        sectionPeople(theClub.committee, "committee"),
         { blockType: "sectionFleetLocation", flush: true },
         await ctaBand(theClub.cta),
       ],
@@ -542,6 +545,7 @@ for (let i = 0; i < fleet.length; i++) {
       photoAlt: b.photoAlt,
       specsLeft: b.specsLeft,
       specsRight: b.specsRight,
+      mmsi: b.mmsi,
       order: i,
       _status: "published",
     } as never,
@@ -551,30 +555,25 @@ for (let i = 0; i < fleet.length; i++) {
 
 console.log("Seeding people…");
 await clear("people");
-const peopleGroups: Array<[string, string]> = [
-  ["boardMembers", "board"],
-  ["trainingInstructors", "instructors"],
-  ["communitySkippers", "skippers"],
-];
-for (const [key, group] of peopleGroups) {
-  const arr = people[key] as AnyObj[];
-  for (let i = 0; i < arr.length; i++) {
-    const p = arr[i];
-    await payload.create({
-      collection: "people",
-      data: {
-        name: p.name,
-        title: p.title,
-        dept: p.dept,
-        email: p.email,
-        photo: await mediaId(p.photo, p.name),
-        group,
-        order: i,
-        _status: "published",
-      } as never,
-      context: ctx,
-    });
-  }
+for (let i = 0; i < people.people.length; i++) {
+  const p = people.people[i] as AnyObj;
+  await payload.create({
+    collection: "people",
+    data: {
+      name: p.name,
+      title: p.title,
+      dept: p.dept,
+      email: p.email,
+      photo: await mediaId(p.photo, p.name),
+      qualification: p.qualification,
+      isCommittee: p.isCommittee ?? false,
+      isClubSkipper: p.isClubSkipper ?? false,
+      isInstructor: p.isInstructor ?? false,
+      order: i,
+      _status: "published",
+    } as never,
+    context: ctx,
+  });
 }
 
 console.log("Seeding courses…");

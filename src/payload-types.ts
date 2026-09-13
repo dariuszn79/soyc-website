@@ -501,7 +501,7 @@ export interface SectionPeopleBlock {
     heading: string;
     body?: string | null;
   };
-  group: 'board' | 'instructors' | 'skippers';
+  group: 'committee' | 'instructors' | 'skippers';
   id?: string | null;
   blockName?: string | null;
   blockType: 'sectionPeople';
@@ -569,7 +569,6 @@ export interface SectionCardsBlock {
         | CardCourseBlock
         | CardBoatBlock
         | CardPersonBlock
-        | CardFleetMapBlock
         | FeeItemBlock
         | FeeGroupBlock
         | RichTextContentBlock
@@ -794,7 +793,7 @@ export interface CardPersonBlock {
   blockType: 'cardPerson';
 }
 /**
- * Committee members, staff, and instructors shown on the site.
+ * Committee members, club skippers, and instructors shown on the site. A person can appear in several groups.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "people".
@@ -810,7 +809,18 @@ export interface Person {
    * Accessible description. Falls back to the asset's own alt text.
    */
   photoAlt?: string | null;
-  group: 'board' | 'instructors' | 'skippers';
+  qualification?:
+    | (
+        | 'RYA Day Skipper'
+        | 'RYA Coastal Skipper'
+        | 'RYA Yachtmaster Coastal'
+        | 'RYA Yachtmaster Offshore'
+        | 'RYA Yachtmaster Ocean'
+      )
+    | null;
+  isCommittee?: boolean | null;
+  isClubSkipper?: boolean | null;
+  isInstructor?: boolean | null;
   /**
    * Sort order (ascending).
    */
@@ -818,15 +828,6 @@ export interface Person {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardFleetMapBlock".
- */
-export interface CardFleetMapBlock {
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cardFleetMap';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -924,7 +925,6 @@ export interface SectionTabsBlock {
               | CardCourseBlock
               | CardBoatBlock
               | CardPersonBlock
-              | CardFleetMapBlock
               | FeeItemBlock
               | FeeGroupBlock
               | RichTextContentBlock
@@ -1682,7 +1682,6 @@ export interface SectionCardsBlockSelect<T extends boolean = true> {
         cardCourse?: T | CardCourseBlockSelect<T>;
         cardBoat?: T | CardBoatBlockSelect<T>;
         cardPerson?: T | CardPersonBlockSelect<T>;
-        cardFleetMap?: T | CardFleetMapBlockSelect<T>;
         feeItem?: T | FeeItemBlockSelect<T>;
         feeGroup?: T | FeeGroupBlockSelect<T>;
         richText?: T | RichTextContentBlockSelect<T>;
@@ -1861,14 +1860,6 @@ export interface CardPersonBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CardFleetMapBlock_select".
- */
-export interface CardFleetMapBlockSelect<T extends boolean = true> {
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "FeeItemBlock_select".
  */
 export interface FeeItemBlockSelect<T extends boolean = true> {
@@ -1970,7 +1961,6 @@ export interface SectionTabsBlockSelect<T extends boolean = true> {
               cardCourse?: T | CardCourseBlockSelect<T>;
               cardBoat?: T | CardBoatBlockSelect<T>;
               cardPerson?: T | CardPersonBlockSelect<T>;
-              cardFleetMap?: T | CardFleetMapBlockSelect<T>;
               feeItem?: T | FeeItemBlockSelect<T>;
               feeGroup?: T | FeeGroupBlockSelect<T>;
               richText?: T | RichTextContentBlockSelect<T>;
@@ -2320,7 +2310,10 @@ export interface PeopleSelect<T extends boolean = true> {
   email?: T;
   photo?: T;
   photoAlt?: T;
-  group?: T;
+  qualification?: T;
+  isCommittee?: T;
+  isClubSkipper?: T;
+  isInstructor?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;

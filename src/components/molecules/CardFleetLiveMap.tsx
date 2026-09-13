@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import type mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 
 export interface TrackedVessel {
   mmsi: string;
@@ -27,10 +26,10 @@ const POLL_MS = 10_000;
 
 /**
  * Live vessel map — Mapbox GL + markers fed by /api/vessel-positions
- * (aisstream.io). Loaded client-side only (see CardFleetMap's dynamic import);
+ * (aisstream.io). Loaded client-side only (see CardFleetLiveMapLazy's dynamic import);
  * `className` controls the outer wrapper's sizing/positioning per context.
  */
-export default function FleetLiveMap({
+export default function CardFleetLiveMap({
   vessels,
   mapboxToken,
   className = "",
@@ -51,26 +50,39 @@ export default function FleetLiveMap({
     let cancelled = false;
     let map: mapboxgl.Map | null = null;
     // Lazy-import mapbox-gl so it never enters the server bundle.
-    import("mapbox-gl").then((mod) => {
-      if (cancelled || !containerRef.current) return;
-      const mb = mod.default;
-      mapboxglRef.current = mb;
-      map = new mb.Map({
-        container: containerRef.current,
-        accessToken: mapboxToken,
-        style: "mapbox://styles/mapbox/light-v11",
-        center: SOLENT_CENTER,
-        zoom: 10,
-        attributionControl: false,
+    import("mapbox-gl")
+      .then((mod) => {
+        if (cancelled || !containerRef.current) return;
+        const mb = mod.default;
+        mapboxglRef.current = mb;
+        try {
+          map = new mb.Map({
+            container: containerRef.current,
+            accessToken: mapboxToken,
+            style: "mapbox://styles/mapbox/light-v11",
+            center: SOLENT_CENTER,
+            zoom: 10,
+            attributionControl: false,
+          });
+        } catch (err) {
+          console.error("mapbox Map constructor failed", err);
+          setMapError(err instanceof Error ? err.message : "Map failed to initialise");
+          return;
+        }
+        map.addControl(new mb.AttributionControl({ compact: true }), "bottom-right");
+        map.addControl(new mb.NavigationControl({ showCompass: false }), "top-right");
+        map.on("load", () => console.log("mapbox map loaded"));
+        map.on("error", (e) => {
+          console.error("Mapbox error", e?.error ?? e);
+          setMapError(e?.error?.message ?? "Map failed to load");
+        });
+        mapRef.current = map;
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("mapbox-gl import failed", err);
+        setMapError(err?.message ?? "Mapbox failed to load");
       });
-      map.addControl(new mb.AttributionControl({ compact: true }), "bottom-right");
-      map.addControl(new mb.NavigationControl({ showCompass: false }), "top-right");
-      map.on("error", (e) => {
-        console.error("Mapbox error", e?.error ?? e);
-        setMapError(e?.error?.message ?? "Map failed to load");
-      });
-      mapRef.current = map;
-    });
     return () => {
       cancelled = true;
       map?.remove();
@@ -139,7 +151,9 @@ export default function FleetLiveMap({
   return (
     <div className={`${className} flex flex-col`}>
       <div className="relative min-h-0 flex-1">
-        <div ref={containerRef} className="absolute inset-0" />
+        {/* mapbox-gl adds .mapboxgl-map (position:relative) which overrides
+            Tailwind's .absolute, so size with h-full w-full instead. */}
+        <div ref={containerRef} className="h-full w-full" />
 
         {mapError && (
           <div className="absolute inset-0 flex items-center justify-center bg-brand-tertiary-100/90 p-spacing-md">

@@ -10,40 +10,164 @@
       {
         "level": "Beginner",
         "title": "Competent Crew",
-        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
-        "items": ["Basic seamanship", "Sail handling", "Rope work", "Safety awareness", "Helm experience"],
+        "desc": "A course to take the beginner to a safe and competent standard crewing a yacht. For those starting yachting. Often taught alongside Dayskipper students with both levels of students aboard.\n\nThis is a popular way for a beginner to start. If you have completed Start Yachting then you can go on to do a subsequent 3-day course which will bring you up to the level of Competent Crew. The alternative way is to go straight into a Competent Crew course run over 5-days or alternatively as 3 weekends.",
+        "items": [],
         "prices": [
           { "from": "1st April", "til": "31st October", "amount": "£650", "duration": "5 days" },
           { "from": "1st April", "til": "31st October", "amount": "£600", "duration": "5 days" }
         ],
-        "notes": "The price includes RYA course completion certificate. Course starts at 09:00 on the first day and finishes approximately 16:00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+        "notes": "The price includes RYA course completion certificate. Course starts at 09:00 on the first day and finishes approximately 16.00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
       },
       {
         "level": "All Levels",
-        "title": "Skill Bites",
-        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
-        "items": ["Basic seamanship", "Sail handling", "Rope work", "Safety awareness", "Helm experience"],
+        "title": "SOYC One-day Skill Bites",
+        "desc": "If you are enjoying your sailing and learning and have succeeded in achieving the Day skipper Certificate you might like to consider becoming a Club Skipper. See Sailing Orders (link) for the full details.",
+        "items": [],
         "prices": [
           { "from": "1st April", "til": "31st October", "amount": "£86", "duration": "1 day" },
           { "from": "1st April", "til": "31st October", "amount": "£73.50", "duration": "1 day" }
         ],
-        "notes": "String value"
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
       },
       {
         "level": "All Levels",
-        "title": "Improve Your Skills",
-        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
-        "items": ["Basic seamanship", "Sail handling", "Rope work", "Safety awareness", "Helm experience"],
+        "title": "SOYC Improve Your Skills",
+        "desc": "Practising key skills to improve your ability and as a currency check.All comers. Obligatory every 2 years for Club skippers.",
+        "items": [],
         "prices": [
           { "from": "1st April", "til": "31st October", "amount": "£172", "duration": "1 day" },
           { "from": "1st April", "til": "31st October", "amount": "£147", "duration": "1 day" }
         ],
-        "notes": "String value"
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
       }
     ],
-    "Intermediate": [],
-    "Advanced": [],
-    "All Levels": []
+    "Intermediate": [
+      {
+        "level": "Intermediate",
+        "title": "RYA Day Skipper",
+        "desc": "Teaches the skills and techniques to skipper a sailing yacht safely on coastal and offshore passages by day and night.\nRecommended pre-course experience: 15 days at sea, 300 miles, 8 night hours, 2 days as skipper.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£650", "duration": "5 days" },
+          { "from": "1st April", "til": "31st October", "amount": "£600", "duration": "5 days" }
+        ],
+        "notes": "The price includes RYA course completion certificate. Course starts at 09:00 on the first day and finishes approximately 16.00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "Intermediate",
+        "title": "SOYC One-day Skill Bites",
+        "desc": "If you are enjoying your sailing and learning and have succeeded in achieving the Day skipper Certificate you might like to consider becoming a Club Skipper. See Sailing Orders (link) for the full details.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£86", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£73.50", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "All Levels",
+        "title": "SOYC Improve Your Skills",
+        "desc": "Practising key skills to improve your ability and as a currency check.All comers. Obligatory every 2 years for Club skippers.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£172", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£147", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "All Levels",
+        "title": "SOYC Club Skipper",
+        "desc": "Perfect for complete beginners. Learn the basics of crewing a yacht, essential knots, sail handling, and safety procedures.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£56", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£56", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      }
+    ],
+    "Advanced": [
+      {
+        "level": "Advanced",
+        "title": "RYA Costal Skipper",
+        "desc": "Teaches the skills and techniques to skipper a sailing yacht safely on coastal and offshore passages by day and night. Recommended pre-course experience: 15 days at sea, 300 miles, 8 night hours, 2 days as skipper.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£720", "duration": "5 days" },
+          { "from": "1st April", "til": "31st October", "amount": "£660", "duration": "5 days" }
+        ],
+        "notes": "The price includes RYA course completion certificate. Course starts at 09:00 on the first day and finishes approximately 16.00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "Advanced",
+        "title": "RYA Yachtmaster Costal Prep & Exam",
+        "desc": "These are the final stages of training for leisure yachtsmen and are run as 5-day courses followed by a practical sailing examination.\nWork-up to hone skills before taking the Yachtmaster (YM) Exam, which usually follows the course immediately.\nFor those about to take the exam, the Gold Standard of the RYA cruising qualification system.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£840", "duration": "5 days + 2 days" },
+          { "from": "1st April", "til": "31st October", "amount": "£780", "duration": "5 days + 2 days" }
+        ],
+        "notes": "Course starts at 09:00 on the first day and finishes approximately 16.00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper.\nThere is an examination fee, Yachtmaster Offshore £241, Yachtmaster Coastal £208 is additionally payable to the RYA."
+      },
+      {
+        "level": "Advanced",
+        "title": "RYA Yachtmaster Costal Prep Only",
+        "desc": "These are the final stages of training for leisure yachtsmen and are run as 5-day courses followed by a practical sailing examination.\nWork-up to hone skills before taking the Yachtmaster (YM) Exam, which usually follows the course immediately.\nFor those about to take the exam, the Gold Standard of the RYA cruising qualification system.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£720", "duration": "5 days + 2 days" },
+          { "from": "1st April", "til": "31st October", "amount": "£660", "duration": "5 days + 2 days" }
+        ],
+        "notes": "Course starts at 09:00 on the first day and finishes approximately 16.00 on the last day. Food is not included in the course cost. A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper. Please note there is no RYA course completion certificate for the preparation training."
+      },
+      {
+        "level": "Intermediate",
+        "title": "SOYC Club Skipper",
+        "desc": "If you are enjoying your sailing and learning and have succeeded in achieving the Day skipper Certificate you might like to consider becoming a Club Skipper. See Sailing Orders (link) for the full details.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£56", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£56", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "All Levels",
+        "title": "SOYC Improve Your Skills",
+        "desc": "Practising key skills to improve your ability and as a currency check.All comers. Obligatory every 2 years for Club skippers.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£172", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£147", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      },
+      {
+        "level": "All Levels",
+        "title": "SOYC One-day Skill Bites",
+        "desc": "If you are enjoying your sailing and learning and have succeeded in achieving the Day skipper Certificate you might like to consider becoming a Club Skipper. See Sailing Orders (link) for the full details.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£86", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£73.50", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      }
+    ],
+    "All Levels": [
+      {
+        "level": "All Levels",
+        "title": "SOYC Improve Your Skills",
+        "desc": "Practising key skills to improve your ability and as a currency check.All comers. Obligatory every 2 years for Club skippers.",
+        "items": [],
+        "prices": [
+          { "from": "1st April", "til": "31st October", "amount": "£172", "duration": "1 day" },
+          { "from": "1st April", "til": "31st October", "amount": "£147", "duration": "1 day" }
+        ],
+        "notes": "A share in the cost of any meals taken ashore and any mooring fees away from home base will be payable to the skipper."
+      }
+    ]
   },
   "upcomingTrainingCourses": [
     { "title": "IYS -Improve Your Skills", "dates": "23 October - 28 October", "yacht": "Concorde", "model": "Bavaria 38", "skipper": "Name Surname" },

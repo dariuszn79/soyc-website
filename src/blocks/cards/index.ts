@@ -6,7 +6,6 @@ import { CardEventBlock } from "./CardEvent";
 import { CardCourseBlock } from "./CardCourse";
 import { CardBoatBlock } from "./CardBoat";
 import { CardPersonBlock } from "./CardPerson";
-import { CardFleetMapBlock } from "./CardFleetMap";
 import { FeeItemBlock } from "./FeeItem";
 import { FeeGroupBlock } from "./FeeGroup";
 import { RichTextBlockDef } from "./RichText";
@@ -23,7 +22,6 @@ export const cardBlocks: Block[] = [
   CardCourseBlock,
   CardBoatBlock,
   CardPersonBlock,
-  CardFleetMapBlock,
   FeeItemBlock,
   FeeGroupBlock,
   RichTextBlockDef,

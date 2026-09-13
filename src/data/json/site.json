@@ -19,9 +19,9 @@
   "openNavLabel": "Open navigation menu",
   "closeNavLabel": "Close navigation menu",
   "logoHref": "/",
-  "logoSrc": "/figmaAssets/speedbird-logo--05-1.png",
-  "footerBackgroundSrc": "/figmaAssets/lines-1--1.png",
-  "footerCompassSrc": "/figmaAssets/compas.png",
-  "footerLogoSrc": "/figmaAssets/layer-5-1.png",
-  "siteFooterBackgroundSrc": "/figmaAssets/hamble-map.png"
+  "logoSrc": "/images/speedbird-logo--05-1.png",
+  "footerBackgroundSrc": "/images/lines-1--1.png",
+  "footerCompassSrc": "/images/compas.png",
+  "footerLogoSrc": "/images/layer-5-1.png",
+  "siteFooterBackgroundSrc": "/images/hamble-map.png"
 }

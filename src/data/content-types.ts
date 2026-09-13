@@ -27,6 +27,10 @@ export interface Person {
   title: string;
   photo: string;
   email: string;
+  qualification?: string;
+  isCommittee?: boolean;
+  isClubSkipper?: boolean;
+  isInstructor?: boolean;
 }
 
 export interface SpecItem {

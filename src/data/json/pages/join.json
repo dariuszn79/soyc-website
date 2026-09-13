@@ -6,7 +6,7 @@
   "hero": {
     "heading": "Come sailing with us",
     "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally",
-    "imageSrc": "/figmaAssets/join/hero.png",
+    "imageSrc": "/images/join/hero.png",
     "imageAlt": "Speedbird members sailing together on the Solent",
     "cta": {
       "label": "Apply to join",

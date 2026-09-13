@@ -4,7 +4,7 @@
     "model": "Bavaria  C38",
     "year": "2024",
     "description": "Our flagship yacht. Comfortable, capable, and equipped for both short and extended cruising. Popular for weekend passages and longer offshore cruises.",
-    "photo": "/figmaAssets/fleet-speedbird.png",
+    "photo": "/images/fleet-speedbird.png",
     "photoAlt": "Speedbird moored in the marina",
     "specsLeft": [
       { "label": "Size", "value": "11.5m LOA (38')" },
@@ -19,10 +19,11 @@
   },
   {
     "name": "Concorde",
+    "mmsi": "261010051",
     "model": "Bavaria  36",
     "year": "2014",
     "description": "Our flagship yacht. Comfortable, capable, and equipped for both short and extended cruising. Popular for weekend passages and longer offshore cruises.",
-    "photo": "/figmaAssets/fleet-concorde.png",
+    "photo": "/images/fleet-concorde.png",
     "photoAlt": "Concorde moored alongside the marina pontoon",
     "specsLeft": [
       { "label": "Size", "value": "11.5m LOA (38')" },

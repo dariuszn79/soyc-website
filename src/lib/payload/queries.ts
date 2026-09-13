@@ -6,7 +6,7 @@ import { primaryNavItems, footerNavLinks } from "@/data/navigation";
 import fleetLocationJson from "@/data/json/components/fleet-location.json";
 import cruiseMapJson from "@/data/json/components/cruise-map.json";
 import { fleet } from "@/data/fleet";
-import { boardMembers, trainingInstructors, communitySkippers } from "@/data/people";
+import { people as peopleSeed } from "@/data/people";
 import { courseTabs, coursesByTab, upcomingTrainingCourses } from "@/data/courses";
 import { cruiseEvents } from "@/data/cruises";
 
@@ -24,11 +24,16 @@ async function withFallback<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   }
 }
 
-const peopleFallback: Record<string, Person[]> = {
-  board: boardMembers,
-  instructors: trainingInstructors,
-  skippers: communitySkippers,
+/** People groups selectable on the Section: People block → the boolean flag
+ * on the Person document that marks membership of that group. */
+export type PeopleGroup = "committee" | "instructors" | "skippers";
+const peopleGroupFlag: Record<PeopleGroup, keyof Person> = {
+  committee: "isCommittee",
+  instructors: "isInstructor",
+  skippers: "isClubSkipper",
 };
+const peopleFallback = (group: PeopleGroup): Person[] =>
+  peopleSeed.filter((p) => p[peopleGroupFlag[group]]);
 
 export const getSiteSettings = () =>
   withFallback(async () => {
@@ -140,18 +145,18 @@ export const getBoats = () =>
     return docs.length ? docs.map(toBoat) : fleet;
   }, fleet);
 
-export const getPeople = (group: "board" | "instructors" | "skippers") =>
+export const getPeople = (group: PeopleGroup) =>
   withFallback(async () => {
     const payload = await getPayloadClient();
     const { docs } = await payload.find({
       collection: "people",
-      where: { group: { equals: group } },
+      where: { [peopleGroupFlag[group]]: { equals: true } },
       sort: "order",
       limit: 200,
       depth: 2,
     });
-    return docs.length ? (docs.map(toPerson) as Person[]) : peopleFallback[group];
-  }, peopleFallback[group]);
+    return docs.length ? (docs.map(toPerson) as Person[]) : peopleFallback(group);
+  }, peopleFallback(group));
 
 export const getCourses = (): Promise<{
   courseTabs: typeof courseTabs;

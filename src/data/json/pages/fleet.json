@@ -6,7 +6,7 @@
   "hero": {
     "heading": "Two dedicated offshore yachts",
     "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally established as the British Airways Yacht Club, we became fully independent in 2016 and are now wholly owned and managed by our members.",
-    "imageSrc": "/figmaAssets/fleet-hero-figma.png",
+    "imageSrc": "/images/fleet-hero-figma.png",
     "imageAlt": "Crew preparing a Speedbird offshore yacht"
   },
   "cta": {
@@ -15,6 +15,6 @@
     "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water.",
     "label": "Join us",
     "href": "/join",
-    "imageSrc": "/figmaAssets/cta-yacht-bg.jpg"
+    "imageSrc": "/images/cta-yacht-bg.jpg"
   }
 }

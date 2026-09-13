@@ -41,6 +41,14 @@ export const Boats: CollectionConfig = {
       },
     },
     {
+      name: "mmsiWarning",
+      type: "ui",
+      admin: {
+        position: "sidebar",
+        components: { Field: "@/components/admin/MmsiWarning" },
+      },
+    },
+    {
       name: "lastPosition",
       type: "group",
       label: "Last AIS position",

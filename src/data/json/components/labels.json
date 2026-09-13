@@ -15,12 +15,12 @@
   "cruiseCarousel": {
     "previous": "Previous cruise",
     "next": "Next cruise",
-    "arrowSrc": "/figmaAssets/cruises/arrow.svg"
+    "arrowSrc": "/images/cruises/arrow.svg"
   },
   "gallery": {
     "previous": "Previous slide",
     "next": "Next slide",
-    "previousIcon": "/figmaAssets/community/arrow-prev.svg",
-    "nextIcon": "/figmaAssets/community/arrow-next.svg"
+    "previousIcon": "/images/community/arrow-prev.svg",
+    "nextIcon": "/images/community/arrow-next.svg"
   }
 }

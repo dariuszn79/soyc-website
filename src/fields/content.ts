@@ -57,7 +57,7 @@ export const imagePathField = (
     type: "text",
     admin: {
       description:
-        "Path to an asset in /public (e.g. /figmaAssets/home/cruises.png).",
+        "Path to an asset in /public (e.g. /images/home/cruises.png).",
     },
   },
   { name: overrides.altName ?? "imageAlt", label: "Image alt text", type: "text" },

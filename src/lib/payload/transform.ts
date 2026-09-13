@@ -80,6 +80,7 @@ export const toPerson = (p: AnyDoc): Person => ({
   title: p?.title ?? "",
   photo: toMediaSrc(p?.photo),
   email: p?.email ?? "",
+  qualification: p?.qualification ?? "",
 });
 
 /** Map a cruise/training event doc to CardEvent props. */

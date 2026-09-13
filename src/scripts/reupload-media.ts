@@ -15,10 +15,10 @@ const PUBLIC = path.resolve(process.cwd(), "public");
 // Docs whose filenames no longer match their source asset (created under an
 // old name, then suffixed on a later seed).
 const OVERRIDES: Record<string, string> = {
-  "event-5.png": "figmaAssets/cruises/event-1.png",
-  "event-6.png": "figmaAssets/cruises/event-2.png",
-  "event-7.png": "figmaAssets/cruises/event-3.png",
-  "event-8.png": "figmaAssets/cruises/event-4.png",
+  "event-5.png": "images/cruises/event-1.png",
+  "event-6.png": "images/cruises/event-2.png",
+  "event-7.png": "images/cruises/event-3.png",
+  "event-8.png": "images/cruises/event-4.png",
 };
 
 // Filenames may have a Payload-added "-N" suffix — strip it to find the
@@ -42,27 +42,22 @@ const sourceFor = (filename: string) => {
   return null;
 };
 
-const main = async () => {
-  const payload = await getPayload({ config });
-  const { docs } = await payload.find({ collection: "media", limit: 500, depth: 0 });
-  for (const doc of docs) {
-    const src = doc.filename ? sourceFor(doc.filename) : null;
-    if (!src) {
-      console.warn(`no source file for ${doc.filename} — skipped`);
-      continue;
-    }
-    await payload.update({
-      collection: "media",
-      id: doc.id,
-      data: {},
-      filePath: src,
-    });
-    console.log(`uploaded ${doc.filename}`);
+// Top-level await is required: `payload run` exits as soon as the module's
+// synchronous evaluation finishes, so a main() wrapper never completes.
+const payload = await getPayload({ config });
+const { docs } = await payload.find({ collection: "media", limit: 500, depth: 0 });
+for (const doc of docs) {
+  const src = doc.filename ? sourceFor(doc.filename) : null;
+  if (!src) {
+    console.warn(`no source file for ${doc.filename} — skipped`);
+    continue;
   }
-  console.log("done");
-};
-
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+  await payload.update({
+    collection: "media",
+    id: doc.id,
+    data: {},
+    filePath: src,
+  });
+  console.log(`uploaded ${doc.filename}`);
+}
+console.log("done");

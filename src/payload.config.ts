@@ -63,13 +63,18 @@ export default buildConfig({
     SiteSettings,
   ],
   db: postgresAdapter({
+    // Schema push does a full drizzle introspection ("Pulling schema…") on
+    // every Payload init — over a remote DB that's tens of seconds and it
+    // runs per dev worker/recompile, hanging everything. Only enable when
+    // the schema actually changed: PAYLOAD_DB_PUSH=true pnpm dev (once).
+    push: process.env.PAYLOAD_DB_PUSH === "true",
     pool: {
       connectionString: process.env.DATABASE_URI || "",
       ssl: { rejectUnauthorized: false },
-      // The DB is fronted by a session-mode pooler (max ~15 clients total).
-      // Keep each process's pool small and release idle connections quickly so
-      // dev workers + schema introspection don't exhaust it.
-      max: 2,
+      // Vercel + the Supabase session pooler (max ~15 clients) needs a tiny
+      // per-process pool — set DB_POOL_MAX=2 there. Local dev connects
+      // directly and can use the larger default.
+      max: Number(process.env.DB_POOL_MAX ?? 10),
       idleTimeoutMillis: 3000,
     },
   }),

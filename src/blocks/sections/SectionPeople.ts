@@ -1,7 +1,7 @@
 import type { Block } from "payload";
 import { sectionHeadingFields } from "../../fields/sectionHeading";
 
-/** CardPerson grid sourced from the People collection, filtered by group. */
+/** CardPerson grid sourced from the People collection, filtered by group flag. */
 export const SectionPeopleBlock: Block = {
   slug: "sectionPeople",
   interfaceName: "SectionPeopleBlock",
@@ -12,11 +12,11 @@ export const SectionPeopleBlock: Block = {
       name: "group",
       type: "select",
       required: true,
-      defaultValue: "board",
+      defaultValue: "committee",
       options: [
-        { label: "Board / Committee", value: "board" },
-        { label: "Training instructors", value: "instructors" },
-        { label: "Community skippers", value: "skippers" },
+        { label: "Committee", value: "committee" },
+        { label: "Instructors", value: "instructors" },
+        { label: "Club Skippers", value: "skippers" },
       ],
     },
   ],
