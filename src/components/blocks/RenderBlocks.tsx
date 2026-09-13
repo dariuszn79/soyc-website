@@ -177,10 +177,17 @@ export async function renderBlock(block: Block, index: number, first: boolean) {
       );
 
     case "sectionFleetLocation": {
-      const content = await getFleetLocation();
+      const [content, locBoats] = [await getFleetLocation(), await getBoats()];
       return (
         <BodyWrapper key={index} first={first}>
-          <SectionFleetLocation flush={block.flush ?? false} content={content} />
+          <SectionFleetLocation
+            flush={block.flush ?? false}
+            content={content}
+            vessels={locBoats
+              .filter((b) => b.mmsi)
+              .map((b) => ({ mmsi: b.mmsi as string, name: b.name }))}
+            mapboxToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? ""}
+          />
         </BodyWrapper>
       );
     }

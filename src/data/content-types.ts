@@ -38,6 +38,8 @@ export interface Boat {
   name: string;
   model: string;
   year: string;
+  /** AIS transponder number for live tracking — empty = not tracked. */
+  mmsi?: string;
   description: string;
   photo: string;
   photoAlt: string;

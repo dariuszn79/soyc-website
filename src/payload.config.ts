@@ -21,7 +21,6 @@ import { Footer } from "./globals/Footer";
 import { FleetLocation } from "./globals/FleetLocation";
 import { CruiseMap } from "./globals/CruiseMap";
 import { SiteSettings } from "./globals/SiteSettings";
-import { ComponentLabels } from "./globals/ComponentLabels";
 
 import { adminGroups } from "./lib/payload/adminGroups";
 
@@ -61,7 +60,6 @@ export default buildConfig({
     FleetLocation,
     CruiseMap,
     SiteSettings,
-    ComponentLabels,
   ],
   db: postgresAdapter({
     pool: {
@@ -81,6 +79,7 @@ export default buildConfig({
           group: adminGroups.members,
           description: "Form templates built with the visual form builder (e.g. the membership application).",
         },
+        labels: { singular: "Form", plural: "Forms" },
       },
       formSubmissionOverrides: {
         admin: {
@@ -90,6 +89,18 @@ export default buildConfig({
         labels: { singular: "Form Entry", plural: "Form Entries" },
       },
     }),
+    // Nav groups render in first-occurrence order across the collections
+    // array. The form builder appends forms/form-submissions last, which would
+    // put "↪︎ Forms" after "↪︎ Settings" — move them ahead of `users` so the
+    // groups read: … Forms → Settings.
+    (config) => {
+      const collections = config.collections ?? [];
+      const moved = collections.filter((c) => c.slug === "forms" || c.slug === "form-submissions");
+      const rest = collections.filter((c) => c.slug !== "forms" && c.slug !== "form-submissions");
+      const idx = rest.findIndex((c) => c.slug === "users");
+      rest.splice(idx === -1 ? rest.length : idx, 0, ...moved);
+      return { ...config, collections: rest };
+    },
   ],
   secret: process.env.PAYLOAD_SECRET || "",
   // sharp's published types drift slightly from Payload's SharpDependency type.

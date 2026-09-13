@@ -32,6 +32,15 @@ export const Boats: CollectionConfig = {
     specGroup("specsLeft", "Specifications (left column)"),
     specGroup("specsRight", "Specifications (right column)"),
     {
+      name: "mmsi",
+      type: "text",
+      label: "MMSI number",
+      admin: {
+        position: "sidebar",
+        description: "AIS transponder number — enables live position tracking on map cards.",
+      },
+    },
+    {
       name: "order",
       type: "number",
       admin: { position: "sidebar", description: "Sort order (ascending)." },

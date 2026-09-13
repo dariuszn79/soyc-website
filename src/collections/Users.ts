@@ -4,9 +4,9 @@ import { adminGroups } from "../lib/payload/adminGroups";
 export const Users: CollectionConfig = {
   slug: "users",
   auth: true,
-  labels: { singular: "Member / Staff Account", plural: "Club Members & Staff Accounts" },
+  labels: { singular: "Access / Role", plural: "Access & Roles" },
   admin: {
-    group: adminGroups.members,
+    group: adminGroups.settings,
     useAsTitle: "email",
     defaultColumns: ["name", "email"],
     description: "Club members and admin staff login accounts.",

@@ -3,7 +3,6 @@ import { getPayloadClient } from "./client";
 
 import { siteContent } from "@/data/site";
 import { primaryNavItems, footerNavLinks } from "@/data/navigation";
-import { componentLabels } from "@/data/component-labels";
 import fleetLocationJson from "@/data/json/components/fleet-location.json";
 import cruiseMapJson from "@/data/json/components/cruise-map.json";
 import { fleet } from "@/data/fleet";
@@ -109,12 +108,6 @@ export const getNavigation = () =>
     },
     { primaryNavItems, footerNavLinks },
   );
-
-export const getComponentLabels = () =>
-  withFallback(async () => {
-    const payload = await getPayloadClient();
-    return (await payload.findGlobal({ slug: "component-labels" })) as typeof componentLabels;
-  }, componentLabels);
 
 export const getFleetLocation = () =>
   withFallback(async () => {

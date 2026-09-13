@@ -18,7 +18,6 @@ const read = (p: string): any => JSON.parse(fs.readFileSync(path.join(DATA, p), 
 
 // ── JSON sources ────────────────────────────────────────────────────────
 const site = read("site.json");
-const labels = read("components/labels.json");
 const fleetLocation = read("components/fleet-location.json");
 const cruiseMap = read("components/cruise-map.json");
 const notFound = read("pages/not-found.json");
@@ -511,7 +510,6 @@ await payload.updateGlobal({
   },
   context: ctx,
 });
-await payload.updateGlobal({ slug: "component-labels", data: labels, context: ctx });
 await payload.updateGlobal({ slug: "fleet-location", data: fleetLocation, context: ctx });
 await payload.updateGlobal({ slug: "cruise-map", data: cruiseMap, context: ctx });
 
@@ -638,21 +636,11 @@ for (const p of await buildPages()) {
 }
 
 console.log("Seeding admin user…");
-const email = process.env.SEED_EMAIL || "admin@soyc.co.uk";
-const password = process.env.SEED_PASSWORD || "ChangeMe123!";
-const existing = await payload.find({ collection: "users", where: { email: { equals: email } }, limit: 1 });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let adminUser: any = existing.docs[0];
-if (!adminUser) {
-  adminUser = await payload.create({ collection: "users", data: { email, password, name: "SOYC Admin" } });
-  console.log(`Created admin user: ${email} / ${password}`);
-} else {
-  console.log(`Admin user already exists: ${email}`);
-}
 
-// Collapse all admin nav groups by default for the seeded admin user (stored
+// Collapse all admin nav groups by default for a seeded user (stored
 // per-user in payload-preferences under the "nav" key).
-if (adminUser) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function seedNavPreferences(user: any) {
   const navGroups = Object.fromEntries(
     Object.values(adminGroups).map((g) => [g, { open: false }]),
   );
@@ -662,19 +650,42 @@ if (adminUser) {
     limit: 100,
   });
   const pref = (prefs.docs as AnyObj[]).find(
-    (d) => d?.user?.relationTo === "users" && d?.user?.value === adminUser.id,
+    (d) => d?.user?.relationTo === "users" && d?.user?.value === user.id,
   );
   // The `user` field is populated by a beforeValidate hook from req.user, so
-  // the admin doc must be passed as `user` rather than inside `data`.
-  const prefData = {
-    key: "nav",
-    value: { open: true, groups: navGroups },
-  };
+  // the user doc must be passed as `user` rather than inside `data`.
+  const prefData = { key: "nav", value: { open: true, groups: navGroups } };
   if (pref) {
-    await payload.update({ collection: "payload-preferences" as never, id: pref.id, user: adminUser, data: prefData as never, context: ctx });
+    await payload.update({ collection: "payload-preferences" as never, id: pref.id, user, data: prefData as never, context: ctx });
   } else {
-    await payload.create({ collection: "payload-preferences" as never, user: adminUser, data: prefData as never, context: ctx });
+    await payload.create({ collection: "payload-preferences" as never, user, data: prefData as never, context: ctx });
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function seedUser(email: string, password: string, name: string): Promise<any> {
+  const existing = await payload.find({ collection: "users", where: { email: { equals: email } }, limit: 1 });
+  const user = existing.docs[0] ??
+    (await payload.create({ collection: "users", data: { email, password, name } }));
+  console.log(existing.docs[0] ? `Admin user already exists: ${email}` : `Created admin user: ${email} / ${password}`);
+  await seedNavPreferences(user);
+  return user;
+}
+
+await seedUser(
+  process.env.SEED_EMAIL || "admin@soyc.co.uk",
+  process.env.SEED_PASSWORD || "ChangeMe123!",
+  "SOYC Admin",
+);
+
+// Optional: seed the current developer's own login via env vars so it
+// survives reseeds. Set these in .env.local — never commit credentials.
+if (process.env.SEED_USER_EMAIL && process.env.SEED_USER_PASSWORD) {
+  await seedUser(
+    process.env.SEED_USER_EMAIL,
+    process.env.SEED_USER_PASSWORD,
+    process.env.SEED_USER_NAME || "Admin",
+  );
 }
 
 console.log("Seed complete.");

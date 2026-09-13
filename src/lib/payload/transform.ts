@@ -65,6 +65,7 @@ export const toBoat = (b: AnyDoc): Boat => ({
   name: b?.name ?? "",
   model: b?.model ?? "",
   year: b?.year ?? "",
+  mmsi: b?.mmsi ?? "",
   description: b?.description ?? "",
   photo: toMediaSrc(b?.photo),
   photoAlt: b?.photoAlt || toMediaAlt(b?.photo),

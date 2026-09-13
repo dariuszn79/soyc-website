@@ -9,7 +9,7 @@ import { CardPerson } from "@/components/molecules/CardPerson";
 import { CardFleetMap } from "@/components/molecules/CardFleetMap";
 import { FeeItem } from "@/components/molecules/FeeItem";
 import { RichText } from "@/components/molecules/RichText";
-import { getCruiseMap } from "@/lib/payload/queries";
+import { getBoats, getCruiseMap } from "@/lib/payload/queries";
 import {
   toBoat,
   toCta,
@@ -91,8 +91,19 @@ export async function renderCard(card: CardBlock, key: number | string): Promise
         <CardPerson key={key} {...toPerson(card.person)} layout={card.layout ?? "club"} />
       );
     }
-    case "cardFleetMap":
-      return <CardFleetMap key={key} content={await getCruiseMap()} />;
+    case "cardFleetMap": {
+      const [content, boats] = [await getCruiseMap(), await getBoats()];
+      return (
+        <CardFleetMap
+          key={key}
+          content={content}
+          vessels={boats
+            .filter((b) => b.mmsi)
+            .map((b) => ({ mmsi: b.mmsi as string, name: b.name }))}
+          mapboxToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ?? ""}
+        />
+      );
+    }
     case "feeItem":
       return (
         <FeeItem

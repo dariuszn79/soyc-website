@@ -1,4 +1,5 @@
 import { Overline } from "@/components/atoms/Overline";
+import { FleetLiveMap, type TrackedVessel } from "@/components/molecules/CardFleetMap";
 import data from "@/data/json/components/fleet-location.json";
 import type { FleetLocationContent } from "@/data/page-types";
 
@@ -8,9 +9,13 @@ interface SectionFleetLocationProps {
   flush?: boolean;
   /** Content from the `fleet-location` global; falls back to bundled JSON. */
   content?: FleetLocationContent;
+  /** Tracked boats (with MMSI) — when present the map goes live. */
+  vessels?: TrackedVessel[];
+  mapboxToken?: string;
 }
 
-export function SectionFleetLocation({ flush = false, content = defaultContent }: SectionFleetLocationProps) {
+export function SectionFleetLocation({ flush = false, content = defaultContent, vessels = [], mapboxToken = "" }: SectionFleetLocationProps) {
+  const live = vessels.length > 0 && !!mapboxToken;
   return (
     <section
       id="fleet-location"
@@ -34,6 +39,10 @@ export function SectionFleetLocation({ flush = false, content = defaultContent }
         className="relative min-h-[440px] overflow-hidden sm:min-h-[520px] lg:min-h-[652px]"
         aria-label={content.mapAriaLabel}
       >
+        {live ? (
+          <FleetLiveMap vessels={vessels} mapboxToken={mapboxToken} className="absolute inset-0" />
+        ) : (
+          <>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={content.mapSrc}
@@ -72,6 +81,8 @@ export function SectionFleetLocation({ flush = false, content = defaultContent }
             <span className="min-w-[96px] text-center">{content.speedbirdLabel}</span>
           </div>
         </div>
+          </>
+        )}
       </div>
     </section>
   );

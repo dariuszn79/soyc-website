@@ -72,11 +72,11 @@ export interface Config {
     'cruise-events': CruiseEvent;
     courses: Course;
     'training-events': TrainingEvent;
+    forms: Form;
+    'form-submissions': FormSubmission;
     users: User;
     people: Person;
     media: Media;
-    forms: Form;
-    'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -89,11 +89,11 @@ export interface Config {
     'cruise-events': CruiseEventsSelect<false> | CruiseEventsSelect<true>;
     courses: CoursesSelect<false> | CoursesSelect<true>;
     'training-events': TrainingEventsSelect<false> | TrainingEventsSelect<true>;
+    forms: FormsSelect<false> | FormsSelect<true>;
+    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     people: PeopleSelect<false> | PeopleSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    forms: FormsSelect<false> | FormsSelect<true>;
-    'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -109,7 +109,6 @@ export interface Config {
     'fleet-location': FleetLocation;
     'cruise-map': CruiseMap;
     'site-settings': SiteSetting;
-    'component-labels': ComponentLabel;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
@@ -117,7 +116,6 @@ export interface Config {
     'fleet-location': FleetLocationSelect<false> | FleetLocationSelect<true>;
     'cruise-map': CruiseMapSelect<false> | CruiseMapSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
-    'component-labels': ComponentLabelsSelect<false> | ComponentLabelsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -384,6 +382,10 @@ export interface Boat {
         id?: string | null;
       }[]
     | null;
+  /**
+   * AIS transponder number — enables live position tracking on map cards.
+   */
+  mmsi?: string | null;
   /**
    * Sort order (ascending).
    */
@@ -1208,6 +1210,25 @@ export interface TrainingEvent {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Entries received from website forms.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "form-submissions".
+ */
+export interface FormSubmission {
+  id: number;
+  form: number | Form;
+  submissionData?:
+    | {
+        field: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Club members and admin staff login accounts.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1234,25 +1255,6 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
-}
-/**
- * Entries received from website forms.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "form-submissions".
- */
-export interface FormSubmission {
-  id: number;
-  form: number | Form;
-  submissionData?:
-    | {
-        field: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1299,6 +1301,14 @@ export interface PayloadLockedDocument {
         value: number | TrainingEvent;
       } | null)
     | ({
+        relationTo: 'forms';
+        value: number | Form;
+      } | null)
+    | ({
+        relationTo: 'form-submissions';
+        value: number | FormSubmission;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -1309,14 +1319,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'forms';
-        value: number | Form;
-      } | null)
-    | ({
-        relationTo: 'form-submissions';
-        value: number | FormSubmission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -2048,6 +2050,7 @@ export interface BoatsSelect<T extends boolean = true> {
         value?: T;
         id?: T;
       };
+  mmsi?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2114,64 +2117,6 @@ export interface TrainingEventsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "people_select".
- */
-export interface PeopleSelect<T extends boolean = true> {
-  name?: T;
-  title?: T;
-  dept?: T;
-  email?: T;
-  photo?: T;
-  photoAlt?: T;
-  group?: T;
-  order?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2324,6 +2269,64 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "people_select".
+ */
+export interface PeopleSelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  dept?: T;
+  email?: T;
+  photo?: T;
+  photoAlt?: T;
+  group?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -2470,41 +2473,6 @@ export interface SiteSetting {
   createdAt?: string | null;
 }
 /**
- * Reusable UI text fragments and micro-copy (button labels, card labels).
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "component-labels".
- */
-export interface ComponentLabel {
-  id: number;
-  cardBoat?: {
-    kicker?: string | null;
-    built?: string | null;
-    specifications?: string | null;
-  };
-  cardCourse?: {
-    from?: string | null;
-    till?: string | null;
-    notes?: string | null;
-  };
-  cardEvent?: {
-    skipper?: string | null;
-  };
-  cruiseCarousel?: {
-    previous?: string | null;
-    next?: string | null;
-    arrowSrc?: string | null;
-  };
-  gallery?: {
-    previous?: string | null;
-    next?: string | null;
-    previousIcon?: string | null;
-    nextIcon?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2598,49 +2566,6 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         title?: T;
         description?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "component-labels_select".
- */
-export interface ComponentLabelsSelect<T extends boolean = true> {
-  cardBoat?:
-    | T
-    | {
-        kicker?: T;
-        built?: T;
-        specifications?: T;
-      };
-  cardCourse?:
-    | T
-    | {
-        from?: T;
-        till?: T;
-        notes?: T;
-      };
-  cardEvent?:
-    | T
-    | {
-        skipper?: T;
-      };
-  cruiseCarousel?:
-    | T
-    | {
-        previous?: T;
-        next?: T;
-        arrowSrc?: T;
-      };
-  gallery?:
-    | T
-    | {
-        previous?: T;
-        next?: T;
-        previousIcon?: T;
-        nextIcon?: T;
       };
   updatedAt?: T;
   createdAt?: T;

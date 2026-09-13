@@ -1,9 +1,50 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import data from "@/data/json/components/cruise-map.json";
 import type { CruiseMapContent } from "@/data/page-types";
+import type { TrackedVessel } from "./FleetLiveMap";
+
+export type { TrackedVessel };
 
 const defaultContent: CruiseMapContent = data;
 
-export function CardFleetMap({ content = defaultContent }: { content?: CruiseMapContent }) {
+/**
+ * Browser-only live map — mapbox-gl can't run during SSR, so it is loaded via
+ * a dynamic import with `ssr: false`. Also used by SectionFleetLocation.
+ */
+export const FleetLiveMap = dynamic(() => import("./FleetLiveMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 bg-brand-tertiary-100" aria-hidden="true" />
+  ),
+});
+
+/**
+ * CardFleetMap — live vessel tracking on a Mapbox map.
+ *
+ * Renders a Mapbox GL map with a marker per tracked boat (Boats with an MMSI
+ * set) fed by /api/vessel-positions (aisstream.io). Falls back to the static
+ * mock image when no boats are tracked or no Mapbox token is configured.
+ */
+export function CardFleetMap({
+  content = defaultContent,
+  vessels = [],
+  mapboxToken = "",
+}: {
+  content?: CruiseMapContent;
+  vessels?: TrackedVessel[];
+  mapboxToken?: string;
+}) {
+  if (vessels.length === 0 || !mapboxToken) return <StaticMap content={content} />;
+  return (
+    <div className="relative aspect-[784/652] w-full overflow-hidden lg:aspect-auto lg:h-[652px]">
+      <FleetLiveMap vessels={vessels} mapboxToken={mapboxToken} className="absolute inset-0" />
+    </div>
+  );
+}
+
+function StaticMap({ content }: { content: CruiseMapContent }) {
   return (
     <div className="relative aspect-[784/652] w-full overflow-hidden lg:h-[652px] lg:aspect-auto">
       {/* eslint-disable-next-line @next/next/no-img-element */}

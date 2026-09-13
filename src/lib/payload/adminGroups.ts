@@ -8,6 +8,6 @@ export const adminGroups = {
   fleet: "↪︎ The Fleet",
   cruises: "↪︎ Cruises",
   training: "↪︎ Training",
-  members: "↪︎ Members & Forms",
-  settings: "↪︎ Settings & Utility",
+  members: "↪︎ Forms",
+  settings: "↪︎ Settings",
 } as const;
