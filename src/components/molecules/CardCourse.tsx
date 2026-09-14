@@ -25,7 +25,7 @@ export function CardCourse({ title, desc, prices, notes }: Course) {
         <div className="grid w-full max-w-[440px] grid-cols-2">
           {prices.map((price, index) => (
             <div
-              key={`${price.from}-${price.amount}`}
+              key={`${price.from}-${price.amount}-${index}`}
               className={`flex min-w-0 flex-col px-spacing-xs ${
                 index > 0 ? "border-l border-brand-rule-strong" : ""
               }`}

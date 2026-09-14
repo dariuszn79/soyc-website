@@ -1,6 +1,7 @@
 import { IconFacebook } from "@/components/atoms/IconFacebook";
 import { IconMail } from "@/components/atoms/IconMail";
-import { siteContent } from "@/data/site";
+import { siteContent as siteContentDefault } from "@/data/site";
+import type { SiteContent } from "@/data/page-types";
 
 /**
  * Footer — the shared site-wide footer rendered by the root layout.
@@ -8,7 +9,8 @@ import { siteContent } from "@/data/site";
  * Includes the nautical decorative background, contact details, location,
  * site navigation, actions, logo, and company information.
  */
-export function Footer() {
+export function Footer({ site }: { site?: SiteContent } = {}) {
+  const siteContent = site ?? siteContentDefault;
   return (
     <footer className="relative w-full overflow-hidden bg-brand-secondary-100 px-6 py-10 text-text-light md:px-spacing-xl lg:h-[316px] lg:px-[60px] lg:py-spacing-xl">
       <div
@@ -37,7 +39,7 @@ export function Footer() {
             <p className="font-gill text-heading-sm font-semibold leading-[36px]">
               {siteContent.coordinates}
             </p>
-            <p className="font-gill text-button font-medium leading-body">
+            <p className="font-gill text-button uppercase font-medium leading-body">
               {siteContent.location}
             </p>
           </div>

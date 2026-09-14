@@ -6,7 +6,7 @@
   "hero": {
     "heading": "Discover the South Coast and Beyond",
     "body": "We founded Speedbird Offshore Yacht Club in 1972, when a small group of sailors came together with the belief that offshore sailing and racing demanded more than a traditional weekend marina club could offer. Originally established as the British Airways Yacht Club, we became fully independent in 2016 and are now wholly owned and managed by our members.",
-    "imageSrc": "/figmaAssets/cruises/hero.png",
+    "imageSrc": "/images/cruises/hero-cruises.png",
     "imageAlt": "A Speedbird yacht sailing under a red, white and blue spinnaker"
   },
   "cruiseTypes": [
@@ -44,6 +44,6 @@
     "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
     "label": "Join us",
     "href": "/join",
-    "imageSrc": "/figmaAssets/cruises/cta.jpg"
+    "imageSrc": "/images/cruises/cta.jpg"
   }
 }

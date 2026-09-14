@@ -81,10 +81,8 @@ export interface CommunityPageContent {
     kicker: string;
     heading: string;
     body: string;
-    src: string;
+    images: Array<{ src: string; alt: string }>;
     overlaySrc: string;
-    alt: string;
-    totalSlides: number;
   };
   skippers: { kicker: string; heading: string; body: string };
   cta: CTA & { kicker: string; heading: string; body: string; imageSrc: string };
@@ -118,6 +116,11 @@ export interface SiteContent {
   registration: string;
   headerJoinLabel: string;
   membersLabel: string;
+  /** Optional href overrides (Header/Footer globals). */
+  joinHref?: string;
+  membersHref?: string;
+  /** Non-page footer links (Footer global). */
+  extraLinks?: Array<{ label: string; href: string }>;
   primaryNavLabel: string;
   mobileNavLabel: string;
   openNavLabel: string;

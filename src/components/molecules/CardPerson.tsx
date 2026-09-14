@@ -25,7 +25,7 @@ export function CardPerson({
       <article className="relative flex min-h-[176px] min-w-0 items-center border border-brand-rule-strong bg-brand-tertiary-100 p-spacing-sm">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/figmaAssets/person-card-mark.svg"
+          src="/images/person-card-mark.svg"
           alt=""
           className="absolute left-3 top-3 h-7 w-[29px]"
         />
@@ -37,9 +37,11 @@ export function CardPerson({
           <h3 className="break-words font-baskerville text-[25px] italic leading-[1.05] text-brand-secondary-100 sm:text-[32px] sm:leading-[40px]">
             {name}
           </h3>
-          <p className="font-gill text-[16px] leading-body text-[#333444] sm:text-[18px]">
-            {title}
-          </p>
+          {title && (
+            <p className="font-gill text-[16px] leading-body text-[#333444] sm:text-[18px]">
+              {title}
+            </p>
+          )}
         </div>
       </article>
     );
@@ -59,7 +61,9 @@ export function CardPerson({
         <p className="font-gill text-label uppercase leading-label text-brand-secondary-100">{dept}</p>
         <div className="flex flex-col">
           <p className="font-baskerville text-person leading-heading text-brand-secondary-100">{name}</p>
-          <p className="font-baskerville italic text-person-title leading-heading text-brand-secondary-100">{title}</p>
+          {title && (
+            <p className="font-baskerville italic text-person-title leading-heading text-brand-secondary-100">{title}</p>
+          )}
         </div>
         <div className="h-px w-full bg-brand-rule" />
         <p className="font-gill text-caption leading-caption text-brand-secondary-100">E: {email}</p>

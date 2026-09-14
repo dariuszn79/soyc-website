@@ -22,7 +22,7 @@ export function NauticalMap() {
         <img
           className="absolute left-[18.26%] top-[23.78%] h-full w-full -rotate-180 object-cover"
           alt=""
-          src="/figmaAssets/lines-1-.png"
+          src="/images/lines-1-.png"
         />
         <div className="sr-only">
           {depthLabels.map((label, i) => (

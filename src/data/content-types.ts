@@ -27,6 +27,10 @@ export interface Person {
   title: string;
   photo: string;
   email: string;
+  qualification?: string;
+  isCommittee?: boolean;
+  isClubSkipper?: boolean;
+  isInstructor?: boolean;
 }
 
 export interface SpecItem {
@@ -38,6 +42,8 @@ export interface Boat {
   name: string;
   model: string;
   year: string;
+  /** AIS transponder number for live tracking — empty = not tracked. */
+  mmsi?: string;
   description: string;
   photo: string;
   photoAlt: string;

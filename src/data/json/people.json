@@ -1,31 +1,11 @@
 {
-  "boardMembers": [
-    { "dept": "Commodore", "name": "Andrew Williams", "title": "Commodore & Chair", "photo": "/figmaAssets/board/andrew-williams.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Sailing", "name": "Mel Calvert", "title": "Sailing Director", "photo": "/figmaAssets/board/mel-calvert.jpg", "email": "generalenquiries@soyc.co.uk" },
-    { "dept": "Marketing", "name": "John Trillwood", "title": "Marketing Director", "photo": "/figmaAssets/board/john-trillwood.jpg", "email": "generalenquiries@soyc.co.uk" },
-    { "dept": "Membership", "name": "Martin Hodgkins", "title": "Membership Director", "photo": "/figmaAssets/board/martin-hodgkins.jpg", "email": "generalenquiries@soyc.co.uk" },
-    { "dept": "General", "name": "John Healy", "title": "Director", "photo": "/figmaAssets/board/john-healy.jpg", "email": "generalenquiries@soyc.co.uk" },
-    { "dept": "Operations", "name": "Paul Wragg", "title": "Operations Director", "photo": "/figmaAssets/board/paul-wragg.jpg", "email": "generalenquiries@soyc.co.uk" },
-    { "dept": "Finance", "name": "John Steven", "title": "Finance Director", "photo": "/figmaAssets/board/john-steven.jpg", "email": "generalenquiries@soyc.co.uk" }
-  ],
-  "trainingInstructors": [
-    { "dept": "Training", "name": "Andrew Williams", "title": "RYA Yachtmaser Offshore", "photo": "/figmaAssets/board/andrew-williams.jpg", "email": "" },
-    { "dept": "Training", "name": "Mel Calvert", "title": "RYA Yachtmaser Ocean", "photo": "/figmaAssets/board/mel-calvert.jpg", "email": "" },
-    { "dept": "Training", "name": "John Trillwood", "title": "RYA Yachtmaser Costal", "photo": "/figmaAssets/board/john-trillwood.jpg", "email": "" },
-    { "dept": "Training", "name": "Martin Hodgkins", "title": "RYA Yachtmaser Offshore", "photo": "/figmaAssets/board/martin-hodgkins.jpg", "email": "" },
-    { "dept": "Training", "name": "John Healy", "title": "RYA Yachtmaser Offshore", "photo": "/figmaAssets/board/john-healy.jpg", "email": "" },
-    { "dept": "Training", "name": "Paul Wragg", "title": "RYA Yachtmaser Costal", "photo": "/figmaAssets/board/paul-wragg.jpg", "email": "" },
-    { "dept": "Training", "name": "John Steven", "title": "RYA Yachtmaser Offshore", "photo": "/figmaAssets/board/john-steven.jpg", "email": "" }
-  ],
-  "communitySkippers": [
-    { "dept": "Commodore", "name": "Andrew Williams", "title": "Commodore & Chair", "photo": "/figmaAssets/board/andrew-williams.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Sailing", "name": "Mel Calvert", "title": "Sailing Director", "photo": "/figmaAssets/board/mel-calvert.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Marketing", "name": "John Trillwood", "title": "Marketing Director", "photo": "/figmaAssets/board/john-trillwood.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Membership", "name": "Martin Hodgkins", "title": "Membership Director", "photo": "/figmaAssets/board/martin-hodgkins.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "General", "name": "John Healy", "title": "Director", "photo": "/figmaAssets/board/john-healy.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Operations", "name": "Paul Wragg", "title": "Operations Director", "photo": "/figmaAssets/board/paul-wragg.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Fnance", "name": "John Steven", "title": "Finance Director", "photo": "/figmaAssets/board/john-steven.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Fnance", "name": "John Steven", "title": "Finance Director", "photo": "/figmaAssets/board/john-steven.jpg", "email": "andrew.williams@soyc.co.uk" },
-    { "dept": "Fnance", "name": "John Steven", "title": "Finance Director", "photo": "/figmaAssets/board/john-steven.jpg", "email": "andrew.williams@soyc.co.uk" }
+  "people": [
+    { "dept": "Commodore", "name": "Andrew Williams", "isCommittee": true, "isClubSkipper": true, "isInstructor": true, "qualification": "RYA Yachtmaster Ocean", "title": "Commodore & Chair", "photo": "/images/people/male-profile-placeholder.png", "email": "andrew.williams@soyc.co.uk" },
+    { "dept": "Sailing", "name": "Mel Calvert", "isCommittee": true, "isClubSkipper": true, "isInstructor": true, "qualification": "RYA Yachtmaster Ocean", "title": "Sailing Director", "photo": "/images/people/female-profile-placeholder.png", "email": "generalenquiries@soyc.co.uk" },
+    { "dept": "Marketing", "name": "John Trillwood", "isCommittee": true, "isClubSkipper": true, "isInstructor": false, "qualification": "RYA Yachtmaster Coastal", "title": "Marketing Director", "photo": "/images/people/male-profile-placeholder.png", "email": "generalenquiries@soyc.co.uk" },
+    { "dept": "Membership", "name": "Martin Hodgkins", "isCommittee": true, "isClubSkipper": true, "isInstructor": true, "qualification": "RYA Yachtmaster Offshore", "title": "Membership Director", "photo": "/images/people/male-profile-placeholder.png", "email": "generalenquiries@soyc.co.uk" },
+    { "dept": "General", "name": "John Healy", "isCommittee": true, "isClubSkipper": true, "isInstructor": false, "qualification": "RYA Yachtmaster Offshore", "title": "Director", "photo": "/images/people/male-profile-placeholder.png", "email": "generalenquiries@soyc.co.uk" },
+    { "dept": "Operations", "name": "Paul Wragg", "isCommittee": true, "isClubSkipper": true, "isInstructor": true, "qualification": "RYA Yachtmaster Coastal", "title": "Operations Director", "photo": "/images/people/male-profile-placeholder.png", "email": "generalenquiries@soyc.co.uk" },
+    { "dept": "Finance", "name": "John Steven", "isCommittee": true, "isClubSkipper": true, "isInstructor": true, "qualification": "RYA Yachtmaster Offshore", "title": "Finance Director", "photo": "/images/people/male-profile-placeholder.png", "email": "generalenquiries@soyc.co.uk" }
   ]
 }

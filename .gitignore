@@ -5,3 +5,11 @@ dist/
 out/
 *.tar.gz
 tsconfig.tsbuildinfo
+
+# Environment
+.env
+.env*.local
+
+# Payload media uploads
+/public/media
+.vercel

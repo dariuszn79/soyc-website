@@ -5,7 +5,7 @@
     "yacht": "Speedbird",
     "model": "Bavaria C38",
     "skipper": "Name Surname",
-    "imageSrc": "/figmaAssets/cruises/event-1.png",
+    "imageSrc": "/images/cruises/event-1.png",
     "imageAlt": "Speedbird moored during a cruise"
   },
   {
@@ -14,7 +14,7 @@
     "yacht": "Speedbird",
     "model": "Bavaria C38",
     "skipper": "Name Surname",
-    "imageSrc": "/figmaAssets/cruises/event-2.png",
+    "imageSrc": "/images/cruises/event-2.png",
     "imageAlt": "Coastal destination on a Speedbird cruise"
   },
   {
@@ -23,7 +23,7 @@
     "yacht": "Speedbird",
     "model": "Bavaria C38",
     "skipper": "Name Surname",
-    "imageSrc": "/figmaAssets/cruises/event-3.png",
+    "imageSrc": "/images/cruises/event-3.png",
     "imageAlt": "Speedbird sailing on the South Coast"
   },
   {
@@ -32,7 +32,7 @@
     "yacht": "Speedbird",
     "model": "Bavaria C38",
     "skipper": "Name Surname",
-    "imageSrc": "/figmaAssets/cruises/event-4.png",
+    "imageSrc": "/images/cruises/event-4.png",
     "imageAlt": "A harbour visited during a Speedbird cruise"
   }
 ]

@@ -1,10 +1,10 @@
 {
-  "mapSrc": "/figmaAssets/cruises/map.png",
+  "mapSrc": "/images/cruises/map.png",
   "mapAlt": "Map showing the latest positions of Speedbird and Concorde",
-  "logoSrc": "/figmaAssets/cruises/map-logo.png",
-  "speedbirdMarkerSrc": "/figmaAssets/cruises/marker-blue.svg",
+  "logoSrc": "/images/cruises/map-logo.png",
+  "speedbirdMarkerSrc": "/images/cruises/marker-blue.svg",
   "speedbirdMarkerAlt": "Speedbird position",
-  "concordeMarkerSrc": "/figmaAssets/cruises/marker-red.svg",
+  "concordeMarkerSrc": "/images/cruises/marker-red.svg",
   "concordeMarkerAlt": "Concorde position",
   "concordeLabel": "Concorde",
   "speedbirdLabel": "Speedbird"

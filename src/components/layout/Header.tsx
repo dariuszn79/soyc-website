@@ -7,8 +7,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLayoutEffect, useRef, useState } from "react";
 import { NavItem } from "@/components/atoms/NavItem";
-import { primaryNavItems } from "@/data/navigation";
-import { siteContent } from "@/data/site";
+import { primaryNavItems as primaryNavItemsDefault } from "@/data/navigation";
+import { siteContent as siteContentDefault } from "@/data/site";
+import type { SiteContent } from "@/data/page-types";
+import type { NavItem as NavItemType } from "@/data/content-types";
 
 function normalizePath(path: string) {
   return path === "/" ? path : path.replace(/\/$/, "");
@@ -25,7 +27,15 @@ function normalizePath(path: string) {
  * page gets the same header automatically.
  */
 
-export function Header() {
+export function Header({
+  site,
+  nav,
+}: {
+  site?: SiteContent;
+  nav?: NavItemType[];
+} = {}) {
+  const siteContent = site ?? siteContentDefault;
+  const primaryNavItems = nav ?? primaryNavItemsDefault;
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -135,13 +145,13 @@ export function Header() {
           })}
 
           <Link
-            href="/join"
+            href={siteContent.joinHref ?? "/join"}
             className="flex h-12 items-center justify-center bg-brand-primary-100 px-spacing-md py-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-primary-100/90"
           >
             {siteContent.headerJoinLabel}
           </Link>
           <Link
-            href="/members"
+            href={siteContent.membersHref ?? "/members-area"}
             className="flex h-12 items-center justify-center bg-brand-secondary-100 px-spacing-md py-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100 transition-colors hover:bg-brand-secondary-100/90"
           >
             {siteContent.membersLabel}
@@ -187,14 +197,14 @@ export function Header() {
             })}
             <div className="mt-spacing-md grid grid-cols-2 gap-spacing-xxs">
               <Link
-                href="/join"
+                href={siteContent.joinHref ?? "/join"}
                 className="flex h-12 items-center justify-center bg-brand-primary-100 px-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100"
                 onClick={() => setMobileOpen(false)}
               >
                 {siteContent.headerJoinLabel}
               </Link>
               <Link
-                href="/members"
+                href={siteContent.membersHref ?? "/members-area"}
                 className="flex h-12 items-center justify-center bg-brand-secondary-100 px-spacing-xs font-button text-button font-medium leading-button tracking-button text-brand-tertiary-100"
                 onClick={() => setMobileOpen(false)}
               >
