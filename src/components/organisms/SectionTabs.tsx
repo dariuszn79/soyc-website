@@ -23,7 +23,7 @@ async function resolveTabCards(
   const spans = cards.map((c) => cardSpan(c, layout));
 
   return (
-    <div key={key} className={cardLayoutClass(layout)}>
+    <div key={key} className={cardLayoutClass(layout)} style={{paddingTop:48}}>
       {nodes.map((node, i) => (
         <div key={i} className={spans[i] ?? ""}>
           {node}

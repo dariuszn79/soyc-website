@@ -31,7 +31,7 @@ export function SectionTabsClient({
   const active = tabs.find((t) => t.value === activeTab) ?? tabs[0];
 
   return (
-    <div className="flex flex-col gap-spacing-md bg-brand-tertiary-100 pb-spacing-md pt-12">
+    <div className="flex flex-col gap-spacing-md bg-brand-tertiary-100 pb-spacing-md pt-12 mb-">
       <StickyTabs
         tabs={tabs.map(({ value, label }) => ({ value, label }))}
         activeTab={activeTab}
@@ -49,7 +49,7 @@ export function SectionTabsClient({
         {footerNote && (
           <p
             key="footer"
-            className="px-spacing-md text-center font-gill text-[16px] font-semibold leading-[19px] text-brand-secondary-100"
+            className="px-spacing-md pt-[24px] text-center font-gill text-[16px] font-semibold leading-[19px] text-brand-secondary-100"
           >
             {footerNote}
           </p>

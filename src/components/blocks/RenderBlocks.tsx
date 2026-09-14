@@ -41,7 +41,7 @@ type Block = any;
 /** Outer wrapper shared by "body" (non-hero) sections. */
 function BodyWrapper({ children, first }: { children: React.ReactNode; first?: boolean }) {
   return (
-    <div className={`mx-auto w-full max-w-[1440px] ${first ? "" : "mt-[60px]"}`}>{children}</div>
+    <div className={`mx-auto w-full px-[60px] max-w-[1440px] ${first ? "" : "mt-[60px]"}`}>{children}</div>
   );
 }
 
