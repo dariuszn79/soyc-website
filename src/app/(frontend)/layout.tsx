@@ -5,6 +5,12 @@ import { Footer } from "@/components/organisms/Footer";
 import { getHeader, getFooter, getSiteSettings, getNavigation } from "@/lib/payload/queries";
 import { LivePreviewListener } from "@/components/LivePreviewListener";
 
+// Pages are statically cached and purged on publish (revalidateFrontend). This
+// time-based ISR is the safety net: if an on-demand purge is ever missed (e.g.
+// the publish request errored after writing), no page stays stale for more
+// than a minute. Applies to every route under (frontend).
+export const revalidate = 60;
+
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
   return site.metadata;
