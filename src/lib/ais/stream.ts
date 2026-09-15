@@ -8,9 +8,10 @@ import type { Payload } from "payload";
  *
  * - Dev / persistent Node host: `ensureStream` lazily starts it in-process and
  *   positions are persisted to the Boat's `lastPosition` (throttled).
- * - Serverless production: `scripts/ais-worker.ts` runs the same stream on an
- *   always-on machine — /api/vessel-positions only ever reads the database,
- *   so no socket is needed at request time.
+ * - Vercel: /api/vessel-positions runs `collectPositions` for a bounded window
+ *   after each response (at most ~once a minute per instance) and persists the
+ *   fixes. Optionally `src/ais-worker.ts` can run the persistent stream on an
+ *   always-on machine instead (set AISSTREAM_MODE=worker on the web app).
  *
  * Requires `AISSTREAM_API_KEY` (server-only env — never sent to the browser).
  */
