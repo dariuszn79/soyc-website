@@ -25,7 +25,7 @@ export function CruiseEventCarousel({ events }: CruiseEventCarouselProps) {
 
   return (
     <div className="flex w-full flex-col gap-spacing-md">
-      <div className="flex items-center justify-end gap-[10px]">
+      <div className="flex items-center justify-start gap-[10px]">
         <button
           type="button"
           aria-label={componentLabels.cruiseCarousel.previous}

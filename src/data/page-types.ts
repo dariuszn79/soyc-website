@@ -32,7 +32,7 @@ export interface HomePageContent {
     actions: CTA[];
   };
   sections: Section[];
-  finalCta: CTA & { kicker: string; heading: string; body: string; imageSrc: string };
+  cta: CTA & { kicker: string; heading: string; body: string; imageSrc: string };
 }
 
 export interface ClubPageContent {

@@ -24,7 +24,10 @@ export async function GET() {
     const mmsis = boats
       .map((b: any) => b.mmsi?.trim())
       .filter((m: string | undefined): m is string => Boolean(m));
-    ensureStream(mmsis);
+    // ensureStream opens a persistent upstream WebSocket — on serverless that
+    // socket pins the function's event loop until maxDuration and holds its DB
+    // pool connections, starving the shared pooler. Only run it off-Vercel.
+    if (!process.env.VERCEL) ensureStream(mmsis);
 
     const vessels: VesselPosition[] = boats
       .filter((b: any) => b.mmsi && b.lastPosition?.lat != null && b.lastPosition?.lon != null)
