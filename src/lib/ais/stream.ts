@@ -57,6 +57,22 @@ export function ensureStream(mmsis: string[]) {
   });
 }
 
+/** aisstream subscription filters shared by both stream modes.
+ * BoundingBoxes is mandatory — with it omitted the server confirms the
+ * subscription but never sends a message. A world-spanning box keeps tracking
+ * global so fixes still arrive when a club boat sails outside home waters. */
+const subscriptionFilters = (mmsis: string[]) => ({
+  BoundingBoxes: [[[-90, -180], [90, 180]]],
+  FiltersShipMMSI: mmsis.slice().sort(),
+  // Class A ships send PositionReport; yachts' Class B transponders send
+  // StandardClassB/ExtendedClassB position reports instead.
+  FilterMessageTypes: [
+    "PositionReport",
+    "StandardClassBPositionReport",
+    "ExtendedClassBPositionReport",
+  ],
+});
+
 /**
  * Open (or re-subscribe) the upstream stream. One socket is kept per process;
  * resending a subscription replaces it, so a changed MMSI set reconnects.
@@ -65,19 +81,7 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
   const apiKey = process.env.AISSTREAM_API_KEY;
   if (!apiKey || !mmsis.length) return;
 
-  // No BoundingBoxes — FiltersShipMMSI alone tracks the vessels globally, so
-  // fixes still arrive when a club boat sails outside home waters.
-  const subscription = JSON.stringify({
-    APIKey: apiKey,
-    FiltersShipMMSI: mmsis.slice().sort(),
-    // Class A ships send PositionReport; yachts' Class B transponders send
-    // StandardClassB/ExtendedClassB position reports instead.
-    FilterMessageTypes: [
-      "PositionReport",
-      "StandardClassBPositionReport",
-      "ExtendedClassBPositionReport",
-    ],
-  });
+  const subscription = JSON.stringify({ APIKey: apiKey, ...subscriptionFilters(mmsis) });
   // Dedupe on the full payload so a changed subscription (e.g. new MMSI or
   // filter) reconnects instead of silently reusing the old socket.
   if (state.socket && state.subscribedTo === subscription) return;
@@ -135,6 +139,70 @@ export function startStream(mmsis: string[], onReport: (pos: VesselPosition) => 
       // already closed
     }
   };
+}
+
+/**
+ * Serverless-safe alternative to `startStream`: open a short-lived socket,
+ * forward every fix to `onReport` for `durationMs`, then close. Resolves with
+ * the number of fixes received. Never reconnects and never touches the
+ * persistent `state.socket`, so it can run inside a bounded function
+ * lifetime (e.g. Next `after()` on Vercel) without pinning the instance.
+ */
+export function collectPositions(
+  mmsis: string[],
+  onReport: (pos: VesselPosition) => void | Promise<void>,
+  durationMs: number,
+): Promise<number> {
+  const apiKey = process.env.AISSTREAM_API_KEY;
+  if (!apiKey || !mmsis.length) return Promise.resolve(0);
+
+  return new Promise((resolve) => {
+    let count = 0;
+    const pending: Promise<void>[] = [];
+    const ws = new WebSocket("wss://stream.aisstream.io/v0/stream");
+    ws.binaryType = "arraybuffer";
+    const finish = () => {
+      clearTimeout(timer);
+      try {
+        ws.close();
+      } catch {
+        // already closed
+      }
+      Promise.allSettled(pending).then(() => resolve(count));
+    };
+    const timer = setTimeout(finish, durationMs);
+
+    ws.onopen = () => ws.send(JSON.stringify({ APIKey: apiKey, ...subscriptionFilters(mmsis) }));
+    ws.onmessage = (event) => {
+      try {
+        const raw = event.data;
+        const msg = JSON.parse(
+          typeof raw === "string" ? raw : Buffer.from(raw as ArrayBuffer).toString("utf8"),
+        );
+        const meta = msg?.MetaData;
+        const report = msg?.Message?.[msg?.MessageType];
+        if (meta?.MMSI == null || meta.latitude == null || meta.longitude == null) return;
+        count++;
+        const r = onReport({
+          mmsi: String(meta.MMSI),
+          lat: meta.latitude,
+          lon: meta.longitude,
+          cog: report?.Cog,
+          sog: report?.Sog,
+          shipName: meta.ShipName?.trim(),
+          updatedAt: Date.now(),
+        });
+        if (r) pending.push(r.catch((err) => console.error("[ais] persist failed", err)));
+      } catch {
+        // malformed message — ignore
+      }
+    };
+    ws.onerror = (e) => {
+      console.error("[ais] collect error", e);
+      finish();
+    };
+    ws.onclose = () => finish();
+  });
 }
 
 /** Write a position fix onto the matching Boat's `lastPosition`, throttled to
