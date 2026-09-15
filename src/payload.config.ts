@@ -73,8 +73,11 @@ export default buildConfig({
       ssl: { rejectUnauthorized: false },
       // Supabase's Supavisor: use the transaction pooler (port 6543) — session
       // mode (5432) caps at ~15 clients shared by every lambda and dev server.
-      // Keep the per-process pool tiny on serverless regardless.
-      max: Number(process.env.DB_POOL_MAX ?? (process.env.VERCEL ? 2 : 5)),
+      // With the transaction pooler each instance can hold a handful of
+      // clients: Vercel fluid compute serves concurrent requests (autosave,
+      // publish, admin form-state, vessel polling) from one instance, and a
+      // Payload update holds a client for its whole transaction.
+      max: Number(process.env.DB_POOL_MAX ?? 8),
       idleTimeoutMillis: 3000,
       // Fail fast when the pooler is saturated — the default is an infinite
       // wait, which turns a full pool into requests that hang until the
