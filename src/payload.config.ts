@@ -71,10 +71,10 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
       ssl: { rejectUnauthorized: false },
-      // Vercel + the Supabase session pooler (max ~15 clients) needs a tiny
-      // per-process pool — set DB_POOL_MAX=2 there. Local dev connects
-      // directly and can use the larger default.
-      max: Number(process.env.DB_POOL_MAX ?? 10),
+      // Supabase's Supavisor: use the transaction pooler (port 6543) — session
+      // mode (5432) caps at ~15 clients shared by every lambda and dev server.
+      // Keep the per-process pool tiny on serverless regardless.
+      max: Number(process.env.DB_POOL_MAX ?? (process.env.VERCEL ? 2 : 5)),
       idleTimeoutMillis: 3000,
       // Fail fast when the pooler is saturated — the default is an infinite
       // wait, which turns a full pool into requests that hang until the

@@ -15,11 +15,18 @@ import type { Page } from "@/payload-types";
 import { toBoat, toEventCard, toMediaAlt, toMediaSrc, toPerson } from "./transform";
 
 /** Run a Payload query, falling back to bundled JSON if the DB is unreachable
- * (e.g. before DATABASE_URI is configured or the schema is seeded). */
+ * (e.g. before DATABASE_URI is configured or the schema is seeded).
+ *
+ * In production the error is re-thrown instead: pages are statically cached,
+ * so silently serving the seed JSON during a DB blip would bake stale content
+ * into the cache until the next revalidation. Throwing makes Next keep the
+ * last good page (ISR) rather than replace it. */
 async function withFallback<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try {
     return await fn();
-  } catch {
+  } catch (err) {
+    const building = process.env.NEXT_PHASE === "phase-production-build";
+    if (process.env.NODE_ENV === "production" && process.env.DATABASE_URI && !building) throw err;
     return fallback;
   }
 }
