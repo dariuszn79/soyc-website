@@ -76,6 +76,10 @@ export default buildConfig({
       // directly and can use the larger default.
       max: Number(process.env.DB_POOL_MAX ?? 10),
       idleTimeoutMillis: 3000,
+      // Fail fast when the pooler is saturated — the default is an infinite
+      // wait, which turns a full pool into requests that hang until the
+      // function's maxDuration (300s on Vercel) kills them.
+      connectionTimeoutMillis: 8000,
     },
   }),
   plugins: [

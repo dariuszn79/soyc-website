@@ -72,10 +72,10 @@
       "variant": "secondary"
     }
   ],
-  "finalCta": {
-    "kicker": "Our home",
+  "cta": {
+   "kicker": "Join us",
     "heading": "Thinking of joining",
-    "body": "We own and operate two offshore yachts, which sail throughout the year across the Solent and beyond. Our members do not need to organise their own crew or find a skipper. They can simply sign up for a trip and join us on the water. Our sailing programme includes relaxed day trips, structured training, competitive racing and longer offshore passages.",
+    "body": "Whether you’re new to sailing or an experienced sailor, there’s a place for you at our club. Join us to get out on the water, build your skills, enjoy new adventures and become part of a welcoming sailing community.",
     "label": "Join us",
     "href": "/join",
     "imageSrc": "/images/home/join-cta.png"

@@ -343,7 +343,7 @@ async function buildPages() {
       pageSections: [
         await heroHome(home.hero),
         ...(await Promise.all(home.sections.map(sectionImageParalax))),
-        await ctaBand(home.finalCta),
+        await ctaBand(home.cta),
       ],
     },
     {
